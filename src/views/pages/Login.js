@@ -15,7 +15,6 @@
 
 */
 import React from "react";
-import classnames from "classnames";
 // reactstrap components
 import {
   Button,
@@ -25,16 +24,21 @@ import {
   CardFooter,
   CardTitle,
   Form,
-  Input,
-  InputGroupAddon,
-  InputGroupText,
-  InputGroup,
   Container,
   Col,
 } from "reactstrap";
+import { Field, reduxForm } from 'redux-form';
+import {
+  FormInput
+} from "../../components/FormInputs/LoginInput";
+import * as loginActions from '../../_actions/login';
+import { connect } from 'react-redux';
 
-const Login = () => {
-  const [state, setState] = React.useState({});
+const Login = ({
+  handleSubmit,
+  signin,
+}) => {
+  //const [state, setState] = React.useState({});
   React.useEffect(() => {
     document.body.classList.toggle("login-page");
     return function cleanup() {
@@ -46,7 +50,7 @@ const Login = () => {
       <div className="content">
         <Container>
           <Col className="ml-auto mr-auto" lg="4" md="6">
-            <Form className="form">
+            <Form className="form" onSubmit={handleSubmit(signin.bind(this))}>
               <Card className="card-login card-white">
                 <CardHeader>
                   <img
@@ -56,74 +60,29 @@ const Login = () => {
                   <CardTitle tag="h1">Log in</CardTitle>
                 </CardHeader>
                 <CardBody>
-                  <InputGroup
-                    className={classnames({
-                      "input-group-focus": state.emailFocus,
-                    })}
-                  >
-                    <InputGroupAddon addonType="prepend">
-                      <InputGroupText>
-                        <i className="tim-icons icon-email-85" />
-                      </InputGroupText>
-                    </InputGroupAddon>
-                    <Input
-                      placeholder="Email"
-                      type="text"
-                      onFocus={(e) => setState({ ...state, emailFocus: true })}
-                      onBlur={(e) => setState({ ...state, emailFocus: false })}
-                    />
-                  </InputGroup>
-                  <InputGroup
-                    className={classnames({
-                      "input-group-focus": state.passFocus,
-                    })}
-                  >
-                    <InputGroupAddon addonType="prepend">
-                      <InputGroupText>
-                        <i className="tim-icons icon-lock-circle" />
-                      </InputGroupText>
-                    </InputGroupAddon>
-                    <Input
-                      placeholder="Password"
-                      type="text"
-                      onFocus={(e) => setState({ ...state, passFocus: true })}
-                      onBlur={(e) => setState({ ...state, passFocus: false })}
-                    />
-                  </InputGroup>
+                  <Field
+                    component={FormInput}
+                    name="email"
+                    placeholder="Email"
+                    type="text"
+                  />
+                  <Field
+                    component={FormInput}
+                    name="password"
+                    placeholder="Password"
+                    type="password"
+                  />
                 </CardBody>
                 <CardFooter>
                   <Button
                     block
                     className="mb-3"
                     color="primary"
-                    href="#pablo"
-                    onClick={(e) => e.preventDefault()}
                     size="lg"
+                    type="submit"
                   >
                     Get Started
                   </Button>
-                  <div className="pull-left">
-                    <h6>
-                      <a
-                        className="link footer-link"
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        Create Account
-                      </a>
-                    </h6>
-                  </div>
-                  <div className="pull-right">
-                    <h6>
-                      <a
-                        className="link footer-link"
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        Need Help?
-                      </a>
-                    </h6>
-                  </div>
                 </CardFooter>
               </Card>
             </Form>
@@ -134,4 +93,33 @@ const Login = () => {
   );
 };
 
-export default Login;
+const validate = (values) => {
+  let errors = {};
+  if(!values.email){
+    errors.email = "*required";
+  }
+  if(!values.password){
+    errors.password = "*required";
+  }
+  return errors;
+}
+
+const LoginForm = reduxForm({
+  form: 'login',
+  validate,
+  enableReinitialize: true,
+})(Login);
+
+export default connect(
+  (state) => ({
+
+  }),
+  (dispatch) => ({
+    signin(values) {
+      dispatch(loginActions.signin({
+        email: values.email,
+        password: values.password,
+      }));
+    }
+  })
+)(LoginForm);

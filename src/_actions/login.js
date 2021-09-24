@@ -65,3 +65,8 @@ export const signinKO = ({
     error,
   }
 });
+
+export const logOut = () => ({
+  type: types.LOGOFF_SUCCEEDED,
+  payload: {}
+});

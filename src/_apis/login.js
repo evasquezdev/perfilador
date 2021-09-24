@@ -1,7 +1,7 @@
 import URL from './routes';
 
 export const doSignIn = (
-    email,
+  email,
   password
 ) => new Promise((resolve, reject) => {
   const data = new FormData();

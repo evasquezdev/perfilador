@@ -36,6 +36,10 @@ import {
   Modal,
   UncontrolledTooltip,
 } from "reactstrap";
+import {
+  connect
+} from 'react-redux';
+import * as loginActions from '../../_actions/login';
 
 const AdminNavbar = (props) => {
   const [collapseOpen, setCollapseOpen] = React.useState(false);
@@ -68,6 +72,9 @@ const AdminNavbar = (props) => {
   const toggleModalSearch = () => {
     setModalSearch(!modalSearch);
   };
+  const {
+    logOut
+  } = props;
   return (
     <>
       <Navbar
@@ -207,7 +214,10 @@ const AdminNavbar = (props) => {
                   </NavLink>
                   <DropdownItem divider tag="li" />
                   <NavLink tag="li">
-                    <DropdownItem className="nav-item">Log out</DropdownItem>
+                    <DropdownItem className="nav-item"onClick={(e) => {
+                      e.preventDefault();
+                      logOut();
+                    }}>Log out</DropdownItem>
                   </NavLink>
                 </DropdownMenu>
               </UncontrolledDropdown>
@@ -238,4 +248,12 @@ const AdminNavbar = (props) => {
   );
 };
 
-export default AdminNavbar;
+export default connect(
+  (state) => ({
+  }),
+  (dispatch) => ({
+    logOut(){
+      dispatch(loginActions.logOut());
+    },
+  })
+)(AdminNavbar);

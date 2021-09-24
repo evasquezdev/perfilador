@@ -1,5 +1,5 @@
 {
-  "name": "black-dashboard-pro-react",
+  "name": "sms-devpackgroup",
   "version": "1.1.0",
   "private": true,
   "homepage": "https://demos.creative-tim.com/black-dashboard-pro-react/#/admin/dashboard",
@@ -29,7 +29,7 @@
     "react-scripts": "4.0.1",
     "react-select": "3.1.1",
     "react-table": "7.6.2",
-    "reactstrap": "8.7.1",
+    "reactstrap": "^8.7.1",
     "redux": "^4.1.1",
     "redux-form": "^8.3.7",
     "redux-persist": "^6.0.0",

@@ -3,9 +3,9 @@ import * as types from '../_types/login';
 
 const stateShape = {
   loading: false,
-  user: undefined,
+  user: null,
 };
-const Login = (state = stateShape, action) => {
+const login = (state = stateShape, action) => {
   switch (action.type) {
     case types.POST_SIGNIN: {
       return {
@@ -29,6 +29,7 @@ const Login = (state = stateShape, action) => {
     case types.POST_RESET_PASS_KO:
     case types.POST_CONFIRM_TOKEN_KO:
     case types.POST_SIGNOUT_OK:
+    case types.LOGOFF_SUCCEEDED:
     case types.POST_FORGOT_PASS_KO: {
       return stateShape;
     }
@@ -38,6 +39,14 @@ const Login = (state = stateShape, action) => {
   }
 };
 
-export default Login;
+export default login;
 
-export const getUserToken = (state) => state.user.token;
+export const getUserToken = (state) => {
+  //console.log(state)
+  return state.user ? state.user.token : null;
+}
+
+export const getUserMsgInfo = (state) => ({
+  quantity_of_emails: state.user.company.quantity_of_emails,
+  quantity_of_sms: state.user.company.quantity_of_sms,
+})

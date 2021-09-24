@@ -11,13 +11,16 @@ import "react-notification-alert/dist/animate.css";
 import "assets/scss/black-dashboard-pro-react.scss?v=1.2.0";
 import "assets/demo/demo.css";
 
+import * as selector from './_reducers';
+//import * as loginActions from './_actions/login';
+
 const history = createBrowserHistory();
 
 const App = ({
-    auth
-}) => (<BrowserRouter history={history}>{console.log(auth)}
+    token,
+}) => (<BrowserRouter history={history}>
     <Switch>
-        {auth && auth.token ? 
+        {token ? 
         <>
             <Route path="/" render={(props) => <AdminLayout {...props} />} />
         </> :
@@ -31,6 +34,8 @@ const App = ({
 
 export default connect(
     (state) => ({
-        auth: state
+        token: selector.getUserToken(state)
     }),
+    (dispatch) => ({
+    })
 )(App);

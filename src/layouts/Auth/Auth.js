@@ -17,8 +17,8 @@
 import React from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 
-import AuthNavbar from "components/Navbars/AuthNavbar.js";
-import Footer from "components/Footer/Footer.js";
+//import AuthNavbar from "components/Navbars/AuthNavbar.js";
+//import Footer from "components/Footer/Footer.js";
 
 import routes from "routes.js";
 
@@ -81,14 +81,12 @@ const Pages = (props) => {
   };
   return (
     <>
-      <AuthNavbar brandText={getActiveRoute(routes) + " Page"} />
       <div className="wrapper wrapper-full-page">
         <div className={"full-page " + getFullPageName(routes)}>
           <Switch>
             {getRoutes(routes)}
             <Redirect from="*" to="/auth/login" />
           </Switch>
-          <Footer fluid />
         </div>
       </div>
     </>

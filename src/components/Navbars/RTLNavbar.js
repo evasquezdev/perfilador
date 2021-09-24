@@ -17,6 +17,10 @@
 import React from "react";
 // nodejs library that concatenates classes
 import classNames from "classnames";
+import {
+  connect
+} from 'react-redux';
+import * as loginActions from '../../_actions/login';
 
 // reactstrap components
 import {
@@ -68,6 +72,9 @@ const RTLNavbar = (props) => {
   const toggleModalSearch = () => {
     setModalSearch(!modalSearch);
   };
+  const {
+    logOut
+  } = props;
   return (
     <>
       <Navbar
@@ -208,7 +215,10 @@ const RTLNavbar = (props) => {
                   </NavLink>
                   <DropdownItem divider tag="li" />
                   <NavLink tag="li">
-                    <DropdownItem className="nav-item">Log out</DropdownItem>
+                    <DropdownItem className="nav-item" onClick={(e) => {
+                      e.preventDefault();
+                      logOut();
+                    }}>Log out</DropdownItem>
                   </NavLink>
                 </DropdownMenu>
               </UncontrolledDropdown>
@@ -239,4 +249,12 @@ const RTLNavbar = (props) => {
   );
 };
 
-export default RTLNavbar;
+export default connect(
+  (state) => ({
+  }),
+  (dispatch) => ({
+    logOut(){
+      dispatch(loginActions.logOut());
+    },
+  })
+)(RTLNavbar);
