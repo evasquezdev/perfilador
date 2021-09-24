@@ -42,15 +42,13 @@ class Databases extends React.Component{
     const {
       departments,
       municipalities,
-      data,
+      filteredData,
       loading,
       filterData,
-      userInfo
     } = this.props;
     const {
       FilterForm
     } = this.state;
-    //console.log(userInfo)
     return (<div className="content">
       <Modal />
       <Row>
@@ -61,36 +59,45 @@ class Databases extends React.Component{
                 <CardTitle>
                   Filtros
                 </CardTitle>
-                <FormGroup>
-                  <Label>Edad Minima</Label>
-                  <Input
-                    type="number"
-                    min="18"
-                    step="1"
-                    disabled={loading}
-                    value={FilterForm.age_init}
-                    onChange={(e) => this.setState({
-                      FilterForm: {
-                        ...FilterForm,
-                        age_init: e.target.value
-                      }
-                    })}
-                  />
-                  <Label>Edad Maxima</Label>
-                  <Input
-                    type="number"
-                    max="100"
-                    step="1"
-                    disabled={loading}
-                    value={FilterForm.age_end}
-                    onChange={(e) => this.setState({
-                      FilterForm: {
-                        ...FilterForm,
-                        age_end: e.target.value
-                      }
-                    })}
-                  />
-                </FormGroup>
+                <Label>Rango de Edad</Label>
+                <Row>
+                  <Col xs="6">
+                    <FormGroup>
+                      <Input
+                        type="number"
+                        min="18"
+                        step="1"
+                        placeholder="18"
+                        disabled={loading}
+                        value={FilterForm.age_init}
+                        onChange={(e) => this.setState({
+                          FilterForm: {
+                            ...FilterForm,
+                            age_init: e.target.value
+                          }
+                        })}
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col xs="6">
+                    <FormGroup>
+                      <Input
+                        type="number"
+                        max="100"
+                        step="1"
+                        placeholder="70"
+                        disabled={loading}
+                        value={FilterForm.age_end}
+                        onChange={(e) => this.setState({
+                          FilterForm: {
+                            ...FilterForm,
+                            age_end: e.target.value
+                          }
+                        })}
+                      />
+                    </FormGroup>
+                  </Col>
+                </Row>
                 <FormGroup>
                   <Label>Departamento</Label>
                   <Input 
@@ -150,7 +157,7 @@ class Databases extends React.Component{
                         }
                       })}
                     />{' '}
-                    Male
+                    Hombre
                   </Label>
                 </FormGroup>
                 <FormGroup check>
@@ -167,7 +174,7 @@ class Databases extends React.Component{
                         }
                       })}
                     />{' '}
-                    Female
+                    Mujer
                   </Label>
                 </FormGroup>
                 <FormGroup check>
@@ -253,12 +260,12 @@ class Databases extends React.Component{
           </Form>
         </Col>
         <Col xs="3">
-          {data && <div style={{
+          {filteredData && <div style={{
             maxHeight: '45rem',
             overflowY: 'scroll'
           }}>
             <h3>Resumen Data</h3>
-              {data.map((d,i) => {
+              {filteredData.data.map((d,i) => {
                 return <Card key={i}>
                   <CardBody>
                     <CardTitle>
@@ -289,23 +296,42 @@ class Databases extends React.Component{
               })}
           </div>}
         </Col>
-        <Col xs="6">
-          {data && <Card>
+        {filteredData && <Col xs="6">
+          <Card>
             <CardBody>
               <CardTitle>
-                Envio de Mensajes
+                creditos disponibles
               </CardTitle>
               <ListGroup>
                 <ListGroupItem className="justify-content-between">
                   Mensajes restantes por correo 
-                  <Badge pill color="info">{userInfo.quantity_of_emails}</Badge>
+                  <Badge pill color="info">{filteredData.email_available}</Badge>
                 </ListGroupItem>
                 <ListGroupItem className="justify-content-between">
-                  Dapibus ac facilisis in 
-                  <Badge pill color="info">{userInfo.quantity_of_sms}</Badge>
+                  Mensajes restantes por SMS
+                  <Badge pill color="info">{filteredData.sms_available}</Badge>
                 </ListGroupItem>
               </ListGroup>
-              <br/>
+            </CardBody>
+          </Card>
+          <Card>
+            <CardBody>
+              <CardTitle>
+                total a enviar
+              </CardTitle>
+              <ListGroup>
+                <ListGroupItem className="justify-content-between">
+                  Total Filtrado
+                  <Badge pill color="info">{filteredData.total_of_filters}</Badge>
+                </ListGroupItem>
+              </ListGroup>
+            </CardBody>
+          </Card>
+          <Card>
+            <CardBody>
+              <CardTitle>
+                Enviar Mensaje
+              </CardTitle>
               <Form>
                 <FormGroup>
                   <Label>
@@ -322,10 +348,13 @@ class Databases extends React.Component{
                     minHeight: '150px'
                   }}/>
                 </FormGroup>
+                <Button>
+                  Enviar Mensaje
+                </Button>
               </Form>
             </CardBody>
-          </Card>}
-        </Col>
+          </Card>
+        </Col>}
       </Row>
     </div>);
   }
@@ -335,7 +364,7 @@ export default connect(
   (state) => ({
     departments: selector.getDepartments(state),
     municipalities: selector.getMunicipalities(state),
-    data: selector.getFilterData(state),
+    filteredData: selector.getFilterData(state),
     loading: selector.getFilterloading(state),
     userInfo: selector.getUserMsgInfo(state)
   }),

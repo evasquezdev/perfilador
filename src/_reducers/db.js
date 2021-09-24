@@ -48,6 +48,19 @@ const db = (state = stateShape, action) => {
         loading: false
       }
     }
+    case types.POST_SYNC_DB: {
+      return {
+        ...state,
+        loading: true,
+      }
+    }
+    case types.POST_SYNC_DB_KO:
+    case types.POST_SYNC_DB_OK: {
+      return {
+        ...state,
+        loading: false
+      }
+    }
     default: {
       return {
         ...state,

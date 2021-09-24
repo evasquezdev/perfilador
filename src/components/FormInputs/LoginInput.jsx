@@ -18,7 +18,6 @@ export const FormInput = ({
 		error,
 	},
 }) => {
-    console.log(touched,error)
     const [state, setState] = React.useState({});
     return (<InputGroup
         className={classnames({

@@ -54,7 +54,6 @@ class Databases extends React.Component{
       deleteDb,
       showError,
     } = this.props;
-    //console.log(loading,dbs)
     return (<div className="content">
       <Modal />
       <Row>
@@ -86,6 +85,7 @@ class Databases extends React.Component{
                   <Input
                     type="text"
                     value = {name}
+                    disabled={loading}
                     onChange={e => this.setState({
                       dbForm: {
                         ...this.state.dbForm,
@@ -99,6 +99,7 @@ class Databases extends React.Component{
                   <Input
                     type="text"
                     value = {abbreviation}
+                    disabled={loading}
                     onChange={e => this.setState({
                       dbForm: {
                         ...this.state.dbForm,
@@ -111,6 +112,7 @@ class Databases extends React.Component{
                   <Button color="info" size="sm">
                     <Input type="file" 
                       accept=".xlsx"
+                      disabled={loading}
                       onChange={e => {
                         e.preventDefault();
                         this.setState({
@@ -121,13 +123,17 @@ class Databases extends React.Component{
                         })
                       }}
                     />
-                    <Label>Seleccionar DB</Label>
+                    <Label>Seleccionar Archivo</Label>
                   </Button>
                   {file && <span className="form-text">
                     {file.name}
                   </span>}
                 </FormGroup>
-                <Button type="submit" color="success">Subir DB</Button>
+                <Button type="submit" color="success" disabled={loading}>
+                  <i className="tim-icons icon-cloud-upload-94" />
+                  {" "}
+                  Subir DB
+                </Button>
               </Form>
             </CardBody>
           </Card>
@@ -142,17 +148,19 @@ class Databases extends React.Component{
             {loading ? 'loading...' : dbs.map((db,i) => <Col xs="6" md="2" key={i}>
               <Card>
                 <CardImg top 
-                  src={process.env.PUBLIC_URL + "/Microsoft-Excel-icon.png"} 
+                  src={process.env.PUBLIC_URL + "/excel.png"} 
                   alt="excel_icon"
+                  style={{
+                    maxWidth: '10rem',
+                    margin: 'auto'
+                  }}
                 />
                 <CardBody>
                   <CardTitle>{db.abbreviation}</CardTitle>
-                  <CardText>
-                    <p>Name: {db.name}</p>
-                    <p>Total: </p>
-                    <p>Hombres: </p>
-                    <p>Mujeres: </p>
-                  </CardText>
+                  <CardText>Name: {db.name}</CardText>
+                  <CardText>Total: </CardText>
+                  <CardText>Hombres: </CardText>
+                  <CardText>Mujeres: </CardText>
                 </CardBody>
                 <CardFooter>
                   <Row className="no-gutters">
@@ -160,7 +168,7 @@ class Databases extends React.Component{
                       {db.ingested !== "False" ? 
                       <Button size="sm" 
                         color="danger" block
-                        style={{fontSize: '0.675rem'}}
+                        style={{fontSize: '0.675rem'}} disabled={loading}
                         onClick={()=>{
                           deleteDb(db.id)
                         }}
@@ -169,7 +177,7 @@ class Databases extends React.Component{
                       </Button> : 
                       <Button size="sm" 
                         color="success" block
-                        style={{fontSize: '0.675rem'}}
+                        style={{fontSize: '0.675rem'}} disabled={loading}
                         onClick={()=>{
                           syncDb(db.id)
                         }}

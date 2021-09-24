@@ -42,7 +42,6 @@ const login = (state = stateShape, action) => {
 export default login;
 
 export const getUserToken = (state) => {
-  //console.log(state)
   return state.user ? state.user.token : null;
 }
 
