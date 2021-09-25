@@ -23,7 +23,7 @@ import NotificationAlert from "react-notification-alert";
 
 // core components
 import AdminNavbar from "components/Navbars/AdminNavbar.js";
-import Footer from "components/Footer/Footer.js";
+//import Footer from "components/Footer/Footer.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
 import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
 
@@ -197,12 +197,6 @@ const Admin = (props) => {
           {getRoutes(routes)}
           <Redirect from="*" to="/admin/dashboard" />
         </Switch>
-        {
-          // we don't want the Footer to be rendered on full screen maps page
-          props.location.pathname.indexOf("full-screen-map") !== -1 ? null : (
-            <Footer fluid />
-          )
-        }
       </div>
       <FixedPlugin
         activeColor={activeColor}

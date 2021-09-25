@@ -149,7 +149,7 @@ const AdminNavbar = (props) => {
                   <span className="d-lg-none d-md-block">Search</span>
                 </Button>
               </InputGroup>
-              <UncontrolledDropdown nav>
+              {/*<UncontrolledDropdown nav>
                 <DropdownToggle
                   caret
                   color="default"
@@ -187,7 +187,7 @@ const AdminNavbar = (props) => {
                     </DropdownItem>
                   </NavLink>
                 </DropdownMenu>
-              </UncontrolledDropdown>
+              </UncontrolledDropdown>*/}
               <UncontrolledDropdown nav>
                 <DropdownToggle
                   caret
@@ -206,12 +206,12 @@ const AdminNavbar = (props) => {
                   <p className="d-lg-none">Log out</p>
                 </DropdownToggle>
                 <DropdownMenu className="dropdown-navbar" right tag="ul">
-                  <NavLink tag="li">
+                  {/*<NavLink tag="li">
                     <DropdownItem className="nav-item">Profile</DropdownItem>
                   </NavLink>
                   <NavLink tag="li">
                     <DropdownItem className="nav-item">Settings</DropdownItem>
-                  </NavLink>
+                  </NavLink>*/}
                   <DropdownItem divider tag="li" />
                   <NavLink tag="li">
                     <DropdownItem className="nav-item"onClick={(e) => {

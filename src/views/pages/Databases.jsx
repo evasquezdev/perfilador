@@ -139,7 +139,13 @@ class Databases extends React.Component{
           </Card>
         </Col>
         <Col sm="12" md="6">
-          <Button className="btn-round" color="primary">
+          <Button 
+            className="btn-round" 
+            color="primary"
+            onClick={()=>{
+              window.open(`${process.env.PUBLIC_URL}/Formato DB.xlsx`)
+            }}
+          >
             <i className="tim-icons icon-cloud-download-93" /> Descargar Formato DB
           </Button>
         </Col>

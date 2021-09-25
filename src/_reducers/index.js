@@ -9,11 +9,14 @@ import modal, * as fromModal from './modal';
 
 import filter, * as filterHandler from './filter';
 
+import action, * as actionHandler from './action';
+
 export default combineReducers({
   login,
   db,
   modal,
   filter,
+  action,
   form: reducerForm,
 });
 
@@ -36,3 +39,6 @@ export const getDepartments = (state) => filterHandler.getDepartments(state.filt
 export const getMunicipalities = (state) => filterHandler.getMunicipalities(state.filter);
 export const getFilterData = (state) => filterHandler.getFilterData(state.filter);
 export const getFilterloading = (state) => filterHandler.getFilterloading(state.filter);
+
+//action
+export const getActionloading = (state) => actionHandler.getActionloading(state.action);

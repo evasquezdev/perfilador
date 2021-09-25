@@ -20,6 +20,7 @@ import * as selector from '../../_reducers';
 import * as filterActions from '../../_actions/filter';
 //import * as modalActions from '../../_actions/modal';
 import Modal from '../../components/Modal';
+import * as messageActions from '../../_actions/action';
 
 class Databases extends React.Component{
   state = {
@@ -30,6 +31,8 @@ class Databases extends React.Component{
       municipality: '',
       sex: '',
       sms_email: '0',
+      header: '',
+      text: '',
     }
   }
   componentDidMount(){
@@ -45,6 +48,8 @@ class Databases extends React.Component{
       filteredData,
       loading,
       filterData,
+      loadingAction,
+      sendMail,
     } = this.props;
     const {
       FilterForm
@@ -332,23 +337,52 @@ class Databases extends React.Component{
               <CardTitle>
                 Enviar Mensaje
               </CardTitle>
-              <Form>
+              <Form onSubmit={e => e.preventDefault()}>
                 <FormGroup>
                   <Label>
                     Titulo mensaje
                   </Label>
-                  <Input type="text"/>
+                  <Input 
+                    type="text"
+                    value = {FilterForm.header}
+                    disabled={loadingAction}
+                    onChange={(e)=>{
+                      this.setState({
+                        FilterForm: {
+                          ...FilterForm,
+                          header: e.target.value
+                        }
+                      })
+                    }}
+                  />
                 </FormGroup>
                 <FormGroup>
                   <Label>
                     Mensaje
                   </Label>
-                  <Input type="textarea" style={{
-                    maxHeight: '200px',
-                    minHeight: '150px'
-                  }}/>
+                  <Input type="textarea" 
+                    style={{
+                      maxHeight: '200px',
+                      minHeight: '150px'
+                    }}
+                    value = {FilterForm.text}
+                    disabled={loadingAction}
+                    onChange={(e)=>{
+                      this.setState({
+                        FilterForm: {
+                          ...FilterForm,
+                          text: e.target.value
+                        }
+                      })
+                    }}
+                  />
                 </FormGroup>
-                <Button>
+                <Button
+                  disabled={loadingAction}
+                  onClick={()=>{
+                    sendMail(FilterForm)
+                  }}
+                >
                   Enviar Mensaje
                 </Button>
               </Form>
@@ -366,7 +400,8 @@ export default connect(
     municipalities: selector.getMunicipalities(state),
     filteredData: selector.getFilterData(state),
     loading: selector.getFilterloading(state),
-    userInfo: selector.getUserMsgInfo(state)
+    userInfo: selector.getUserMsgInfo(state),
+    loadingAction: selector.getActionloading(state),
   }),
   (dispatch) => ({
     getDeps(){
@@ -374,6 +409,11 @@ export default connect(
     },
     filterData(FilterForm){
       dispatch(filterActions.filterData(FilterForm))
+    },
+    sendMail(FilterForm){
+      dispatch(messageActions.sendMail({
+        ...FilterForm,
+      }))
     }
   })
 )(Databases);
