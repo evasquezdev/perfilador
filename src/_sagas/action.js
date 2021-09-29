@@ -21,6 +21,7 @@ function* sendMail(action) {
       sms_email,
       header,
       text,
+      file
     } = action.payload;
     const token = yield select(reducers.getUserToken);
     const response = yield call(
@@ -34,6 +35,7 @@ function* sendMail(action) {
       sms_email,
       header,
       text,
+      file
     );
     yield put(actions.sendMailOK({
       msg: response

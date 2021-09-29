@@ -9,6 +9,7 @@ export const sendMail = ({
   sms_email,
   header,
   text,
+  file
 }) => ({
   type: types.SEND_EMAIL,
   payload: {
@@ -20,6 +21,7 @@ export const sendMail = ({
     sms_email,
     header,
     text,
+    file
   }
 });
 

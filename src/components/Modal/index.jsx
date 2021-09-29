@@ -34,7 +34,6 @@ class ModalCore extends Component {
         id,
         ...values,
       })
-      console.log('values', values)
     }
     hideModal();
   }

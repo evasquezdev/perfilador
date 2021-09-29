@@ -18,7 +18,7 @@ import {
 import { connect } from 'react-redux';
 import * as selector from '../../_reducers';
 import * as filterActions from '../../_actions/filter';
-//import * as modalActions from '../../_actions/modal';
+import * as modalActions from '../../_actions/modal';
 import Modal from '../../components/Modal';
 import * as messageActions from '../../_actions/action';
 
@@ -33,6 +33,7 @@ class Databases extends React.Component{
       sms_email: '0',
       header: '',
       text: '',
+      file: null,
     }
   }
   componentDidMount(){
@@ -54,6 +55,7 @@ class Databases extends React.Component{
     const {
       FilterForm
     } = this.state;
+    const filteredmuns = municipalities.filter(m => m.department === FilterForm.department)
     return (<div className="content">
       <Modal />
       <Row>
@@ -72,7 +74,7 @@ class Databases extends React.Component{
                         type="number"
                         min="18"
                         step="1"
-                        placeholder="18"
+                        placeholder="Minimo"
                         disabled={loading}
                         value={FilterForm.age_init}
                         onChange={(e) => this.setState({
@@ -90,7 +92,7 @@ class Databases extends React.Component{
                         type="number"
                         max="100"
                         step="1"
-                        placeholder="70"
+                        placeholder="Maximo"
                         disabled={loading}
                         value={FilterForm.age_end}
                         onChange={(e) => this.setState({
@@ -126,7 +128,7 @@ class Databases extends React.Component{
                   </Input>
                 </FormGroup>
                 <FormGroup>
-                  <Label>Municipalidad</Label>
+                  <Label>Municipio</Label>
                   <Input 
                     type="select"
                     disabled={loading}
@@ -140,10 +142,10 @@ class Databases extends React.Component{
                     })}
                   >
                     <option></option>
-                    {municipalities.map((mun,i) => <option key={i}
-                      value={mun}
+                    {filteredmuns.map((mun,i) => <option key={i}
+                      value={mun.municipality}
                     >
-                      {mun}
+                      {mun.municipality}
                     </option>)}
                   </Input>
                 </FormGroup>
@@ -305,16 +307,28 @@ class Databases extends React.Component{
           <Card>
             <CardBody>
               <CardTitle>
-                creditos disponibles
+                Creditos disponibles
               </CardTitle>
               <ListGroup>
                 <ListGroupItem className="justify-content-between">
-                  Mensajes restantes por correo 
-                  <Badge pill color="info">{filteredData.email_available}</Badge>
+                  <Row>
+                    <Col xs="6">
+                      Mensajes restantes por correo 
+                    </Col>
+                    <Col xs="6" style={{textAlign: 'right'}}>
+                      <Badge pill color="info">{filteredData.email_available}</Badge>
+                    </Col>
+                  </Row>
                 </ListGroupItem>
                 <ListGroupItem className="justify-content-between">
-                  Mensajes restantes por SMS
-                  <Badge pill color="info">{filteredData.sms_available}</Badge>
+                  <Row>
+                    <Col xs="6">
+                      Mensajes restantes por SMS
+                    </Col>
+                    <Col xs="6"  style={{textAlign: 'right'}}>
+                      <Badge pill color="info">{filteredData.sms_available}</Badge>
+                    </Col>
+                  </Row>
                 </ListGroupItem>
               </ListGroup>
             </CardBody>
@@ -322,12 +336,18 @@ class Databases extends React.Component{
           <Card>
             <CardBody>
               <CardTitle>
-                total a enviar
+                Total a enviar
               </CardTitle>
               <ListGroup>
                 <ListGroupItem className="justify-content-between">
-                  Total Filtrado
-                  <Badge pill color="info">{filteredData.total_of_filters}</Badge>
+                  <Row>
+                    <Col xs="6">
+                      Total Filtrado
+                    </Col>
+                    <Col xs="6"  style={{textAlign: 'right'}}>
+                      <Badge pill color="info">{filteredData.total_of_filters}</Badge>
+                    </Col>
+                  </Row>
                 </ListGroupItem>
               </ListGroup>
             </CardBody>
@@ -377,14 +397,41 @@ class Databases extends React.Component{
                     }}
                   />
                 </FormGroup>
-                <Button
-                  disabled={loadingAction}
-                  onClick={()=>{
-                    sendMail(FilterForm)
-                  }}
-                >
-                  Enviar Mensaje
-                </Button>
+                <Row>
+                  <Col>
+                    <FormGroup>
+                      <Button color="info" size="sm">
+                        <Input type="file" 
+                          accept=".jpg,.png,.jpeg"
+                          disabled={loading}
+                          onChange={e => {
+                            e.preventDefault();
+                            this.setState({
+                              FilterForm: {
+                                ...FilterForm,
+                                file: e.target.files[0]
+                              }
+                            })
+                          }}
+                        />
+                        <Label>Subir Imagen Adjunta</Label>
+                      </Button>
+                      {FilterForm.file && <span className="form-text text-info">
+                        {FilterForm.file.name}
+                      </span>}
+                    </FormGroup>
+                  </Col>
+                  <Col>
+                    <Button
+                      disabled={loadingAction}
+                      onClick={()=>{
+                        sendMail(FilterForm)
+                      }}
+                    >
+                      Enviar Mensaje
+                    </Button>
+                  </Col>
+                </Row>
               </Form>
             </CardBody>
           </Card>
@@ -411,9 +458,28 @@ export default connect(
       dispatch(filterActions.filterData(FilterForm))
     },
     sendMail(FilterForm){
-      dispatch(messageActions.sendMail({
-        ...FilterForm,
-      }))
+      if(  
+        (!FilterForm.header || FilterForm.header==="") || 
+        (!FilterForm.text || FilterForm.text==="") ||
+        (!FilterForm.file)
+      ) {
+        dispatch(modalActions.showError({
+          message: 'Error: Formulario incompleto',
+          title: 'Error'
+        }))
+      }else{
+        var filesize = ((FilterForm.file.size/1024)/1024).toFixed(4);
+        if(filesize > 2){
+          dispatch(modalActions.showError({
+            message: 'Error: tamaño de imagen es muy grande',
+            title: 'Error'
+          }))
+        } else {
+          dispatch(messageActions.sendMail({
+            ...FilterForm,
+          }))
+        }
+      }
     }
   })
 )(Databases);

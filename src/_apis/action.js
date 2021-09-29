@@ -10,6 +10,7 @@ export const sendMail = (
   sms_email,
   header,
   text,
+  file,
 ) => new Promise((resolve, reject) => {
   let dbData = new FormData();
   age_init && dbData.append('age_init',age_init);
@@ -20,6 +21,7 @@ export const sendMail = (
   dbData.append('sms_email',sms_email);
   dbData.append('header',header);
   dbData.append('text',text);
+  dbData.append('file',file);
   fetch(`${URL}/filters/send_email/`, {
     method: 'POST',
     headers: {

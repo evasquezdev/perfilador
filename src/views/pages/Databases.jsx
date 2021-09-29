@@ -86,6 +86,7 @@ class Databases extends React.Component{
                     type="text"
                     value = {name}
                     disabled={loading}
+                    placeholder="Nombre de la base de datos a crear"
                     onChange={e => this.setState({
                       dbForm: {
                         ...this.state.dbForm,
@@ -100,6 +101,7 @@ class Databases extends React.Component{
                     type="text"
                     value = {abbreviation}
                     disabled={loading}
+                    placeholder="Abreviacion para la base de datos a crear"
                     onChange={e => this.setState({
                       dbForm: {
                         ...this.state.dbForm,
@@ -108,32 +110,38 @@ class Databases extends React.Component{
                     })}
                   />
                 </FormGroup>
-                <FormGroup>
-                  <Button color="info" size="sm">
-                    <Input type="file" 
-                      accept=".xlsx"
-                      disabled={loading}
-                      onChange={e => {
-                        e.preventDefault();
-                        this.setState({
-                          dbForm: {
-                            ...this.state.dbForm,
-                            file: e.target.files[0]
-                          }
-                        })
-                      }}
-                    />
-                    <Label>Seleccionar Archivo</Label>
-                  </Button>
-                  {file && <span className="form-text">
-                    {file.name}
-                  </span>}
-                </FormGroup>
-                <Button type="submit" color="success" disabled={loading}>
-                  <i className="tim-icons icon-cloud-upload-94" />
-                  {" "}
-                  Subir DB
-                </Button>
+                <Row>
+                  <Col>
+                    <FormGroup>
+                      <Button color="info" size="sm">
+                        <Input type="file" 
+                          accept=".xlsx"
+                          disabled={loading}
+                          onChange={e => {
+                            e.preventDefault();
+                            this.setState({
+                              dbForm: {
+                                ...this.state.dbForm,
+                                file: e.target.files[0]
+                              }
+                            })
+                          }}
+                        />
+                        <Label>Subir Archivo</Label>
+                      </Button>
+                      {file && <span className="form-text text-info">
+                        {file.name}
+                      </span>}
+                    </FormGroup>
+                  </Col>
+                  <Col>
+                    <Button type="submit" color="success" disabled={loading}>
+                      <i className="tim-icons icon-cloud-upload-94" />
+                      {" "}
+                      Crear Base de Datos
+                    </Button>
+                  </Col>
+                </Row>
               </Form>
             </CardBody>
           </Card>
@@ -164,9 +172,6 @@ class Databases extends React.Component{
                 <CardBody>
                   <CardTitle>{db.abbreviation}</CardTitle>
                   <CardText>Name: {db.name}</CardText>
-                  <CardText>Total: </CardText>
-                  <CardText>Hombres: </CardText>
-                  <CardText>Mujeres: </CardText>
                 </CardBody>
                 <CardFooter>
                   <Row className="no-gutters">

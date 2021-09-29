@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/static/css/main.ff9be431.chunk.css",
-    "main.js": "/static/js/main.94da35cf.chunk.js",
-    "main.js.map": "/static/js/main.94da35cf.chunk.js.map",
+    "main.js": "/static/js/main.d8a1a703.chunk.js",
+    "main.js.map": "/static/js/main.d8a1a703.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.52f3214c.js",
     "runtime-main.js.map": "/static/js/runtime-main.52f3214c.js.map",
     "static/css/2.f4cb9c36.chunk.css": "/static/css/2.f4cb9c36.chunk.css",
@@ -12,7 +12,7 @@
     "static/css/2.f4cb9c36.chunk.css.map": "/static/css/2.f4cb9c36.chunk.css.map",
     "static/css/main.ff9be431.chunk.css.map": "/static/css/main.ff9be431.chunk.css.map",
     "static/js/2.c4b11ea7.chunk.js.LICENSE.txt": "/static/js/2.c4b11ea7.chunk.js.LICENSE.txt",
-    "static/js/main.94da35cf.chunk.js.LICENSE.txt": "/static/js/main.94da35cf.chunk.js.LICENSE.txt",
+    "static/js/main.d8a1a703.chunk.js.LICENSE.txt": "/static/js/main.d8a1a703.chunk.js.LICENSE.txt",
     "static/media/card-primary.png": "/static/media/card-primary.17212428.png",
     "static/media/black-dashboard-pro-react.scss?v=1.2.0": "/static/media/night-sky-full-of-stars-fantasy-animation-made-of-magical-sparkly-light-particles-flickering-on-a-purple-blue-gradient-background_bajacpz7x_thumbnail-full01.e6a30d27.png",
     "static/media/emilyz.jpg": "/static/media/emilyz.48a62490.jpg",
@@ -29,6 +29,6 @@
     "static/css/2.f4cb9c36.chunk.css",
     "static/js/2.c4b11ea7.chunk.js",
     "static/css/main.ff9be431.chunk.css",
-    "static/js/main.94da35cf.chunk.js"
+    "static/js/main.d8a1a703.chunk.js"
   ]
 }
