@@ -21,6 +21,7 @@ import classNames from "classnames";
 import { Line, Bar } from "react-chartjs-2";
 // react plugin for creating vector maps
 import { VectorMap } from "react-jvectormap";
+import { connect } from 'react-redux';
 
 // reactstrap components
 import {
@@ -53,6 +54,9 @@ import {
   chartExample4,
 } from "variables/charts.js";
 
+import * as selector from '../_reducers';
+import * as actions from '../_actions/dashboard';
+
 var mapData = {
   AU: 760,
   BR: 550,
@@ -67,7 +71,355 @@ var mapData = {
   US: 2920,
 };
 
-const Dashboard = () => {
+let chart_1_2_3_options = {
+  maintainAspectRatio: false,
+  legend: {
+    display: false,
+  },
+  tooltips: {
+    backgroundColor: "#f5f5f5",
+    titleFontColor: "#333",
+    bodyFontColor: "#666",
+    bodySpacing: 4,
+    xPadding: 12,
+    mode: "nearest",
+    intersect: 0,
+    position: "nearest",
+  },
+  responsive: true,
+  scales: {
+    yAxes: [
+      {
+        barPercentage: 1.6,
+        gridLines: {
+          drawBorder: false,
+          color: "rgba(29,140,248,0.0)",
+          zeroLineColor: "transparent",
+        },
+        ticks: {
+          suggestedMin: 60,
+          suggestedMax: 125,
+          padding: 20,
+          fontColor: "#9a9a9a",
+        },
+      },
+    ],
+    xAxes: [
+      {
+        barPercentage: 1.6,
+        gridLines: {
+          drawBorder: false,
+          color: "rgba(29,140,248,0.1)",
+          zeroLineColor: "transparent",
+        },
+        ticks: {
+          padding: 20,
+          fontColor: "#9a9a9a",
+        },
+      },
+    ],
+  },
+};
+
+let renderChartData = (labels,data) => (canvas) => {
+  let ctx = canvas.getContext("2d");
+  let gradientStroke = ctx.createLinearGradient(0, 230, 0, 50);
+  gradientStroke.addColorStop(1, "rgba(29,140,248,0.2)");
+  gradientStroke.addColorStop(0.4, "rgba(29,140,248,0.0)");
+  gradientStroke.addColorStop(0, "rgba(29,140,248,0)");
+  return {
+    labels: labels,
+    datasets: [
+      {
+        label: "Data",
+        fill: true,
+        backgroundColor: gradientStroke,
+        borderColor: "#1f8ef1",
+        borderWidth: 2,
+        borderDash: [],
+        borderDashOffset: 0.0,
+        pointBackgroundColor: "#1f8ef1",
+        pointBorderColor: "rgba(255,255,255,0)",
+        pointHoverBackgroundColor: "#1f8ef1",
+        pointBorderWidth: 20,
+        pointHoverRadius: 4,
+        pointHoverBorderWidth: 15,
+        pointRadius: 4,
+        data: data,
+      },
+    ],
+  };
+}
+
+class DashBoard extends React.Component{
+  state = {
+    bigChartData: "accepted",
+  }
+  setBgChartData = (data) => {
+    this.setState({
+      bigChartData: data
+    })
+  }
+  componentDidMount(){
+    const {
+      getDashboard
+    } = this.props;
+    getDashboard();
+  }
+  render(){
+    const {
+      bigChartData
+    } = this.state;
+    const {
+      //loading,
+      data,
+      actual_month_data
+    } = this.props;
+    const chartLabels = data[bigChartData].map(data => data.month);
+    const chartData = data[bigChartData].map(data => data.total);
+    return (
+      <>
+        <div className="content">
+          <Row>
+            <Col xs="12">
+              <Card className="card-chart">
+                <CardHeader>
+                  <Row>
+                    <Col className="text-left" sm="6">
+                      <h5 className="card-category">Mensajes</h5>
+                      <CardTitle tag="h2">Informacion</CardTitle>
+                    </Col>
+                    <Col sm="6">
+                      <ButtonGroup
+                        className="btn-group-toggle float-right"
+                        data-toggle="buttons"
+                      >
+                        <Button
+                          color="info"
+                          id="0"
+                          size="sm"
+                          tag="label"
+                          className={classNames("btn-simple", {
+                            active: bigChartData === "accepted",
+                          })}
+                          onClick={() => this.setBgChartData("accepted")}
+                        >
+                          <span className="d-none d-sm-block d-md-block d-lg-block d-xl-block">
+                            Enviados
+                          </span>
+                          <span className="d-block d-sm-none">
+                            <i className="tim-icons icon-single-02" />
+                          </span>
+                        </Button>
+                        <Button
+                          color="info"
+                          id="1"
+                          size="sm"
+                          tag="label"
+                          className={classNames("btn-simple", {
+                            active: bigChartData === "delivered",
+                          })}
+                          onClick={() => this.setBgChartData("delivered")}
+                        >
+                          <span className="d-none d-sm-block d-md-block d-lg-block d-xl-block">
+                            Rechazados
+                          </span>
+                          <span className="d-block d-sm-none">
+                            <i className="tim-icons icon-gift-2" />
+                          </span>
+                        </Button>
+                        <Button
+                          color="info"
+                          id="2"
+                          size="sm"
+                          tag="label"
+                          className={classNames("btn-simple", {
+                            active: bigChartData === "failed",
+                          })}
+                          onClick={() => this.setBgChartData("failed")}
+                        >
+                          <span className="d-none d-sm-block d-md-block d-lg-block d-xl-block">
+                            Spam
+                          </span>
+                          <span className="d-block d-sm-none">
+                            <i className="tim-icons icon-tap-02" />
+                          </span>
+                        </Button>
+                      </ButtonGroup>
+                    </Col>
+                  </Row>
+                </CardHeader>
+                <CardBody>
+                  <div className="chart-area">
+                    <Line
+                      data={renderChartData(chartLabels,chartData)}
+                      options={chart_1_2_3_options}
+                    />
+                  </div>
+                </CardBody>
+              </Card>
+            </Col>
+            <Col xs="12">
+              <h5 className="card-category">Mes Actual</h5>
+            </Col>
+            <Col lg="2" md="6">
+              <Card className="card-stats">
+                <CardBody>
+                  <Row>
+                    <Col xs="5">
+                      <div className="info-icon text-center icon-warning">
+                        <i className="tim-icons icon-chat-33" />
+                      </div>
+                    </Col>
+                    <Col xs="7">
+                      <div className="numbers">
+                        <p className="card-category">Accepted</p>
+                        <CardTitle tag="h3">{actual_month_data.accepted}</CardTitle>
+                      </div>
+                    </Col>
+                  </Row>
+                </CardBody>
+                <CardFooter>
+                  <hr />
+                  <div className="stats">
+                    <i className="tim-icons icon-refresh-01" /> Update Now
+                  </div>
+                </CardFooter>
+              </Card>
+            </Col>
+            <Col lg="2" md="6">
+              <Card className="card-stats">
+                <CardBody>
+                  <Row>
+                    <Col xs="5">
+                      <div className="info-icon text-center icon-primary">
+                        <i className="tim-icons icon-shape-star" />
+                      </div>
+                    </Col>
+                    <Col xs="7">
+                      <div className="numbers">
+                        <p className="card-category">clicked</p>
+                        <CardTitle tag="h3">{actual_month_data.clicked}</CardTitle>
+                      </div>
+                    </Col>
+                  </Row>
+                </CardBody>
+                <CardFooter>
+                  <hr />
+                  <div className="stats">
+                    <i className="tim-icons icon-sound-wave" /> Last Research
+                  </div>
+                </CardFooter>
+              </Card>
+            </Col>
+            <Col lg="2" md="6">
+              <Card className="card-stats">
+                <CardBody>
+                  <Row>
+                    <Col xs="5">
+                      <div className="info-icon text-center icon-success">
+                        <i className="tim-icons icon-single-02" />
+                      </div>
+                    </Col>
+                    <Col xs="7">
+                      <div className="numbers">
+                        <p className="card-category">complained</p>
+                        <CardTitle tag="h3">{actual_month_data.clicked}</CardTitle>
+                      </div>
+                    </Col>
+                  </Row>
+                </CardBody>
+                <CardFooter>
+                  <hr />
+                  <div className="stats">
+                    <i className="tim-icons icon-trophy" /> Customers feedback
+                  </div>
+                </CardFooter>
+              </Card>
+            </Col>
+            <Col lg="2" md="6">
+              <Card className="card-stats">
+                <CardBody>
+                  <Row>
+                    <Col xs="5">
+                      <div className="info-icon text-center icon-danger">
+                        <i className="tim-icons icon-molecule-40" />
+                      </div>
+                    </Col>
+                    <Col xs="7">
+                      <div className="numbers">
+                        <p className="card-category">delivered</p>
+                        <CardTitle tag="h3">12</CardTitle>
+                      </div>
+                    </Col>
+                  </Row>
+                </CardBody>
+                <CardFooter>
+                  <hr />
+                  <div className="stats">
+                    <i className="tim-icons icon-watch-time" /> In the last hours
+                  </div>
+                </CardFooter>
+              </Card>
+            </Col>
+            <Col lg="2" md="6">
+              <Card className="card-stats">
+                <CardBody>
+                  <Row>
+                    <Col xs="5">
+                      <div className="info-icon text-center icon-danger">
+                        <i className="tim-icons icon-molecule-40" />
+                      </div>
+                    </Col>
+                    <Col xs="7">
+                      <div className="numbers">
+                        <p className="card-category">failed</p>
+                        <CardTitle tag="h3">12</CardTitle>
+                      </div>
+                    </Col>
+                  </Row>
+                </CardBody>
+                <CardFooter>
+                  <hr />
+                  <div className="stats">
+                    <i className="tim-icons icon-watch-time" /> In the last hours
+                  </div>
+                </CardFooter>
+              </Card>
+            </Col>
+            <Col lg="2" md="6">
+              <Card className="card-stats">
+                <CardBody>
+                  <Row>
+                    <Col xs="5">
+                      <div className="info-icon text-center icon-danger">
+                        <i className="tim-icons icon-molecule-40" />
+                      </div>
+                    </Col>
+                    <Col xs="7">
+                      <div className="numbers">
+                        <p className="card-category">opened</p>
+                        <CardTitle tag="h3">12</CardTitle>
+                      </div>
+                    </Col>
+                  </Row>
+                </CardBody>
+                <CardFooter>
+                  <hr />
+                  <div className="stats">
+                    <i className="tim-icons icon-watch-time" /> In the last hours
+                  </div>
+                </CardFooter>
+              </Card>
+            </Col>
+          </Row>
+        </div>
+      </>
+    )
+  }
+}
+
+const Dashboardold = () => {
   const [bigChartData, setbigChartData] = React.useState("data1");
   const setBgChartData = (name) => {
     setbigChartData(name);
@@ -81,8 +433,8 @@ const Dashboard = () => {
               <CardHeader>
                 <Row>
                   <Col className="text-left" sm="6">
-                    <h5 className="card-category">Total Shipments</h5>
-                    <CardTitle tag="h2">Performance</CardTitle>
+                    <h5 className="card-category">Mensajes</h5>
+                    <CardTitle tag="h2">Informacion</CardTitle>
                   </Col>
                   <Col sm="6">
                     <ButtonGroup
@@ -100,7 +452,7 @@ const Dashboard = () => {
                         onClick={() => setBgChartData("data1")}
                       >
                         <span className="d-none d-sm-block d-md-block d-lg-block d-xl-block">
-                          Accounts
+                          Enviados
                         </span>
                         <span className="d-block d-sm-none">
                           <i className="tim-icons icon-single-02" />
@@ -117,7 +469,7 @@ const Dashboard = () => {
                         onClick={() => setBgChartData("data2")}
                       >
                         <span className="d-none d-sm-block d-md-block d-lg-block d-xl-block">
-                          Purchases
+                          Rechazados
                         </span>
                         <span className="d-block d-sm-none">
                           <i className="tim-icons icon-gift-2" />
@@ -134,7 +486,7 @@ const Dashboard = () => {
                         onClick={() => setBgChartData("data3")}
                       >
                         <span className="d-none d-sm-block d-md-block d-lg-block d-xl-block">
-                          Sessions
+                          Spam
                         </span>
                         <span className="d-block d-sm-none">
                           <i className="tim-icons icon-tap-02" />
@@ -1093,4 +1445,15 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default connect(
+  (state) => ({
+    loading: selector.getDashBoardLoading(state),
+    data: selector.getDashBoardData(state),
+    actual_month_data: selector.getDashBoardMonth(state)
+  }),
+  (dispatch) => ({
+    getDashboard(){
+      dispatch(actions.getDashboard())
+    }
+  }),
+)(DashBoard);

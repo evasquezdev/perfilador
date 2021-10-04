@@ -3,6 +3,7 @@ import LoginSaga from './login';
 import dbSaga from './db';
 import filterSaga from './filter';
 import actionSaga from './action';
+import dashboardSaga from './dashboard';
 
 function* mainSaga() {
   yield all([
@@ -10,6 +11,7 @@ function* mainSaga() {
     fork(dbSaga),
     fork(filterSaga),
     fork(actionSaga),
+    fork(dashboardSaga)
   ]);
 }
 

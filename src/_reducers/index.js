@@ -2,14 +2,11 @@ import { combineReducers } from 'redux';
 import { reducer as reducerForm } from 'redux-form';
 
 import login, * as loginHandler from './login';
-
 import db, * as dbHandler from './db';
-
 import modal, * as fromModal from './modal';
-
 import filter, * as filterHandler from './filter';
-
 import action, * as actionHandler from './action';
+import dashboard, * as dashboardHandler from './dashboard';
 
 export default combineReducers({
   login,
@@ -17,6 +14,7 @@ export default combineReducers({
   modal,
   filter,
   action,
+  dashboard,
   form: reducerForm,
 });
 
@@ -42,3 +40,7 @@ export const getFilterloading = (state) => filterHandler.getFilterloading(state.
 
 //action
 export const getActionloading = (state) => actionHandler.getActionloading(state.action);
+
+export const getDashBoardLoading = (state) => dashboardHandler.getDashBoardLoading(state.dashboard);
+export const getDashBoardData = (state) => dashboardHandler.getDashBoardData(state.dashboard);
+export const getDashBoardMonth = (state) => dashboardHandler.getDashBoardMonth(state.dashboard);

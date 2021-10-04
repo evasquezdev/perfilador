@@ -1,0 +1,3 @@
+export const GET_DASHBOARD = 'GET_DASHBOARD';
+export const GET_DASHBOARD_OK = 'GET_DASHBOARD_OK';
+export const GET_DASHBOARD_KO = 'GET_DASHBOARD_KO';
