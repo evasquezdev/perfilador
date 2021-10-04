@@ -1,7 +1,10 @@
 import * as types from '../_types/dashboard';
 
-export const getDashboard = () => ({
-  type: types.GET_DASHBOARD
+export const getDashboard = ({date_init}) => ({
+  type: types.GET_DASHBOARD,
+  payload: {
+    date_init
+  }
 });
 
 export const getDashboardOK = ({

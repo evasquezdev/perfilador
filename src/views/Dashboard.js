@@ -155,6 +155,7 @@ let renderChartData = (labels,data) => (canvas) => {
 class DashBoard extends React.Component{
   state = {
     bigChartData: "accepted",
+    date_init: '10',
   }
   setBgChartData = (data) => {
     this.setState({
@@ -165,7 +166,10 @@ class DashBoard extends React.Component{
     const {
       getDashboard
     } = this.props;
-    getDashboard();
+    const {
+      date_init
+    } = this.state;
+    getDashboard(date_init);
   }
   render(){
     const chartOptions = [
@@ -177,12 +181,14 @@ class DashBoard extends React.Component{
       'complained',
     ]
     const {
-      bigChartData
+      bigChartData,
+      date_init
     } = this.state;
     const {
       //loading,
       data,
-      actual_month_data
+      actual_month_data,
+      getDashboard
     } = this.props;
     const chartLabels = data[bigChartData].map(data => data.month);
     const chartData = data[bigChartData].map(data => data.total);
@@ -212,18 +218,23 @@ class DashBoard extends React.Component{
                           </Col>
                           <Col>
                             <Label>Mes</Label>
-                            <Input type="select" size="sm">
+                            <Input type="select" size="sm" value={date_init} onChange={e => {
+                              this.setState({
+                                date_init: e.target.value
+                              });
+                              getDashboard(e.target.value)
+                            }}>
                               <option>-</option>
-                              <option>Enero</option>
-                              <option>Febrero</option>
-                              <option>Marzo</option>
-                              <option>Abril</option>
-                              <option>Mayo</option>
-                              <option>Junio</option>
-                              <option>Julio</option>
-                              <option>Agosto</option>
-                              <option>Septiembre</option>
-                              <option>Octubre</option>
+                              <option value='1'>Enero</option>
+                              <option value='2'>Febrero</option>
+                              <option value='3'>Marzo</option>
+                              <option value='4'>Abril</option>
+                              <option value='5'>Mayo</option>
+                              <option value='6'>Junio</option>
+                              <option value='7'>Julio</option>
+                              <option value='8'>Agosto</option>
+                              <option value='9'>Septiembre</option>
+                              <option value='10'>Octubre</option>
                             </Input>
                           </Col>
                         </Row>
@@ -1459,8 +1470,8 @@ export default connect(
     actual_month_data: selector.getDashBoardMonth(state)
   }),
   (dispatch) => ({
-    getDashboard(){
-      dispatch(actions.getDashboard())
+    getDashboard(date_init){
+      dispatch(actions.getDashboard({date_init}))
     }
   }),
 )(DashBoard);

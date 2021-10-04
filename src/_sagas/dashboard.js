@@ -10,12 +10,16 @@ import * as api from '../_apis/dashboard';
 import * as reducers from '../_reducers';
 import * as modalActions from '../_actions/modal';
 
-function* getDashboard() {
+function* getDashboard(action) {
   try {
+    const {
+      date_init
+    } = action.payload;
     const token = yield select(reducers.getUserToken);
     const response = yield call(
       api.getDashboard,
-      token
+      token,
+      date_init
     );
     yield put(actions.getDashboardOK({
       data: response.data,

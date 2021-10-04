@@ -1,8 +1,9 @@
 import URL from './routes';
 export const getDashboard = (
-  token
+  token,
+  date_init 
 ) => new Promise((resolve, reject) => {
-  fetch(`${URL}/filters/dashboard/`, {
+  fetch(`${URL}/filters/dashboard/?date_init=${date_init}`, {
     method: 'GET',
     headers: {
       Authorization: `Token ${token}`,
