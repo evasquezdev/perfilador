@@ -44,6 +44,7 @@ import {
   Row,
   Col,
   UncontrolledTooltip,
+  Form,
 } from "reactstrap";
 
 // core components
@@ -167,6 +168,14 @@ class DashBoard extends React.Component{
     getDashboard();
   }
   render(){
+    const chartOptions = [
+      'accepted',
+      'delivered',
+      'failed',
+      'opened',
+      'clicked',
+      'complained',
+    ]
     const {
       bigChartData
     } = this.state;
@@ -177,6 +186,9 @@ class DashBoard extends React.Component{
     } = this.props;
     const chartLabels = data[bigChartData].map(data => data.month);
     const chartData = data[bigChartData].map(data => data.total);
+    var curr = new Date();
+    curr.setDate(curr.getDate() + 3);
+    var date = curr.toISOString().substr(0,10);
     return (
       <>
         <div className="content">
@@ -190,61 +202,56 @@ class DashBoard extends React.Component{
                       <CardTitle tag="h2">Informacion</CardTitle>
                     </Col>
                     <Col sm="6">
+                      <Form
+                        className="float-left"
+                      >
+                        <Row>
+                          <Col>
+                            <Label>Fecha Inicial</Label>
+                            <Input type="date" disabled size="sm" defaultValue={date} />
+                          </Col>
+                          <Col>
+                            <Label>Mes</Label>
+                            <Input type="select" size="sm">
+                              <option>-</option>
+                              <option>Enero</option>
+                              <option>Febrero</option>
+                              <option>Marzo</option>
+                              <option>Abril</option>
+                              <option>Mayo</option>
+                              <option>Junio</option>
+                              <option>Julio</option>
+                              <option>Agosto</option>
+                              <option>Septiembre</option>
+                              <option>Octubre</option>
+                            </Input>
+                          </Col>
+                        </Row>
+                      </Form>
                       <ButtonGroup
                         className="btn-group-toggle float-right"
                         data-toggle="buttons"
                       >
-                        <Button
-                          color="info"
-                          id="0"
-                          size="sm"
-                          tag="label"
-                          className={classNames("btn-simple", {
-                            active: bigChartData === "accepted",
-                          })}
-                          onClick={() => this.setBgChartData("accepted")}
-                        >
-                          <span className="d-none d-sm-block d-md-block d-lg-block d-xl-block">
-                            Enviados
-                          </span>
-                          <span className="d-block d-sm-none">
-                            <i className="tim-icons icon-single-02" />
-                          </span>
-                        </Button>
-                        <Button
-                          color="info"
-                          id="1"
-                          size="sm"
-                          tag="label"
-                          className={classNames("btn-simple", {
-                            active: bigChartData === "delivered",
-                          })}
-                          onClick={() => this.setBgChartData("delivered")}
-                        >
-                          <span className="d-none d-sm-block d-md-block d-lg-block d-xl-block">
-                            Rechazados
-                          </span>
-                          <span className="d-block d-sm-none">
-                            <i className="tim-icons icon-gift-2" />
-                          </span>
-                        </Button>
-                        <Button
-                          color="info"
-                          id="2"
-                          size="sm"
-                          tag="label"
-                          className={classNames("btn-simple", {
-                            active: bigChartData === "failed",
-                          })}
-                          onClick={() => this.setBgChartData("failed")}
-                        >
-                          <span className="d-none d-sm-block d-md-block d-lg-block d-xl-block">
-                            Spam
-                          </span>
-                          <span className="d-block d-sm-none">
-                            <i className="tim-icons icon-tap-02" />
-                          </span>
-                        </Button>
+                        {chartOptions.map((op,idx) => {
+                          return <Button
+                            color="info"
+                            id="0"
+                            size="sm"
+                            tag="label"
+                            className={classNames("btn-simple", {
+                              active: bigChartData === op,
+                            })}
+                            onClick={() => this.setBgChartData(op)}
+                            index={idx}
+                          >
+                            <span className="d-none d-sm-block d-md-block d-lg-block d-xl-block">
+                              {op}
+                            </span>
+                            <span className="d-block d-sm-none">
+                              <i className="tim-icons icon-single-02" />
+                            </span>
+                          </Button>
+                        })}
                       </ButtonGroup>
                     </Col>
                   </Row>
@@ -282,7 +289,7 @@ class DashBoard extends React.Component{
                 <CardFooter>
                   <hr />
                   <div className="stats">
-                    <i className="tim-icons icon-refresh-01" /> Update Now
+                    <i className="tim-icons icon-refresh-01" /> Actualizado para mes actual
                   </div>
                 </CardFooter>
               </Card>
@@ -307,7 +314,7 @@ class DashBoard extends React.Component{
                 <CardFooter>
                   <hr />
                   <div className="stats">
-                    <i className="tim-icons icon-sound-wave" /> Last Research
+                    <i className="tim-icons icon-refresh-01" /> Actualizado para mes actual
                   </div>
                 </CardFooter>
               </Card>
@@ -332,7 +339,7 @@ class DashBoard extends React.Component{
                 <CardFooter>
                   <hr />
                   <div className="stats">
-                    <i className="tim-icons icon-trophy" /> Customers feedback
+                    <i className="tim-icons icon-refresh-01" /> Actualizado para mes actual
                   </div>
                 </CardFooter>
               </Card>
@@ -357,7 +364,7 @@ class DashBoard extends React.Component{
                 <CardFooter>
                   <hr />
                   <div className="stats">
-                    <i className="tim-icons icon-watch-time" /> In the last hours
+                    <i className="tim-icons icon-refresh-01" /> Actualizado para mes actual
                   </div>
                 </CardFooter>
               </Card>
@@ -382,7 +389,7 @@ class DashBoard extends React.Component{
                 <CardFooter>
                   <hr />
                   <div className="stats">
-                    <i className="tim-icons icon-watch-time" /> In the last hours
+                    <i className="tim-icons icon-refresh-01" /> Actualizado para mes actual
                   </div>
                 </CardFooter>
               </Card>
@@ -407,7 +414,7 @@ class DashBoard extends React.Component{
                 <CardFooter>
                   <hr />
                   <div className="stats">
-                    <i className="tim-icons icon-watch-time" /> In the last hours
+                    <i className="tim-icons icon-refresh-01" /> Actualizado para mes actual
                   </div>
                 </CardFooter>
               </Card>
