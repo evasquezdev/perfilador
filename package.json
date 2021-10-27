@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "https://sms.devpackgroup.com/",
   "dependencies": {
+    "@emotion/react": "^11.5.0",
     "bootstrap": "4.5.3",
     "chart.js": "2.9.4",
     "classnames": "2.2.6",
@@ -28,6 +29,7 @@
     "react-router-dom": "5.2.0",
     "react-scripts": "4.0.1",
     "react-select": "3.1.1",
+    "react-spinners": "^0.11.0",
     "react-table": "7.6.2",
     "reactstrap": "^8.7.1",
     "redux": "^4.1.1",

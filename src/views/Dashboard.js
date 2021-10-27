@@ -280,7 +280,7 @@ class DashBoard extends React.Component{
             <Col xs="12">
               <h5 className="card-category">Mes Actual</h5>
             </Col>
-            <Col lg="2" md="6">
+            <Col lg="4" md="6">
               <Card className="card-stats">
                 <CardBody>
                   <Row>
@@ -305,7 +305,7 @@ class DashBoard extends React.Component{
                 </CardFooter>
               </Card>
             </Col>
-            <Col lg="2" md="6">
+            <Col lg="4" md="6">
               <Card className="card-stats">
                 <CardBody>
                   <Row>
@@ -330,7 +330,7 @@ class DashBoard extends React.Component{
                 </CardFooter>
               </Card>
             </Col>
-            <Col lg="2" md="6">
+            <Col lg="4" md="6">
               <Card className="card-stats">
                 <CardBody>
                   <Row>
@@ -355,7 +355,7 @@ class DashBoard extends React.Component{
                 </CardFooter>
               </Card>
             </Col>
-            <Col lg="2" md="6">
+            <Col lg="4" md="6">
               <Card className="card-stats">
                 <CardBody>
                   <Row>
@@ -380,7 +380,7 @@ class DashBoard extends React.Component{
                 </CardFooter>
               </Card>
             </Col>
-            <Col lg="2" md="6">
+            <Col lg="4" md="6">
               <Card className="card-stats">
                 <CardBody>
                   <Row>
@@ -405,7 +405,7 @@ class DashBoard extends React.Component{
                 </CardFooter>
               </Card>
             </Col>
-            <Col lg="2" md="6">
+            <Col lg="4" md="6">
               <Card className="card-stats">
                 <CardBody>
                   <Row>
@@ -1462,6 +1462,7 @@ const Dashboardold = () => {
     </>
   );
 };
+
 
 export default connect(
   (state) => ({

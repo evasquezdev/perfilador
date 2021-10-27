@@ -33,24 +33,42 @@ function* getdeps() {
 function* getdata(action) {
   try {
     const {
-      age_init,
       age_end,
-      department,
+      age_init,
+      departmentid,
+      departmentlabel,
+      file,
+      header,
       municipality,
+      range,
       sex,
       sms_email,
+      text
     } = action.payload;
     const token = yield select(reducers.getUserToken);
     const response = yield call(
       api.getFilterData,
       token,
-      age_init,
       age_end,
-      department,
+      age_init,
+      departmentid,
+      departmentlabel,
+      file,
+      header,
       municipality,
+      range,
       sex,
       sms_email,
+      text
     );
+    console.log('aqui', age_init,
+      age_end,
+      departmentid,
+      departmentlabel,
+      municipality,
+      range,
+      sex,
+      sms_email)
     yield put(actions.filterDataOK({
       data: response
     }));

@@ -12,37 +12,95 @@ import {
   Input,
   Row,
   Col,
-  CardText,
   ListGroup, ListGroupItem, Badge
 } from "reactstrap";
+import Select from "react-select";
 import { connect } from 'react-redux';
 import * as selector from '../../_reducers';
 import * as filterActions from '../../_actions/filter';
 import * as modalActions from '../../_actions/modal';
 import Modal from '../../components/Modal';
 import * as messageActions from '../../_actions/action';
+import { FadeLoader } from "react-spinners";
+import { css } from "@emotion/react";
 
-class Databases extends React.Component{
+const override = css`
+  display: block;
+  margin: 0 auto;
+  border-color: red;
+  size: 10px
+`;
+
+class Databases extends React.Component {
   state = {
     FilterForm: {
       age_init: '',
       age_end: '',
-      department: '',
+      range: null,
+      departmentid: null,
+      departmentlabel: '',
       municipality: '',
       sex: '',
       sms_email: '0',
       header: '',
       text: '',
       file: null,
-    }
+    },
+    range: [
+      {
+        label: '21-30',
+        value: 0
+      },
+      {
+        label: '31-40',
+        value: 1
+      },
+      {
+        label: '41-50',
+        value: 2
+      },
+      {
+        label: '51-60',
+        value: 3
+      },
+      {
+        label: '61-70',
+        value: 4
+      },
+      {
+        label: '71-80',
+        value: 5
+      },
+      {
+        label: '81-90',
+        value: 6
+      },
+      {
+        label: '91-100',
+        value: 7
+      },
+      {
+        label: '101-110',
+        value: 8
+      },
+    ]
   }
-  componentDidMount(){
+
+
+
+
+
+
+
+
+
+  componentDidMount() {
     const {
       getDeps,
     } = this.props;
     getDeps();
   }
-  render(){
+  render() {
     const {
       departments,
       municipalities,
@@ -55,7 +113,7 @@ class Databases extends React.Component{
     const {
       FilterForm
     } = this.state;
-    const filteredmuns = municipalities.filter(m => m.department === FilterForm.department)
+    let filteredmuns = municipalities.filter(m => m.department === FilterForm.departmentlabel)
     return (<div className="content">
       <Modal />
       <Row>
@@ -68,92 +126,69 @@ class Databases extends React.Component{
                 </CardTitle>
                 <Label>Rango de Edad</Label>
                 <Row>
-                  <Col xs="6">
+                  <Col xs="12">
                     <FormGroup>
-                      <Input
-                        type="number"
-                        min="18"
-                        step="1"
-                        placeholder="Minimo"
-                        disabled={loading}
-                        value={FilterForm.age_init}
-                        onChange={(e) => this.setState({
+                      <Select
+                        options={this.state.range}
+                        onChange={e => this.setState({
                           FilterForm: {
                             ...FilterForm,
-                            age_init: e.target.value
+                            range: e.value
                           }
-                        })}
-                      />
-                    </FormGroup>
-                  </Col>
-                  <Col xs="6">
-                    <FormGroup>
-                      <Input
-                        type="number"
-                        max="100"
-                        step="1"
-                        placeholder="Maximo"
-                        disabled={loading}
-                        value={FilterForm.age_end}
-                        onChange={(e) => this.setState({
-                          FilterForm: {
-                            ...FilterForm,
-                            age_end: e.target.value
-                          }
-                        })}
-                      />
+                        })
+                        } />
                     </FormGroup>
                   </Col>
                 </Row>
                 <FormGroup>
                   <Label>Departamento</Label>
-                  <Input 
-                    type="select"
+                  <Select
                     disabled={loading}
                     className="text-info"
-                    value={FilterForm.department}
+                    //value={FilterForm.department}
                     onChange={(e) => this.setState({
                       FilterForm: {
                         ...FilterForm,
-                        department: e.target.value
+                        departmentid: e.value,
+                        departmentlabel: e.label
                       }
                     })}
-                  >
-                    <option></option>
-                    {departments.map((dep,i) => <option key={i}
-                      value={dep}
-                    >
-                      {dep}
-                    </option>)}
-                  </Input>
+                    options={departments.map((dep, i) => {
+                      return {
+                        value: i,
+                        label: dep
+                      }
+                    }
+                    )}
+                  />
                 </FormGroup>
                 <FormGroup>
                   <Label>Municipio</Label>
-                  <Input 
-                    type="select"
+                  <Select
                     disabled={loading}
                     className="text-info"
-                    value={FilterForm.municipality}
+                    //value={FilterForm.department}
                     onChange={(e) => this.setState({
                       FilterForm: {
                         ...FilterForm,
-                        municipality: e.target.value
+                        municipality: e.label
                       }
                     })}
-                  >
-                    <option></option>
-                    {filteredmuns.map((mun,i) => <option key={i}
-                      value={mun.municipality}
-                    >
-                      {mun.municipality}
-                    </option>)}
-                  </Input>
+                    options={filteredmuns.map((dep, i) => {
+                      return {
+                        value: i,
+                        label: dep.municipality
+                      }
+                    }
+                    )}
+                  />
+
                 </FormGroup>
                 <Label>Sexo</Label>
                 <FormGroup check>
                   <Label check>
-                    <Input type="radio" 
-                      name="sex" 
+                    <Input type="radio"
+                      name="sex"
                       value="M"
                       disabled={loading}
                       checked={FilterForm.sex === "M"}
@@ -169,9 +204,9 @@ class Databases extends React.Component{
                 </FormGroup>
                 <FormGroup check>
                   <Label check>
-                    <Input type="radio" 
-                      name="sex" 
-                      value="F" 
+                    <Input type="radio"
+                      name="sex"
+                      value="F"
                       disabled={loading}
                       checked={FilterForm.sex === "F"}
                       onChange={e => this.setState({
@@ -186,9 +221,9 @@ class Databases extends React.Component{
                 </FormGroup>
                 <FormGroup check>
                   <Label check>
-                    <Input type="radio" 
-                      name="sex" 
-                      value="" 
+                    <Input type="radio"
+                      name="sex"
+                      value=""
                       disabled={loading}
                       checked={FilterForm.sex === ""}
                       onChange={e => this.setState({
@@ -204,8 +239,8 @@ class Databases extends React.Component{
                 <Label className="mt-3">Forma de Envio</Label>
                 <FormGroup check>
                   <Label check>
-                    <Input type="radio" 
-                      name="sms_email" 
+                    <Input type="radio"
+                      name="sms_email"
                       value="1"
                       disabled={loading}
                       checked={FilterForm.sms_email === "1"}
@@ -215,14 +250,14 @@ class Databases extends React.Component{
                           sms_email: e.target.value
                         }
                       })}
-                      />{' '}
+                    />{' '}
                     Correo
                   </Label>
                 </FormGroup>
                 <FormGroup check>
                   <Label check>
-                    <Input type="radio" 
-                      name="sms_email" 
+                    <Input type="radio"
+                      name="sms_email"
                       value="2"
                       disabled={loading}
                       checked={FilterForm.sms_email === "2"}
@@ -238,8 +273,8 @@ class Databases extends React.Component{
                 </FormGroup>
                 <FormGroup check>
                   <Label check>
-                    <Input type="radio" 
-                      name="sms_email" 
+                    <Input type="radio"
+                      name="sms_email"
                       value="0"
                       disabled={loading}
                       checked={FilterForm.sms_email === "0"}
@@ -253,105 +288,73 @@ class Databases extends React.Component{
                     Ambos
                   </Label>
                 </FormGroup>
-                <Button className="mt-3" 
-                  color="info"
-                  onClick={e=>{
-                    e.preventDefault();
-                    filterData(FilterForm)
-                  }}
-                >
-                  Filtrar
-                </Button>
+                {this.state.FilterForm.municipality !== '' ?
+                  <Button className="mt-3"
+                    color="info"
+
+                    onClick={e => {
+                      e.preventDefault();
+                      filterData(FilterForm)
+                    }}
+                  >
+                    Filtrar
+                  </Button>
+                  :
+                  <Button className="mt-3"
+                    color="info"
+                    disabled
+                    onClick={e => {
+                      e.preventDefault();
+                      filterData(FilterForm)
+                    }}
+                  >
+                    Filtrar
+                  </Button>
+                }
+
               </CardBody>
             </Card>
           </Form>
         </Col>
-        <Col xs="3">
+        {/*   <Col xs="3">
           {filteredData && <div style={{
             maxHeight: '45rem',
             overflowY: 'scroll'
           }}>
             <h3>Resumen Data</h3>
-              {filteredData.data.map((d,i) => {
-                return <Card key={i}>
-                  <CardBody>
-                    <CardTitle>
-                      Data {i+1}
-                    </CardTitle>
-                    <CardText>
-                      <strong>EDAD</strong><br/>
-                      {d.age_range}
-                    </CardText>
-                    <CardText>
-                      <strong>DEPARTAMENTO</strong><br/>
-                      {d.department}
-                    </CardText>
-                    <CardText>
-                      <strong>MUNICIPALIDAD</strong><br/>
-                      {d.municipality}
-                    </CardText>
-                    <CardText>
-                      <strong>SEXO</strong><br/>
-                      {d.sex}
-                    </CardText>
-                    <CardText>
-                      <strong>CANTIDAD</strong><br/>
-                      {d.dcount}<br/>
-                    </CardText>
-                  </CardBody>
-                </Card>
-              })}
+            {filteredData.data.map((d, i) => {
+              return <Card key={i}>
+                <CardBody>
+                  <CardTitle>
+                    Data {i + 1}
+                  </CardTitle>
+                  <CardText>
+                    <strong>EDAD</strong><br />
+                    {d.age_range}
+                  </CardText>
+                  <CardText>
+                    <strong>DEPARTAMENTO</strong><br />
+                    {d.department}
+                  </CardText>
+                  <CardText>
+                    <strong>MUNICIPALIDAD</strong><br />
+                    {d.municipality}
+                  </CardText>
+                  <CardText>
+                    <strong>SEXO</strong><br />
+                    {d.sex}
+                  </CardText>
+                  <CardText>
+                    <strong>CANTIDAD</strong><br />
+                    {d.dcount}<br />
+                  </CardText>
+                </CardBody>
+              </Card>
+            })}
           </div>}
         </Col>
-        {filteredData && <Col xs="6">
-          <Card>
-            <CardBody>
-              <CardTitle>
-                Creditos disponibles
-              </CardTitle>
-              <ListGroup>
-                <ListGroupItem className="justify-content-between">
-                  <Row>
-                    <Col xs="6">
-                      Mensajes restantes por correo 
-                    </Col>
-                    <Col xs="6" style={{textAlign: 'right'}}>
-                      <Badge pill color="info">{filteredData.email_available}</Badge>
-                    </Col>
-                  </Row>
-                </ListGroupItem>
-                <ListGroupItem className="justify-content-between">
-                  <Row>
-                    <Col xs="6">
-                      Mensajes restantes por SMS
-                    </Col>
-                    <Col xs="6"  style={{textAlign: 'right'}}>
-                      <Badge pill color="info">{filteredData.sms_available}</Badge>
-                    </Col>
-                  </Row>
-                </ListGroupItem>
-              </ListGroup>
-            </CardBody>
-          </Card>
-          <Card>
-            <CardBody>
-              <CardTitle>
-                Total a enviar
-              </CardTitle>
-              <ListGroup>
-                <ListGroupItem className="justify-content-between">
-                  <Row>
-                    <Col xs="6">
-                      Total Filtrado
-                    </Col>
-                    <Col xs="6"  style={{textAlign: 'right'}}>
-                      <Badge pill color="info">{filteredData.total_of_filters}</Badge>
-                    </Col>
-                  </Row>
-                </ListGroupItem>
-              </ListGroup>
-            </CardBody>
-          </Card>
+        */}
+        <Col>
           <Card>
             <CardBody>
               <CardTitle>
@@ -362,11 +365,11 @@ class Databases extends React.Component{
                   <Label>
                     Titulo mensaje
                   </Label>
-                  <Input 
+                  <Input
                     type="text"
-                    value = {FilterForm.header}
+                    value={FilterForm.header}
                     disabled={loadingAction}
-                    onChange={(e)=>{
+                    onChange={(e) => {
                       this.setState({
                         FilterForm: {
                           ...FilterForm,
@@ -380,14 +383,14 @@ class Databases extends React.Component{
                   <Label>
                     Mensaje
                   </Label>
-                  <Input type="textarea" 
+                  <Input type="textarea"
                     style={{
                       maxHeight: '200px',
                       minHeight: '150px'
                     }}
-                    value = {FilterForm.text}
+                    value={FilterForm.text}
                     disabled={loadingAction}
-                    onChange={(e)=>{
+                    onChange={(e) => {
                       this.setState({
                         FilterForm: {
                           ...FilterForm,
@@ -400,10 +403,12 @@ class Databases extends React.Component{
                 <Row>
                   <Col>
                     <FormGroup>
-                      <Button color="info" size="sm">
-                        <Input type="file" 
+                      <Button color="info" size="sm"
+                        style={{ fontSize: 13, height: 40 }}>
+                        <Input type="file"
                           accept=".jpg,.png,.jpeg"
                           disabled={loading}
+                          color="info"
                           onChange={e => {
                             e.preventDefault();
                             this.setState({
@@ -413,8 +418,9 @@ class Databases extends React.Component{
                               }
                             })
                           }}
+
                         />
-                        <Label>Subir Imagen Adjunta</Label>
+                        Subir Imagen Adjunta
                       </Button>
                       {FilterForm.file && <span className="form-text text-info">
                         {FilterForm.file.name}
@@ -423,10 +429,12 @@ class Databases extends React.Component{
                   </Col>
                   <Col>
                     <Button
+                      color="info"
                       disabled={loadingAction}
-                      onClick={()=>{
+                      onClick={() => {
                         sendMail(FilterForm)
                       }}
+                      style={{ fontSize: 13, height: 40 }}
                     >
                       Enviar Mensaje
                     </Button>
@@ -435,9 +443,74 @@ class Databases extends React.Component{
               </Form>
             </CardBody>
           </Card>
+        </Col>
+        {<Col xs="5">
+          <Card>
+            {
+              <CardBody>
+                <CardTitle>
+                  Creditos disponibles
+                </CardTitle>
+                <ListGroup>
+                  <ListGroupItem className="justify-content-between">
+                    <Row>
+                      <Col xs="6">
+                        Mensajes restantes por correo
+                      </Col>
+                      {loading === false ?
+                        <Col xs="6" style={{ textAlign: 'right' }}>
+                          <Badge pill color="info">{filteredData && filteredData.email_available}</Badge>
+                        </Col>
+                        :
+                        <Col md={{ size: 2, offset: 4 }} style={{ textAlign: 'right', marginLeft: 170 }}>
+                          <FadeLoader css={override} size={1} color={"#1d8cf8 "} margin={-10} />
+                        </Col>
+                      }
+                    </Row>
+                  </ListGroupItem>
+                  <ListGroupItem className="justify-content-between">
+                    <Row>
+                      <Col xs="6">
+                        Mensajes restantes por SMS
+                      </Col>
+                      {loading === false ?
+                        <Col xs="6" style={{ textAlign: 'right' }}>
+                          <Badge pill color="info">{filteredData && filteredData.sms_available}</Badge>
+
+                        </Col>
+                        :
+                        <Col md={{ size: 2, offset: 4 }} style={{ textAlign: 'right', marginLeft: 170 }}>
+                          <FadeLoader css={override} size={1} color={"#1d8cf8 "} margin={-10} />
+                        </Col>
+                      }
+                    </Row>
+                  </ListGroupItem>
+                  <ListGroupItem className="justify-content-between">
+                    <Row>
+                      <Col xs="6">
+                        Total Filtrado
+                      </Col>
+
+                      {loading === false ?
+                        <Col xs="6" style={{ textAlign: 'right' }}>
+                          <Badge pill color="info">{filteredData && filteredData.total_of_filters}</Badge>
+                        </Col>
+                        :
+                        <Col md={{ size: 2, offset: 4 }} style={{ textAlign: 'right', marginLeft: 170 }}>
+                          <FadeLoader css={override} size={1} color={"#1d8cf8 "} margin={-10} />
+                        </Col>
+                      }
+                    </Row>
+                  </ListGroupItem>
+                </ListGroup>
+              </CardBody>
+
+            }
+
+          </Card>
         </Col>}
       </Row>
-    </div>);
+    </div >);
   }
 }
 
@@ -451,25 +524,25 @@ export default connect(
     loadingAction: selector.getActionloading(state),
   }),
   (dispatch) => ({
-    getDeps(){
+    getDeps() {
       dispatch(filterActions.getDeps())
     },
-    filterData(FilterForm){
+    filterData(FilterForm) {
       dispatch(filterActions.filterData(FilterForm))
     },
-    sendMail(FilterForm){
-      if(  
-        (!FilterForm.header || FilterForm.header==="") || 
-        (!FilterForm.text || FilterForm.text==="") ||
+    sendMail(FilterForm) {
+      if (
+        (!FilterForm.header || FilterForm.header === "") ||
+        (!FilterForm.text || FilterForm.text === "") ||
         (!FilterForm.file)
       ) {
         dispatch(modalActions.showError({
           message: 'Error: Formulario incompleto',
           title: 'Error'
         }))
-      }else{
-        var filesize = ((FilterForm.file.size/1024)/1024).toFixed(4);
-        if(filesize > 2){
+      } else {
+        var filesize = ((FilterForm.file.size / 1024) / 1024).toFixed(4);
+        if (filesize > 2) {
           dispatch(modalActions.showError({
             message: 'Error: tamaño de imagen es muy grande',
             title: 'Error'

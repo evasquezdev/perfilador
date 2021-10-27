@@ -20,21 +20,31 @@ export const getDepsKO = () => ({
 });
 
 export const filterData = ({
-  age_init,
   age_end,
-  department,
+  age_init,
+  departmentid,
+  departmentlabel,
+  file,
+  header,
   municipality,
+  range,
   sex,
   sms_email,
+  text
 }) => ({
   type: types.FILTER_DATA,
   payload: {
-    age_init,
     age_end,
-    department,
+    age_init,
+    departmentid,
+    departmentlabel,
+    file,
+    header,
     municipality,
+    range,
     sex,
     sms_email,
+    text
   }
 });
 
