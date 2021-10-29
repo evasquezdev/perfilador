@@ -199,7 +199,9 @@ class Databases extends React.Component {
                   </Form>
                   <Row>
                     <Col dm='6'>
-                      <Button type="submit" color="success" disabled={loading}>
+                      <Button type="submit" 
+                      onClick={()=> postDb(this.state.dbForm.file, this.state.dbForm.name, this.state.dbForm.abbreviation)}
+                      color="success" disabled={loading}>
                         <i className="tim-icons icon-cloud-upload-94" />
                         {" "}
                         Crear Base de Datos
