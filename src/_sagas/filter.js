@@ -18,7 +18,7 @@ function* getdeps() {
       token
     );
     yield put(actions.getDepsOK({
-      deparments: response.deparments,
+      deparments: response,
       municipalities: response.municipalities
     }));
   } catch (error) {
@@ -33,42 +33,15 @@ function* getdeps() {
 function* getdata(action) {
   try {
     const {
-      age_end,
-      age_init,
-      departmentid,
-      departmentlabel,
-      file,
-      header,
-      municipality,
-      range,
-      sex,
-      sms_email,
-      text
+      FilterForm
     } = action.payload;
     const token = yield select(reducers.getUserToken);
     const response = yield call(
       api.getFilterData,
       token,
-      age_end,
-      age_init,
-      departmentid,
-      departmentlabel,
-      file,
-      header,
-      municipality,
-      range,
-      sex,
-      sms_email,
-      text
+      FilterForm
     );
-    console.log('aqui', age_init,
-      age_end,
-      departmentid,
-      departmentlabel,
-      municipality,
-      range,
-      sex,
-      sms_email)
+ 
     yield put(actions.filterDataOK({
       data: response
     }));

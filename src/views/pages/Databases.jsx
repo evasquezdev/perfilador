@@ -156,7 +156,7 @@ class Databases extends React.Component {
                         })}
                       />
                     </FormGroup>
-                    <FormGroup>
+                  {/*  <FormGroup>
                       <Label>Abreviacion:</Label>
                       <Input
                         type="text"
@@ -171,6 +171,7 @@ class Databases extends React.Component {
                         })}
                       />
                     </FormGroup>
+                      */}
                     <Row>
                       <Col dm='12'>
                         <FormGroup>

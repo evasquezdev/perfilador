@@ -15,6 +15,9 @@ import {
   ListGroup, ListGroupItem, Badge
 } from "reactstrap";
 import Select from "react-select";
+import { Field, reduxForm, reset/*FieldArray*/ } from 'redux-form';
+
+import ReactDatetime from "react-datetime";
 import { connect } from 'react-redux';
 import * as selector from '../../_reducers';
 import * as filterActions from '../../_actions/filter';
@@ -31,7 +34,24 @@ const override = css`
   size: 10px
 `;
 
-class Databases extends React.Component {
+const data = {
+  "columns": [
+    {
+      "name": "CUI",
+      "type": "ints"
+    },
+    {
+      "name": "CUIString",
+      "type": "string"
+    },
+    {
+      "name": "FECHA_DE_NACIMIENTO",
+      "type": "date"
+    }
+  ]
+}
+
+class DatabasesForm extends React.Component {
   state = {
     FilterForm: {
       age_init: '',
@@ -48,49 +68,115 @@ class Databases extends React.Component {
     },
     range: [
       {
-        label: '21-30',
+        label: 'Menor',
         value: 0
       },
       {
-        label: '31-40',
+        label: 'Mayor',
         value: 1
-      },
-      {
-        label: '41-50',
-        value: 2
-      },
-      {
-        label: '51-60',
-        value: 3
-      },
-      {
-        label: '61-70',
-        value: 4
-      },
-      {
-        label: '71-80',
-        value: 5
-      },
-      {
-        label: '81-90',
-        value: 6
-      },
-      {
-        label: '91-100',
-        value: 7
-      },
-      {
-        label: '101-110',
-        value: 8
-      },
+      }
     ]
   }
 
 
+  FormSelect = ({
+    input: { onChange },
+    placeholder,
+    value,
+    options,
+  }) => (
+    <>
+      <Select
+        className="react-select info"
+        classNamePrefix="react-select"
+        onChange={value => onChange(value.value)}
+        value={value}
+        options={options.map(companyOptions => {
+          return {
+            value: companyOptions.value,
+            label: `${companyOptions.label}`
+          }
+        })}
+        placeholder={placeholder}
+        formNoValidate
+      />
+    </>
+  );
 
+  FormInput = ({
+    input: { onChange },
+    placeholder,
+    type,
+    value,
+    icon,
+    meta: { error },
+  }) => (
+    <>
+      <Input
+        type={type}
+        placeholder={placeholder}
+        value={value}
+        onChange={({ target }) => onChange((target.value))}
+        autoFocus={false}
+        formNoValidate
+      />
+      <label className="error">
+        {this.state.error}
+      </label>
+    </>
+  )
 
+  FormDate = ({
+    input: { onChange },
+    placeholder,
+    value,
+  }) => (
+    <>
+      <ReactDatetime
+        inputProps={{
+          className: "form-control",
+          placeholder,
+        }}
+        timeFormat={false}
+        value={value}
+        onChange={value => onChange((
+          (value._d).getFullYear())
+          +'/'+
+          (parseInt((value._d).getMonth())+1)
+          
+          +'/'+
+          (value._d).getDate())
+        }
+        formNoValidate
 
+      />
 
+      <label className="error">{this.state.error}</label>
+    </>
+  )
+
+  FormCheck = ({
+    input,
+    placeholder,
+    type,
+  }) => (
+    <>
+      <Input {...input} type="radio" />
+      {placeholder}
+      <label>
+        <Field name="sex" component="input" type="radio" value="male" />{' '}
+        Male
+      </label>
+      <label>
+        <Field name="sex" component="input" type="radio" value="female" />{' '}
+        Female
+      </label>
+      <label>
+        <Field name="sex" component="input" type="radio" value="other" />{' '}
+        Other
+      </label>
+    </>
+  )
 
 
 
@@ -109,193 +195,145 @@ class Databases extends React.Component {
       filterData,
       loadingAction,
       sendMail,
+      handleSubmit
     } = this.props;
     const {
       FilterForm
     } = this.state;
-    let filteredmuns = municipalities.filter(m => m.department === FilterForm.departmentlabel)
+    let name;
+    console.log('filter', departments, municipalities)
+   // let filteredmuns = municipalities.filter(m => m.department === FilterForm.departmentlabel)
     return (<div className="content">
       <Modal />
       <Row>
         <Col xs="3">
-          <Form onSubmit={e => e.preventDefault()}>
+          <Form onSubmit={handleSubmit(filterData.bind(this))}>
             <Card>
               <CardBody>
                 <CardTitle>
                   Filtros
                 </CardTitle>
-                <Label>Rango de Edad</Label>
-                <Row>
-                  <Col xs="12">
-                    <FormGroup>
-                      <Select
-                        options={this.state.range}
-                        onChange={e => this.setState({
-                          FilterForm: {
-                            ...FilterForm,
-                            range: e.value
-                          }
-                        })
-                        } />
-                    </FormGroup>
-                  </Col>
-                </Row>
-                <FormGroup>
-                  <Label>Departamento</Label>
-                  <Select
-                    disabled={loading}
-                    className="text-info"
-                    //value={FilterForm.department}
-                    onChange={(e) => this.setState({
-                      FilterForm: {
-                        ...FilterForm,
-                        departmentid: e.value,
-                        departmentlabel: e.label
-                      }
-                    })}
-                    options={departments.map((dep, i) => {
-                      return {
-                        value: i,
-                        label: dep
-                      }
-                    }
-                    )}
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <Label>Municipio</Label>
-                  <Select
-                    disabled={loading}
-                    className="text-info"
-                    //value={FilterForm.department}
-                    onChange={(e) => this.setState({
-                      FilterForm: {
-                        ...FilterForm,
-                        municipality: e.label
-                      }
-                    })}
-                    options={filteredmuns.map((dep, i) => {
-                      return {
-                        value: i,
-                        label: dep.municipality
-                      }
-                    }
-                    )}
-                  />
+                {departments.columns && departments.columns.map((index, id) => (
+                  <>
+                    <Label>{index.name}</Label>
+                    <Row>
+                      <Col xs="12">
+                        <FormGroup>
+                          {index.type === 'int' ?
+                          <Row>
+                            <Col>
+                            <FormGroup >
+                              <Field
+                                name={`${index.name}|${index.type}-1`}
+                                component={this.FormInput}
+                                //		validate={[this.required, this.verifyNumberProduction]}
+                                placeholder="Min"
+                                type='number'
+                                options={this.state.range}
+                              />
+                            </FormGroup>
+                            </Col>
+                            <Col>
+                            <FormGroup >
+                              <Field
+                                name={`${index.name}|${index.type}-2`}
+                                component={this.FormInput}
+                                //		validate={[this.required, this.verifyNumberProduction]}
+                                placeholder="Max"
+                                type='number'
+                                options={this.state.range}
+                              />
+                            </FormGroup>
+                            </Col>
+                            </Row>
+                            :
+                            index.type === 'string' ?
+                              <FormGroup>
+                                <Field
+                                  name={`${index.name}|${index.type}`}
+                                  component={this.FormInput}
+                                  // validate={[this.verifyNumber]}
+                                  // icon= "icon-key-25"
+                                  placeholder=""
+                                />
+                              </FormGroup>
 
-                </FormGroup>
-                <Label>Sexo</Label>
-                <FormGroup check>
-                  <Label check>
-                    <Input type="radio"
-                      name="sex"
-                      value="M"
-                      disabled={loading}
-                      checked={FilterForm.sex === "M"}
-                      onChange={e => this.setState({
-                        FilterForm: {
-                          ...FilterForm,
-                          sex: e.target.value
-                        }
-                      })}
-                    />{' '}
+                              :
+                              <Row>
+                                <Col sm='6'>
+                                  <FormGroup >
+                                    <Label>Fecha Inicio</Label>
+                                    <Field
+                                      name={`${index.name}|${index.type}-1`}
+                                      component={this.FormDate}
+                                      //validate={[this.verifyDate]}
+                                      placeholder="Seleccione Fecha"
+                                    />
+                                  </FormGroup>
+                                </Col>
+                                <Col sm='6'>
+                                  <FormGroup >
+                                    <Label>Fecha Fin</Label>
+                                    <Field
+                                      name={`${index.name}|${index.type}-2`}
+                                      component={this.FormDate}
+                                      //validate={[this.verifyDate]}
+                                      placeholder="Seleccione Fecha"
+                                    />
+                                  </FormGroup>
+                                </Col>
+                              </Row>
+                          }
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                  </>
+                ))
+
+
+                }
+          {/*      <Label>Sexo</Label>
+                <FormGroup>
+                  <label>
+                    <Field name="sex" component="input" type="radio" value="M" />{' '}
                     Hombre
-                  </Label>
-                </FormGroup>
-                <FormGroup check>
-                  <Label check>
-                    <Input type="radio"
-                      name="sex"
-                      value="F"
-                      disabled={loading}
-                      checked={FilterForm.sex === "F"}
-                      onChange={e => this.setState({
-                        FilterForm: {
-                          ...FilterForm,
-                          sex: e.target.value
-                        }
-                      })}
-                    />{' '}
+                  </label>
+                  <br></br>
+                  <label>
+                    <Field name="sex" component="input" type="radio" value="F" />{' '}
                     Mujer
-                  </Label>
-                </FormGroup>
-                <FormGroup check>
-                  <Label check>
-                    <Input type="radio"
-                      name="sex"
-                      value=""
-                      disabled={loading}
-                      checked={FilterForm.sex === ""}
-                      onChange={e => this.setState({
-                        FilterForm: {
-                          ...FilterForm,
-                          sex: e.target.value
-                        }
-                      })}
-                    />{' '}
+                  </label>
+                  <br></br>
+                  <label>
+                    <Field name="sex" component="input" type="radio" value="" />{' '}
                     Ambos
-                  </Label>
+                  </label>
                 </FormGroup>
                 <Label className="mt-3">Forma de Envio</Label>
-                <FormGroup check>
-                  <Label check>
-                    <Input type="radio"
-                      name="sms_email"
-                      value="1"
-                      disabled={loading}
-                      checked={FilterForm.sms_email === "1"}
-                      onChange={e => this.setState({
-                        FilterForm: {
-                          ...FilterForm,
-                          sms_email: e.target.value
-                        }
-                      })}
-                    />{' '}
+                <FormGroup>
+                  <label>
+                    <Field name="sms_email" component="input" type="radio" value="1" />{' '}
                     Correo
-                  </Label>
-                </FormGroup>
-                <FormGroup check>
-                  <Label check>
-                    <Input type="radio"
-                      name="sms_email"
-                      value="2"
-                      disabled={loading}
-                      checked={FilterForm.sms_email === "2"}
-                      onChange={e => this.setState({
-                        FilterForm: {
-                          ...FilterForm,
-                          sms_email: e.target.value
-                        }
-                      })}
-                    />{' '}
+                  </label>
+                  <br></br>
+                  <label>
+                    <Field name="sms_email" component="input" type="radio" value="2" />{' '}
                     SMS
-                  </Label>
-                </FormGroup>
-                <FormGroup check>
-                  <Label check>
-                    <Input type="radio"
-                      name="sms_email"
-                      value="0"
-                      disabled={loading}
-                      checked={FilterForm.sms_email === "0"}
-                      onChange={e => this.setState({
-                        FilterForm: {
-                          ...FilterForm,
-                          sms_email: e.target.value
-                        }
-                      })}
-                    />{' '}
+                  </label>
+                  <br></br>
+                  <label>
+                    <Field name="sms_email" component="input" type="radio" value="0" />{' '}
                     Ambos
-                  </Label>
-                </FormGroup>
-                {this.state.FilterForm.municipality !== '' ?
+                  </label>
+                </FormGroup>*/}
+                {this.state.FilterForm.municipality === '' ?
                   <Button className="mt-3"
                     color="info"
 
-                    onClick={e => {
-                      e.preventDefault();
-                      filterData(FilterForm)
-                    }}
+                  // onClick={e => {
+                  // e.preventDefault();
+                  // filterData(FilterForm)
+                  //}}
                   >
                     Filtrar
                   </Button>
@@ -303,10 +341,10 @@ class Databases extends React.Component {
                   <Button className="mt-3"
                     color="info"
                     disabled
-                    onClick={e => {
-                      e.preventDefault();
-                      filterData(FilterForm)
-                    }}
+                  // onClick={e => {
+                  //  e.preventDefault();
+                  // filterData(FilterForm)
+                  // }}
                   >
                     Filtrar
                   </Button>
@@ -493,7 +531,7 @@ class Databases extends React.Component {
 
                       {loading === false ?
                         <Col xs="6" style={{ textAlign: 'right' }}>
-                          <Badge pill color="info">{filteredData && filteredData.total_of_filters}</Badge>
+                          <Badge pill color="info">{filteredData && filteredData.count}</Badge>
                         </Col>
                         :
                         <Col md={{ size: 2, offset: 4 }} style={{ textAlign: 'right', marginLeft: 170 }}>
@@ -514,6 +552,11 @@ class Databases extends React.Component {
   }
 }
 
+const Databases = reduxForm({
+  form: 'Booking',
+
+})(DatabasesForm);
+
 export default connect(
   (state) => ({
     departments: selector.getDepartments(state),
@@ -528,7 +571,7 @@ export default connect(
       dispatch(filterActions.getDeps())
     },
     filterData(FilterForm) {
-      dispatch(filterActions.filterData(FilterForm))
+      dispatch(filterActions.filterData({FilterForm: FilterForm}))
     },
     sendMail(FilterForm) {
       if (

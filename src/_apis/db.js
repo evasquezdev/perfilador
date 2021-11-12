@@ -26,7 +26,7 @@ export const postdb = (
   let dbData = new FormData();
   dbData.append('file',file);
   dbData.append('name',name);
-  dbData.append('abbreviation',abbreviation);
+  //dbData.append('abbreviation',abbreviation);
   fetch(`${URL}/databases/`, {
     method: 'POST',
     headers: {

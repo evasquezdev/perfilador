@@ -3,7 +3,7 @@ import URL from './routes';
 export const getDepts = (
   token
 ) => new Promise((resolve, reject) => {
-  fetch(`${URL}/filters/deparments_and_municipality/`, {
+  fetch(`${URL}/databases/get_filters/`, {
     method: 'GET',
     headers: {
       Authorization: `Token ${token}`,
@@ -20,31 +20,29 @@ export const getDepts = (
 
 export const getFilterData = (
   token,
-  age_end,
-  age_init,
-  departmentid,
-  departmentlabel,
-  file,
-  header,
-  municipality,
-  range,
-  sex,
-  sms_email,
-  text
+  FilterForm
 ) => new Promise((resolve, reject) => {
-  const _age_init = age_init ? `age_init=${age_init}` : null;
-  const _age_end = age_end ? `age_end=${age_end}` : null;
-  const ranges = range !== '' ? `age_init=${range}` : null;
-  const _department = departmentlabel !== '' ? `department=${departmentlabel}` : null;
-  const _municipality = municipality !== '' ? `municipality=${municipality}` : null;
-  const _sex = sex ? `sex=${sex}` : null;
-  const _sms_email = sms_email ? `sms_email=${sms_email}` : null;
-  const urlData = [_age_init, _age_end, ranges, _department, _municipality, _sex, _sms_email].filter(x => x).join("&")
-  fetch(`${URL}/filters/get_filtered_data/${urlData !== '' ? `?${urlData}` : ''}`, {
-    method: 'GET',
+  let data = {"filters": null}
+  let info = []
+ 
+  Object.keys(FilterForm).map(function(key, index) {
+    info[index] = {
+       'column': key,
+       'value': FilterForm[key]
+     }  
+  });
+  data.filters = FilterForm
+   
+  console.log('data',info)
+  fetch(`${URL}/filters/get_filtered_data/`, {
+    method: 'POST',
     headers: {
+      "Content-type": "application/json",
       Authorization: `Token ${token}`,
-    }
+    },
+    body: JSON.stringify({
+      "filters": info,
+    })
   }).then((resultado) => {
     if (resultado.ok) {
       resultado.json().then((res) => resolve(res));
