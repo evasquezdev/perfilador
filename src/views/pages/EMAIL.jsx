@@ -205,6 +205,11 @@ class DatabasesForm extends React.Component {
     </>
   )
 
+  delay () {
+    setTimeout(function() { //Start the timer
+      window.location.reload()
+  }.bind(this), 2000)
+  }
 
 
   componentDidMount() {
@@ -504,6 +509,7 @@ class DatabasesForm extends React.Component {
                           header: ''
                         }
                       })
+                      this.delay()
                       }}
                       style={{ fontSize: 13, height: 40 }}
                     >

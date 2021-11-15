@@ -180,7 +180,11 @@ class DatabasesForm extends React.Component {
     </>
   )
 
-
+  delay () {
+    setTimeout(function() { //Start the timer
+      window.location.reload()
+  }.bind(this), 2000)
+  }
 
   componentDidMount() {
     const {
@@ -200,7 +204,8 @@ class DatabasesForm extends React.Component {
       loadingAction,
       sendMail,
       handleSubmit,
-      info
+      info,
+      reset
     } = this.props;
     const {
       FilterForm
@@ -354,6 +359,7 @@ class DatabasesForm extends React.Component {
                   >
                     Filtrar
                   </Button>
+                  
                 }
 
               </CardBody>
@@ -442,11 +448,13 @@ class DatabasesForm extends React.Component {
                                 text: ''
                               }
                             })
+                            this.delay()
                           }}
                           style={{ fontSize: 13, height: 40 }}
                         >
                           Enviar Mensaje
                         </Button>
+                      
                       </Col>
                     </Row>
                   </Form>
@@ -515,7 +523,6 @@ class DatabasesForm extends React.Component {
 
 const Databases = reduxForm({
   form: 'Booking',
-  onSubmitSuccess: afterSubmit,
   //enableReinitialize: true
 
 })(DatabasesForm);

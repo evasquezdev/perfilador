@@ -31,7 +31,8 @@ function* sendMail(action) {
       title: 'Mensaje',
       message: "Mensaje Enviado"
     }));
-    yield put(actionsFilter.filterInfo);
+  //  yield put(push('/admin/enviosSMS'));
+    //yield put(actionsFilter.filterInfo);
   } catch (error) {
     yield put(actions.sendMailKO());
     yield put(modalActions.showError({
@@ -66,6 +67,7 @@ function* sendEmail(action) {
       message: "Mensaje Enviado"
     }));
     yield put(actionsFilter.filterInfo());
+  // yield push('/admin/enviosEmail');
   } catch (error) {
     yield put(actions.sendEmailOK());
     yield put(modalActions.showError({
