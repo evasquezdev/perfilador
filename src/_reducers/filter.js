@@ -5,6 +5,8 @@ const stateShape = {
   deparments: [],
   municipalities: [],
   data: null,
+  filters: [],
+  info: []
 };
 
 const filter = (state = stateShape, action) => {
@@ -33,6 +35,59 @@ const filter = (state = stateShape, action) => {
         loading: false,
         deparments: [],
         municipalities: []
+      }
+    }
+    case types.GET_FILTER: {
+      return {
+        ...state,
+        loading: true,
+      }
+    }
+    case types.GET_INFO: {
+      return {
+        ...state,
+        loading: true,
+      }
+    }
+    case types.GET_INFO_OK: {
+      const {
+        info
+      } = action.payload;
+      return {
+        ...state,
+        loading: false,
+        info
+      }
+    }
+    case types.GET_FILTER_KO: {
+      return {
+        ...state,
+        loading: false,
+        info: []
+      }
+    }
+    case types.GET_FILTER_OK: {
+      const {
+        filters
+      } = action.payload;
+      return {
+        ...state,
+        loading: false,
+        filters
+      }
+    }
+    case types.GET_FILTER_KO: {
+      return {
+        ...state,
+        loading: false,
+        filters: [],
+      }
+    }
+    case types.GET_DEP_MUNI_KO: {
+      return {
+        ...state,
+        loading: false,
+        info: [],
       }
     }
     case types.FILTER_DATA: {
@@ -68,6 +123,8 @@ const filter = (state = stateShape, action) => {
 
 export default filter;
 
+export const getInfo = (state) => state.info;
+export const getFilters = (state) => state.filters;
 export const getDepartments = (state) => state.deparments;
 export const getMunicipalities = (state) => state.municipalities;
 export const getFilterData = (state) => state.data;

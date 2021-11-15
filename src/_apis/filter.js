@@ -17,6 +17,63 @@ export const getDepts = (
   }).catch((error) => reject(error));
 });
 
+export const getFilterTable = (
+  token
+) => new Promise((resolve, reject) => {
+  fetch(`${URL}/company/get_company_filters/`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Token ${token}`,
+    }
+  }).then((resultado) => {
+    if (resultado.ok) {
+      resultado.json().then((res) => resolve(res));
+    } else {
+      reject("error");
+    }
+  }).catch((error) => reject(error));
+});
+
+export const getFilterInfo = (
+  token
+) => new Promise((resolve, reject) => {
+  fetch(`${URL}/company/get_company_info/`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Token ${token}`,
+    }
+  }).then((resultado) => {
+    if (resultado.ok) {
+      resultado.json().then((res) => resolve(res));
+    } else {
+      reject("error");
+    }
+  }).catch((error) => reject(error));
+});
+
+export const changeFlag = (
+  token,
+  value,
+  flag
+) => new Promise((resolve, reject) => {
+  let dbData = new FormData();
+  dbData.append('flag',flag);
+  dbData.append('columns',value);
+  //dbData.append('abbreviation',abbreviation);
+  fetch(`${URL}/company/change_filters/`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Token ${token}`,
+    },
+    body: dbData
+  }).then((resultado) => {
+    if (resultado.ok) {
+      resultado.json().then((res) => resolve(res));
+    } else {
+      reject("error");
+    }
+  }).catch((error) => reject(error));
+});
 
 export const getFilterData = (
   token,
@@ -24,7 +81,6 @@ export const getFilterData = (
 ) => new Promise((resolve, reject) => {
   let data = {"filters": null}
   let info = []
- 
   Object.keys(FilterForm).map(function(key, index) {
     info[index] = {
        'column': key,
@@ -33,7 +89,6 @@ export const getFilterData = (
   });
   data.filters = FilterForm
    
-  console.log('data',info)
   fetch(`${URL}/filters/get_filtered_data/`, {
     method: 'POST',
     headers: {

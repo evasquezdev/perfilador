@@ -19,6 +19,25 @@ export const getDepsKO = () => ({
   type: types.GET_DEP_MUNI_KO
 });
 
+
+export const getfilter = () => ({
+  type: types.GET_FILTER
+});
+
+export const getFilterOK = ({
+  filters
+}) => ({
+  type: types.GET_FILTER_OK,
+  payload: {
+    filters
+  }
+});
+
+export const getFilterKO = () => ({
+  type: types.GET_FILTER_KO
+});
+
+
 export const filterData = ({
   FilterForm
 }) => ({
@@ -39,4 +58,49 @@ export const filterDataOK = ({
 
 export const filterDataKO = () => ({
   type: types.FILTER_DATA_KO
+})
+
+
+
+export const changeFlag = ({
+  value,
+  flag
+}) => ({
+  type: types.CHANGE_FLAG,
+  payload: {
+    value,
+    flag
+  }
+});
+
+export const changeFlagOK = ({
+  data
+}) => ({
+  type: types.CHANGE_FLAG_OK,
+  payload: {
+    data
+  }
+});
+
+export const changeFlagKO = () => ({
+  type: types.CHANGE_FLAG_KO
+})
+
+
+export const filterInfo = () => ({
+  type: types.GET_INFO,
+  
+});
+
+export const filterInfoOK = ({
+  info
+}) => ({
+  type: types.GET_INFO_OK,
+  payload: {
+    info
+  }
+});
+
+export const filterInfoKO = () => ({
+  type: types.GET_INFO_KO
 })

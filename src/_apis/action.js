@@ -2,37 +2,69 @@ import URL from './routes';
 
 export const sendMail = (
   token,
-  age_init,
-  age_end,
-  department,
-  municipality,
-  sex,
-  sms_email,
-  header,
   text,
-  file,
+  Filter
 ) => new Promise((resolve, reject) => {
-  let dbData = new FormData();
-  age_init && dbData.append('age_init',age_init);
-  age_end && dbData.append('age_end',age_end);
-  department && dbData.append('department',department);
-  municipality && dbData.append('municipality',municipality);
-  dbData.append('sex',sex);
-  dbData.append('sms_email',sms_email);
-  dbData.append('header',header);
-  dbData.append('text',text);
-  dbData.append('file',file);
+  let data = {"filters": null}
+  let info = []
+  Object.keys(Filter).map(function(key, index) {
+    info[index] = {
+       'column': key,
+       'value': Filter[key]
+     }  
+  });
+  data.filters = Filter
+  fetch(`${URL}/filters/send_sms/`, {
+    method: 'POST',
+    headers: {
+      "Content-type": "application/json",
+      Authorization: `Token ${token}`,
+    },
+    body: JSON.stringify({
+      "sms_text": text,
+      "filters": info,
+    })
+  }).then((resultado) => {
+      if (resultado.ok) {
+        resultado.json().then((res) => resolve(res));
+      } else {
+        reject("error");
+      }
+    }).catch((error) => reject(error));
+});
+
+
+export const sendEmail = (
+  token,
+  text,
+  header,
+  //file,
+  Filter
+) => new Promise((resolve, reject) => {
+  let data = {"filters": null}
+  let info = []
+  Object.keys(Filter).map(function(key, index) {
+    info[index] = {
+       'column': key,
+       'value': Filter[key]
+     }  
+  });
+  data.filters = Filter
   fetch(`${URL}/filters/send_email/`, {
     method: 'POST',
     headers: {
+      "Content-type": "application/json",
       Authorization: `Token ${token}`,
     },
-    body: dbData
+    body: JSON.stringify({
+      "sms_text": header + '|' + text,
+      "filters": info,
+    })
   }).then((resultado) => {
-    if (resultado.ok) {
-      resultado.json().then((res) => resolve(res));
-    } else {
-      reject("error");
-    }
-  }).catch((error) => reject(error));
+      if (resultado.ok) {
+        resultado.json().then((res) => resolve(res));
+      } else {
+        reject("error");
+      }
+    }).catch((error) => reject(error));
 });

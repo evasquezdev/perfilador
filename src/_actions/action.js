@@ -1,27 +1,14 @@
 import * as types from '../_types/action';
 
 export const sendMail = ({
-  age_init,
-  age_end,
-  department,
-  municipality,
-  sex,
-  sms_email,
-  header,
   text,
-  file
+  Filter
+
 }) => ({
   type: types.SEND_EMAIL,
   payload: {
-    age_init,
-    age_end,
-    department,
-    municipality,
-    sex,
-    sms_email,
-    header,
     text,
-    file
+    Filter
   }
 });
 
@@ -35,5 +22,34 @@ export const sendMailOK = ({
 });
 
 export const sendMailKO = () => ({
+  type: types.SEND_EMAIL_KO
+})
+
+export const sendEmail = ({
+  text,
+  header,
+  // file,
+  Filter
+
+}) => ({
+  type: types.SEND_MAIL,
+  payload: {
+    text,
+    header,
+    // file,
+    Filter
+  }
+});
+
+export const sendEmailOK = ({
+  msg
+}) => ({
+  type: types.SEND_EMAIL_OK,
+  payload: {
+    msg
+  }
+});
+
+export const sendEmailKO = () => ({
   type: types.SEND_EMAIL_KO
 })

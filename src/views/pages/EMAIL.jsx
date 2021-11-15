@@ -1,4 +1,5 @@
 import React from "react";
+
 // reactstrap components
 import {
   Button,
@@ -49,8 +50,6 @@ const data = {
     }
   ]
 }
-const afterSubmit = (result, dispatch) =>
-  dispatch(reset('Booking'));
 
 class DatabasesForm extends React.Component {
   state = {
@@ -127,7 +126,33 @@ class DatabasesForm extends React.Component {
       </label>
     </>
   )
+  FormFile = ({
+    input: { onChange },
+    placeholder,
+    type,
+    value,
+    icon,
+    meta: { error },
+  }) => (
+    <>
+      <Input type="file"
+        accept=".jpg,.png,.jpeg"
+       // disabled={loading}
+        color="info"
+        onChange={e => (onChange(e.target.files[0]),this.setState({
+          FilterForm: {
+            ...this.state.FilterForm,
+            file: e.target.files[0]
+          }
+        }))}
+        value={e => onChange(e.target.files[0].name)}
 
+      />
+      <label>
+        {value}
+      </label>
+    </>
+  )
   FormDate = ({
     input: { onChange },
     placeholder,
@@ -185,7 +210,7 @@ class DatabasesForm extends React.Component {
   componentDidMount() {
     const {
       getDeps,
-      getInfo,
+      getInfo
     } = this.props;
     getDeps();
     getInfo()
@@ -399,19 +424,37 @@ class DatabasesForm extends React.Component {
         </Col>
         */}
         <Col>
-          <Row>
-            <Col>
-              <Card>
-                <CardBody>
-                  <CardTitle>
-                    Enviar Mensaje
-                  </CardTitle>
-                  <Form onSubmit={e => e.preventDefault()}>
-                    <FormGroup>
-                      <Label>
-                        Mensaje
-                      </Label>
-                      <Input type="textarea"
+        <Row>
+          <Col>
+          <Card>
+            <CardBody>
+              <CardTitle>
+                Enviar Mensaje
+              </CardTitle>
+              <Form onSubmit={handleSubmit(sendMail.bind(this))}>
+                <FormGroup>
+                  <Label>
+                    Titulo mensaje
+                  </Label>
+                  <Input type="input"
+                       
+                        value={FilterForm.header}
+                        disabled={loadingAction}
+                        onChange={(e) => {
+                          this.setState({
+                            FilterForm: {
+                              ...FilterForm,
+                              header: e.target.value
+                            }
+                          })
+                        }}
+                      />
+                </FormGroup>
+                <FormGroup>
+                  <Label>
+                    Mensaje
+                  </Label>
+                  <Input type="textarea"
                         style={{
                           maxHeight: '200px',
                           minHeight: '150px'
@@ -427,85 +470,101 @@ class DatabasesForm extends React.Component {
                           })
                         }}
                       />
+                </FormGroup>
+                <Row>
+                {/*  <Col>
+                    <FormGroup>
+                      <Button color="info" size="sm"
+                        style={{ fontSize: 13, height: 40 }}>
+                        <Field
+                          name={`file`}
+                          component={this.FormFile}
+                          // validate={[this.verifyNumber]}
+                          // icon= "icon-key-25"
+                          placeholder=""
+                          type="file"
+                        />
+                        Subir Imagen Adjunta
+                      </Button>
+                      {FilterForm.file && <span className="form-text text-info">
+                        {FilterForm.file.name}
+                      </span>}
                     </FormGroup>
-                    <Row>
-
-                      <Col>
-                        <Button
-                          color="info"
-                          disabled={loadingAction}
-                          onClick={() => {
-                            sendMail(FilterForm, this.state.Form)
-                            this.setState({
-                              FilterForm: {
-                                ...FilterForm,
-                                text: ''
-                              }
-                            })
-                          }}
-                          style={{ fontSize: 13, height: 40 }}
-                        >
-                          Enviar Mensaje
-                        </Button>
-                      </Col>
-                    </Row>
-                  </Form>
-                </CardBody>
-              </Card>
-            </Col>
+                  </Col>*/}
+                  <Col>
+                    <Button
+                      color="info"
+                      disabled={loadingAction}
+                      onClick={() => {
+                       sendMail(FilterForm, this.state.Form)
+                       this.setState({
+                        FilterForm: {
+                          ...FilterForm,
+                          text: '',
+                          header: ''
+                        }
+                      })
+                      }}
+                      style={{ fontSize: 13, height: 40 }}
+                    >
+                      Enviar Mensaje
+                    </Button>
+                  </Col>
+                </Row>
+              </Form>
+            </CardBody>
+          </Card>
+          </Col>
           </Row>
           <Row>
+        {<Col xs="12">
+          <Card>
+            {
+              <CardBody>
+                <CardTitle>
+                  Creditos disponibles
+                </CardTitle>
+                <ListGroup>
+                  <ListGroupItem className="justify-content-between">
+                    <Row>
+                      <Col xs="6">
+                        Mensajes restantes por correo
+                      </Col>
+                      {loading === false ?
+                        <Col xs="6" style={{ textAlign: 'right' }}>
+                          <Badge pill color="info">{info && info.email_credit}</Badge>
+                        </Col>
+                        :
+                        <Col md={{ size: 2, offset: 4 }} style={{ textAlign: 'right', marginLeft: 170 }}>
+                          <FadeLoader css={override} size={1} color={"#1d8cf8 "} margin={-10} />
+                        </Col>
+                      }
+                    </Row>
+                  </ListGroupItem>
+                  <ListGroupItem className="justify-content-between">
+                    <Row>
+                      <Col xs="6">
+                        Total Filtrado
+                      </Col>
 
-            {<Col xs="12">
-              <Card>
-                {
-                  <CardBody>
-                    <CardTitle>
-                      Creditos disponibles
-                    </CardTitle>
-                    <ListGroup>
-                      <ListGroupItem className="justify-content-between">
-                        <Row>
-                          <Col xs="6">
-                            Mensajes restantes por SMS
-                          </Col>
-                          {loading === false ?
-                            <Col xs="6" style={{ textAlign: 'right' }}>
-                              {console.log('info',info)}
-                              <Badge pill color="info">{info && info.sms_credit}</Badge>
+                      {loading === false ?
+                        <Col xs="6" style={{ textAlign: 'right' }}>
+                          <Badge pill color="info">{filteredData && filteredData.count}</Badge>
+                        </Col>
+                        :
+                        <Col md={{ size: 2, offset: 4 }} style={{ textAlign: 'right', marginLeft: 170 }}>
+                          <FadeLoader css={override} size={1} color={"#1d8cf8 "} margin={-10} />
+                        </Col>
+                      }
+                    </Row>
+                  </ListGroupItem>
+                </ListGroup>
+              </CardBody>
 
-                            </Col>
-                            :
-                            <Col md={{ size: 2, offset: 4 }} style={{ textAlign: 'right', marginLeft: 170 }}>
-                              <FadeLoader css={override} size={1} color={"#1d8cf8 "} margin={-10} />
-                            </Col>
-                          }
-                        </Row>
-                      </ListGroupItem>
-                      <ListGroupItem className="justify-content-between">
-                        <Row>
-                          <Col xs="6">
-                            Total Filtrado
-                          </Col>
+            }
 
-                          {loading === false ?
-                            <Col xs="6" style={{ textAlign: 'right' }}>
-                              <Badge pill color="info">{filteredData && filteredData.count}</Badge>
-                            </Col>
-                            :
-                            <Col md={{ size: 2, offset: 4 }} style={{ textAlign: 'right', marginLeft: 170 }}>
-                              <FadeLoader css={override} size={1} color={"#1d8cf8 "} margin={-10} />
-                            </Col>
-                          }
-                        </Row>
-                      </ListGroupItem>
-                    </ListGroup>
-                  </CardBody>
-
-                }
-
-              </Card>
-            </Col>}
+          </Card>
+        </Col>}
           </Row>
         </Col>
       </Row>
@@ -515,8 +574,6 @@ class DatabasesForm extends React.Component {
 
 const Databases = reduxForm({
   form: 'Booking',
-  onSubmitSuccess: afterSubmit,
-  //enableReinitialize: true
 
 })(DatabasesForm);
 
@@ -525,10 +582,10 @@ export default connect(
     departments: selector.getFilters(state),
     municipalities: selector.getMunicipalities(state),
     filteredData: selector.getFilterData(state),
-    info: selector.getInfo(state),
     loading: selector.getFilterloading(state),
     userInfo: selector.getUserMsgInfo(state),
     loadingAction: selector.getActionloading(state),
+    info: selector.getInfo(state),
   }),
   (dispatch) => ({
     getDeps() {
@@ -546,21 +603,31 @@ export default connect(
     sendMail(FilterForm, Form) {
       console.log('Form', Form, 'FilterForm', FilterForm)
       if (
-        !FilterForm.text || FilterForm.text === "") {
+        (!FilterForm.header || FilterForm.header === "") ||
+        (!FilterForm.text || FilterForm.text === "") 
+        //|| (!FilterForm.file)
+      ) {
         dispatch(modalActions.showError({
           message: 'Error: Formulario incompleto',
           title: 'Error'
         }))
-      } else {
-        dispatch(messageActions.sendMail({
-       ...FilterForm,
-       Filter :Form
-        }))
-       
-        
-      
-      
+      } 
+      //else {
+       // var filesize = ((FilterForm.file.size / 1024) / 1024).toFixed(4);
+       // if (filesize > 2) {
+        //  dispatch(modalActions.showError({
+        //    message: 'Error: tamaño de imagen es muy grande',
+         //   title: 'Error'
+         // }))
+        //} 
+        else {
+          console.log(FilterForm)
+          dispatch(messageActions.sendEmail({
+            ...FilterForm,
+            Filter : Form
+          }))
+        }
+     // }
     }
-  }
   })
-) (Databases);
+)(Databases);

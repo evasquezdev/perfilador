@@ -43,6 +43,9 @@ import Rtl from "views/pages/Rtl.js";
 import Lock from "views/pages/Lock.js";*/
 import Databases from "views/pages/Databases";
 import SMS from 'views/pages/SMS';
+import EMAIL from 'views/pages/EMAIL';
+import Filters from 'views/pages/Filters';
+
 import Login from "views/pages/Login.js";
 
 const routes = [
@@ -61,10 +64,24 @@ const routes = [
     layout: "/admin",
   },
   {
-    path: "/envios",
-    name: "envios",
+    path: "/enviosSMS",
+    name: "envios SMS",
     icon: "tim-icons icon-notes",
     component: SMS,
+    layout: "/admin",
+  },
+  {
+    path: "/enviosEmail",
+    name: "envios correo",
+    icon: "tim-icons icon-notes",
+    component: EMAIL,
+    layout: "/admin",
+  },
+  {
+    path: "/Filtros",
+    name: "Manejo de filtros",
+    icon: "tim-icons icon-notes",
+    component: Filters,
     layout: "/admin",
   },
   {

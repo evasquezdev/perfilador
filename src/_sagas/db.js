@@ -71,11 +71,11 @@ function* syncdb(action){
     yield put(actions.syncDbOK({
       response
     }));
-    yield put(actions.getDbs())
     yield put(modalActions.showSuccess({
       title: 'Mensaje',
       message: response.message
     }));
+    yield put(actions.getDbs())
   }catch(error){
     yield put(actions.syncDbKO());
     yield put(modalActions.showError({
@@ -99,11 +99,11 @@ function* deletedb(action){
     yield put(actions.deleteDbOK({
       response
     }));
-    yield put(actions.getDbs())
     yield put(modalActions.showSuccess({
       title: 'Mensaje',
       message: response.message
     }));
+    yield put(actions.getDbs())
   }catch(error){
     yield put(actions.deleteDbKO());
     yield put(modalActions.showError({
