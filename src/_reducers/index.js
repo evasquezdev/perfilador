@@ -7,6 +7,8 @@ import modal, * as fromModal from './modal';
 import filter, * as filterHandler from './filter';
 import action, * as actionHandler from './action';
 import dashboard, * as dashboardHandler from './dashboard';
+import company, * as companyHandler from './company';
+import user, * as userHandler from './user';
 
 export default combineReducers({
   login,
@@ -15,6 +17,8 @@ export default combineReducers({
   filter,
   action,
   dashboard,
+  company,
+  user,
   form: reducerForm,
 });
 
@@ -46,3 +50,12 @@ export const getActionloading = (state) => actionHandler.getActionloading(state.
 export const getDashBoardLoading = (state) => dashboardHandler.getDashBoardLoading(state.dashboard);
 export const getDashBoardData = (state) => dashboardHandler.getDashBoardData(state.dashboard);
 export const getDashBoardMonth = (state) => dashboardHandler.getDashBoardMonth(state.dashboard);
+
+
+//company
+export const getCompany = (state) => companyHandler.getCompany(state.company);
+export const getCompanyloading = (state) => companyHandler.getCompanyloading(state.company);
+
+//user
+export const getUser = (state) => userHandler.getUser(state.user);
+export const getUserloading = (state) => userHandler.getUserloading(state.user);

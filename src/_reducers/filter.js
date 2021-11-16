@@ -26,7 +26,8 @@ const filter = (state = stateShape, action) => {
         ...state,
         loading: false,
         deparments,
-        municipalities
+        municipalities,
+        data: null
       }
     }
     case types.GET_DEP_MUNI_KO: {
@@ -56,7 +57,8 @@ const filter = (state = stateShape, action) => {
       return {
         ...state,
         loading: false,
-        info
+        info,
+        data: null
       }
     }
     case types.GET_FILTER_KO: {

@@ -4,6 +4,8 @@ import dbSaga from './db';
 import filterSaga from './filter';
 import actionSaga from './action';
 import dashboardSaga from './dashboard';
+import companySaga from './company';
+import userSaga from './user'
 
 function* mainSaga() {
   yield all([
@@ -11,7 +13,9 @@ function* mainSaga() {
     fork(dbSaga),
     fork(filterSaga),
     fork(actionSaga),
-    fork(dashboardSaga)
+    fork(dashboardSaga),
+    fork(companySaga),
+    fork(userSaga)
   ]);
 }
 

@@ -45,10 +45,34 @@ import Databases from "views/pages/Databases";
 import SMS from 'views/pages/SMS';
 import EMAIL from 'views/pages/EMAIL';
 import Filters from 'views/pages/Filters';
+import Company from 'views/pages/Company';
+import User from 'views/pages/User.jsx';
 
 import Login from "views/pages/Login.js";
 
 const routes = [
+  {
+    collapse: true,
+    name: "Administración",
+    icon: "tim-icons icon-money-coins",
+    state: "pagesCollapseCosting",
+    views: [
+      {
+        path: "/user",
+        name: "Usuarios",
+        mini: "U",
+        component: User,
+        layout: "/admin"
+      },
+      {
+        path: "/company",
+        name: "Empresas",
+        mini: "E",
+        component: Company,
+        layout: "/admin"
+      },
+    ]
+  },
   {
     path: "/dashboard",
     name: "Dashboard",
