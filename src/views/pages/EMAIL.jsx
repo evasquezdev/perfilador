@@ -469,18 +469,20 @@ class DatabasesForm extends React.Component {
                                     </Row>
                                     :
                                     index.name === 'MUNICIPIO' ?
+                                    <Row>
                                       <Col>
                                         <FormGroup >
                                           <Field
                                             name={`${index.name}|${index.type}-1`}
                                             component={this.FormSelectMunicipio}
                                             //		validate={[this.required, this.verifyNumberProduction]}
-                                            placeholder="Min"
+                                            placeholder="Municipios"
                                          //   type='number'
                                             options={departamentSelect ? (filteredmuns[0] && filteredmuns[0].minicipios) : municipiosTotal}
                                           />
                                         </FormGroup>
                                       </Col>
+                                      </Row>
                                       :
                                   <Row>
                                     <Col sm='6'>
