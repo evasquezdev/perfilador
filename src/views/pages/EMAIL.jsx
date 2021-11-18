@@ -531,13 +531,13 @@ class DatabasesForm extends React.Component {
                   Creditos disponibles
                 </CardTitle>
                 <ListGroup>
-                  <ListGroupItem className="justify-content-between">
+                  <ListGroupItem className="justify-content-between" style={{backgroundColor: '#344675'}}>
                     <Row>
                       <Col xs="6">
                         Mensajes restantes por correo
                       </Col>
                       {loading === false ?
-                        <Col xs="6" style={{ textAlign: 'right' }}>
+                        <Col xs="6" style={{ textAlign: 'right'}}>
                           <Badge pill color="info">{info && info.email_credit}</Badge>
                         </Col>
                         :
@@ -547,7 +547,7 @@ class DatabasesForm extends React.Component {
                       }
                     </Row>
                   </ListGroupItem>
-                  <ListGroupItem className="justify-content-between">
+                  <ListGroupItem className="justify-content-between"  style={{backgroundColor: '#344675'}}>
                     <Row>
                       <Col xs="6">
                         Total Filtrado

@@ -20,7 +20,7 @@ import { Button, CustomInput } from "reactstrap";
 
 const FixedPlugin = (props) => {
   const [classes, setClasses] = React.useState("dropdown");
-  const [darkMode, setDarkMode] = React.useState(true);
+  const [darkMode, setDarkMode] = React.useState(false);
   const handleClick = () => {
     if (classes === "dropdown") {
       setClasses("dropdown show");

@@ -58,15 +58,15 @@ class Databases extends React.Component {
     rangeSelect: 'All',
     range: [
       {
-        label: 'DELETE',
+        label: 'ELIMINAR',
         value: 'True'
       },
       {
-        label: 'SYNC UP',
+        label: 'SINCRONIZAR',
         value: 'False'
       },
       {
-        label: 'ALL',
+        label: 'TODOS',
         value: 'All'
       },
 
@@ -103,7 +103,7 @@ class Databases extends React.Component {
             className={this.state.vTabs === "vt1" ? "active" : ""}
             onClick={() => this.setState({ vTabs: "vt1" })}
           >
-            Create DB
+            Crear Base de Datos
           </NavLink>
         </NavItem>
         <NavItem>
@@ -111,7 +111,7 @@ class Databases extends React.Component {
             className={this.state.vTabs === "vt2" ? "active" : ""}
             onClick={() => this.setState({ vTabs: "vt2" })}
           >
-            DELETE & SYNC UP DB
+            Eliminar & Sincronizar Base de Datos
           </NavLink>
         </NavItem>
       </Nav>
@@ -231,6 +231,7 @@ class Databases extends React.Component {
               <FormGroup>
                 <Select
                   styles={customStyles}
+                  placeholder={'Seleccionar'}
                   options={this.state.range}
                   onChange={e => this.setState({
                     rangeSelect: e.value

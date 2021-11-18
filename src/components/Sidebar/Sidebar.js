@@ -170,10 +170,10 @@ const Sidebar = (props) => {
     if (logo.outterLink !== undefined) {
       logoImg = (
         <a
-          href={logo.outterLink}
+        href="#" onclick="return false;"
           className="simple-text logo-mini"
-          target="_blank"
-          onClick={props.closeSidebar}
+          //target="_blank"
+          //onClick={props.closeSidebar}
         >
           <div className="logo-img">
             <img src={logo.imgSrc} alt="react-logo" />
@@ -182,12 +182,12 @@ const Sidebar = (props) => {
       );
       logoText = (
         <a
-          href={logo.outterLink}
+        href="#" onclick="return false;"
           className="simple-text logo-normal"
-          target="_blank"
-          onClick={props.closeSidebar}
+        //  target="_blank"
+      //    onClick={props.closeSidebar}
         >
-          {logo.text}
+          Amor X Guate
         </a>
       );
     } else {

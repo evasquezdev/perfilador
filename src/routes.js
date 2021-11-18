@@ -73,16 +73,16 @@ const routes = [
       },
     ]
   },
-  {
+ /* {
     path: "/dashboard",
     name: "Dashboard",
     icon: "tim-icons icon-chart-pie-36",
     component: Dashboard,
     layout: "/admin",
-  },
+  },*/
   {
     path: "/databases",
-    name: "Databases",
+    name: "Base de Datos",
     icon: "tim-icons icon-image-02",
     component: Databases,
     layout: "/admin",

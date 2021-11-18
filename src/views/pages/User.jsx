@@ -41,7 +41,7 @@ const override = css`
 class CompanyForm extends React.Component {
   state = {
     id: null,
-    email:'',
+    email: '',
     name: '',
     password: '',
     company: {
@@ -126,60 +126,60 @@ class CompanyForm extends React.Component {
                 }}
               />
             </FormGroup>
-            <Label>Email: </Label>
+            <Label>Correo Electrónico: </Label>
             <FormGroup>
-              {edit?
+              {edit ?
                 <Input
-                type="text"
-                value={email}
-                placeholder={'ejemplo@ejemplo.com'}
-                disabled={true}
-                onChange={(e) => {
-                  this.setState({
-                    email: e.target.value
-                  })
-                }}
-              />
-:
-              <Input
-                type="text"
-                value={email}
-                placeholder={'ejemplo@ejemplo.com'}
-                //disabled={loadingAction}
-                onChange={(e) => {
-                  this.setState({
-                    email: e.target.value
-                  })
-                }}
-              />
+                  type="text"
+                  value={email}
+                  placeholder={'ejemplo@ejemplo.com'}
+                  disabled={true}
+                  onChange={(e) => {
+                    this.setState({
+                      email: e.target.value
+                    })
+                  }}
+                />
+                :
+                <Input
+                  type="text"
+                  value={email}
+                  placeholder={'ejemplo@ejemplo.com'}
+                  //disabled={loadingAction}
+                  onChange={(e) => {
+                    this.setState({
+                      email: e.target.value
+                    })
+                  }}
+                />
               }
             </FormGroup>
             <Label>Contraseña: </Label>
             <FormGroup>
               {edit ?
                 <Input
-                type="text"
-                value={password}
-                placeholder={'Contraseña'}
-                disabled={true}
-                onChange={(e) => {
-                  this.setState({
-                    password: e.target.value
-                  })
-                }}
-              />
-:
-              <Input
-                type="text"
-                value={password}
-                placeholder={'Contraseña'}
-                //disabled={loadingAction}
-                onChange={(e) => {
-                  this.setState({
-                    password: e.target.value
-                  })
-                }}
-              />
+                  type="text"
+                  value={password}
+                  placeholder={'Contraseña'}
+                  disabled={true}
+                  onChange={(e) => {
+                    this.setState({
+                      password: e.target.value
+                    })
+                  }}
+                />
+                :
+                <Input
+                  type="text"
+                  value={password}
+                  placeholder={'Contraseña'}
+                  //disabled={loadingAction}
+                  onChange={(e) => {
+                    this.setState({
+                      password: e.target.value
+                    })
+                  }}
+                />
               }
             </FormGroup>
             <Label>Empresa: </Label>
@@ -197,7 +197,7 @@ class CompanyForm extends React.Component {
                 }}
                 onChange={(e) => {
                   this.setState({
-                    company:{
+                    company: {
                       ...company,
                       value: e.value,
                       label: e.label
@@ -211,7 +211,7 @@ class CompanyForm extends React.Component {
                     label: `${companyOptions.name}`
                   }
                 })}
-             //   placeholder={placeholder}
+              //   placeholder={placeholder}
               />
             </FormGroup>
             {edit ?
@@ -223,7 +223,7 @@ class CompanyForm extends React.Component {
                   e.preventDefault();
                   patchCompany(id, name, company)
                   this.setState({
-                    company:{
+                    company: {
                       ...company,
                       value: null,
                       label: '',
@@ -243,9 +243,9 @@ class CompanyForm extends React.Component {
                 //  disabled={loadingAction}
                 onClick={e => {
                   e.preventDefault();
-                  postCompany(email,name, password, company)
+                  postCompany(email, name, password, company)
                   this.setState({
-                    company:{
+                    company: {
                       ...company,
                       value: null,
                       label: '',
@@ -321,7 +321,7 @@ class CompanyForm extends React.Component {
                 },
 
                 {
-                  Header: "ACTION",
+                  Header: "ACCIONES",
                   accessor: "actions",
                   sortable: false,
                   filterable: false,
@@ -331,7 +331,11 @@ class CompanyForm extends React.Component {
               defaultPageSize={5}
               showPaginationTop
               showPaginationBottom={false}
-
+              previousText={'Anterior'}
+              nextText={'Siguiente'}
+              pageText={'Página'}
+              ofText={'de'}
+              rowsText={'filas'}
               className="-striped -highlight primary-pagination"
             />
           }
@@ -359,7 +363,7 @@ export default connect(
     getCompany() {
       dispatch(Actions.fetchCompany())
     },
-    postCompany(email,name, password, company) {
+    postCompany(email, name, password, company) {
       dispatch(filterActions.postUser({
         name: name,
         email: email,

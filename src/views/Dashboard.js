@@ -173,10 +173,10 @@ class DashBoard extends React.Component{
   }
   render(){
     const chartOptions = [
-      'accepted',
-      'delivered',
-      'failed',
-      'opened',
+      'aceptado',
+      'entregado',
+      'fallido',
+      'abierto',
       'clicked',
       'complained',
     ]
@@ -291,7 +291,7 @@ class DashBoard extends React.Component{
                     </Col>
                     <Col xs="7">
                       <div className="numbers">
-                        <p className="card-category">Accepted</p>
+                        <p className="card-category">Aceptado</p>
                         <CardTitle tag="h3">{actual_month_data.accepted}</CardTitle>
                       </div>
                     </Col>

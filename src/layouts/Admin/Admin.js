@@ -195,7 +195,7 @@ const Admin = (props) => {
         />
         <Switch>
           {getRoutes(routes)}
-          <Redirect from="*" to="/admin/dashboard" />
+          <Redirect from="*" to="/admin/databases" />
         </Switch>
       </div>
       <FixedPlugin

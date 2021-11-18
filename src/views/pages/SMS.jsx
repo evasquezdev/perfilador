@@ -472,14 +472,13 @@ class DatabasesForm extends React.Component {
                       Creditos disponibles
                     </CardTitle>
                     <ListGroup>
-                      <ListGroupItem className="justify-content-between">
+                      <ListGroupItem className="justify-content-between"  style={{backgroundColor: '#344675'}}>
                         <Row>
-                          <Col xs="6">
+                          <Col xs="6" >
                             Mensajes restantes por SMS
                           </Col>
                           {loading === false ?
                             <Col xs="6" style={{ textAlign: 'right' }}>
-                              {console.log('info',info)}
                               <Badge pill color="info">{info && info.sms_credit}</Badge>
 
                             </Col>
@@ -490,9 +489,9 @@ class DatabasesForm extends React.Component {
                           }
                         </Row>
                       </ListGroupItem>
-                      <ListGroupItem className="justify-content-between">
+                      <ListGroupItem className="justify-content-between" style={{backgroundColor: '#344675'}}>
                         <Row>
-                          <Col xs="6">
+                          <Col xs="6" >
                             Total Filtrado
                           </Col>
 

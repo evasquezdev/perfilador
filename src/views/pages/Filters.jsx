@@ -258,7 +258,7 @@ class DatabasesForm extends React.Component {
                   filterable: true,
                 },
                 {
-                  Header: "ACTION",
+                  Header: "ACCIONES",
                   accessor: "actions",
                   sortable: false,
                   filterable: false,
@@ -268,7 +268,11 @@ class DatabasesForm extends React.Component {
               defaultPageSize={5}
               showPaginationTop
               showPaginationBottom={false}
-
+              previousText={ 'Anterior'}
+              nextText=  {'Siguiente'}
+              pageText={'Página'}
+              ofText={'de'}
+              rowsText={'filas'}
               className="-striped -highlight primary-pagination"
             />
           }

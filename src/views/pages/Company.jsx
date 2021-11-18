@@ -231,7 +231,7 @@ class CompanyForm extends React.Component {
                   filterable: true,
                 },
                 {
-                  Header: "Email",
+                  Header: "Correo Electrónico",
                   accessor: "email",
                   filterMethod: (filter, row) =>
                   matchSorter(row, filter.value, { keys: ["email"] }),
@@ -249,7 +249,7 @@ class CompanyForm extends React.Component {
                   filterable: true,
                 },
                 {
-                  Header: "ACTION",
+                  Header: "ACCIONES",
                   accessor: "actions",
                   sortable: false,
                   filterable: false,
@@ -259,7 +259,11 @@ class CompanyForm extends React.Component {
               defaultPageSize={5}
               showPaginationTop
               showPaginationBottom={false}
-
+              previousText={ 'Anterior'}
+              nextText=  {'Siguiente'}
+              pageText={'Página'}
+              ofText={'de'}
+              rowsText={'filas'}
               className="-striped -highlight primary-pagination"
             />
           }
