@@ -1,125 +1,209 @@
-/*!
-
-=========================================================
-* Black Dashboard PRO React - v1.2.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/black-dashboard-pro-react
-* Copyright 2020 Creative Tim (https://www.creative-tim.com)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
+import GoogleLogin, { GoogleLogout } from 'react-google-login';
+import classnames from "classnames";
+import { Redirect, Link } from "react-router-dom";
+//import axios from "axios";
+import NotificationAlert from "react-notification-alert";
+import * as action from '../../_actions/login'
+import { Field, reduxForm, reset/*FieldArray*/ } from 'redux-form';
+import Modal from '../../components/Modal';
+import './styles.scss'
+
 // reactstrap components
 import {
   Button,
   Card,
   CardHeader,
   CardBody,
-  CardFooter,
   CardTitle,
   Form,
   Container,
   Col,
+  Row,
+  Input,
+  InputGroup,
+  InputGroupAddon,
+  InputGroupText,
+  Label
 } from "reactstrap";
-import { Field, reduxForm } from 'redux-form';
-import {
-  FormInput
-} from "../../components/FormInputs/LoginInput";
-import * as loginActions from '../../_actions/login';
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
 
-const Login = ({
-  handleSubmit,
-  signin,
-}) => {
-  //const [state, setState] = React.useState({});
-  React.useEffect(() => {
+class Login extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      Email: "",
+      focusEmail: false,
+      Password: "",
+      focusPassword: false,
+      _LoggedIn: false,
+      _RecoverPass: false,
+    }
+  }
+
+
+  componentDidMount() {
     document.body.classList.toggle("login-page");
-    return function cleanup() {
-      document.body.classList.toggle("login-page");
-    };
-  });
-  return (
-    <>
+  }
+  componentWillUnmount() {
+    document.body.classList.toggle("login-page");
+  }
+
+  handleEmailChange = (event) => {
+    const value = event.target.value;
+    this.setState({ Email: value });
+  }
+
+  handlePasswordChange = (event) => {
+    const value = event.target.value;
+    this.setState({ Password: value });
+  }
+
+  responseGoogle(response) {
+    const {
+      authGoogle
+    } = this.props
+    console.log('response', response)
+    console.log('profile', response.profileObj)
+    authGoogle(response.access_token,)
+  }
+
+  recover = () => {
+    const path = "/recover"
+    this.props.history.push({
+      pathname: path
+    })
+    // views.push('/managments_boms')
+    //    views.push('/approve_boms')
+  }
+
+
+
+  _homeRedirect = <Redirect to={{ pathname: "/admin/home" }} />
+
+  _passRedirect = <Redirect to={{ pathname: "/admin/recover" }} />
+
+  render() {
+    const {
+      loging,
+      handleSubmit
+    } = this.props
+    return (<>
+      <Modal />
+      {this.state._LoggedIn ? this._homeRedirect : ''}
+      {this.state._RecoverPass ? this._passRedirect : ''}
       <div className="content">
         <Container>
-          <Col className="ml-auto mr-auto" lg="4" md="6">
-            <Form className="form" onSubmit={handleSubmit(signin.bind(this))}>
+          <Col className="" lg="4" md="6">
+            <Form className="form" onSubmit={handleSubmit(loging.bind(this))}>
               <Card className="card-login card-white">
                 <CardHeader>
-                  <img
-                    alt="..."
-                    src={require("assets/img/card-primary.png").default}
-                  />
-                  <CardTitle tag="h1">Log in</CardTitle>
+                  <CardTitle tag="h6" style={{ color: 'black', fontSize: '30px', marginTop: '10px' }}  >&nbsp; Ingresar </CardTitle>
                 </CardHeader>
-                <CardBody>
-                  <Field
-                    component={FormInput}
-                    name="email"
-                    placeholder="Email"
-                    type="text"
-                  />
-                  <Field
-                    component={FormInput}
-                    name="password"
-                    placeholder="Password"
-                    type="password"
-                  />
+                <CardBody style={{ marginTop: '-80px' }}>
+                  <Label>
+                    Correo Electrónico
+                  </Label>
+                  <InputGroup className={classnames({
+                    "input-group-focus": this.state.Emailfocus
+                  })}>
+                    <InputGroupAddon addonType="prepend">
+                      <InputGroupText>
+                        <i className="tim-icons icon-single-02"></i>
+                      </InputGroupText>
+                    </InputGroupAddon>
+                    <Input
+                      type="text"
+                      placeholder="Email"
+                      onFocus={e => this.setState({ Emailfocus: true })}
+                      onBlur={e => this.setState({ Emailfocus: false })}
+                      value={this.state.Email}
+                      onChange={e => this.handleEmailChange(e)}
+                    />
+                  </InputGroup>
+                  <Row>
+                    <Col sm='6'>
+                      <Label>
+                        Contraseña
+                      </Label>
+                    </Col>
+                    <Col sm="6">
+                      <Link style={{color:"#1d8cf8", fontSize: '0.75rem'}}  to='/auth/recover'>Olvido la contraseña?</Link>
+                    </Col>
+                  </Row>
+                  <InputGroup className={classnames({
+                    "input-group-focus": this.state.Passwordfocus
+                  })}>
+                    <InputGroupAddon addonType="prepend">
+                      <InputGroupText><i className="tim-icons icon-single-02"></i></InputGroupText>
+                    </InputGroupAddon>
+                    <Input
+                      type="password"
+                      placeholder="Password"
+                      onFocus={e => this.setState({ Passwordfocus: true })}
+                      onBlur={e => this.setState({ Passwordfocus: false })}
+                      value={this.state.Password}
+                      onChange={e => this.handlePasswordChange(e)}
+                    />
+                  </InputGroup>
+
+                  <Row>
+                    <Col sm='12'>
+                      <Button
+                        onClick={() => loging(this.state.Email, this.state.Password)}
+                        // type="submit"
+                        size='lg'
+                        style={{ width: '100%' }}
+                      >
+                        Ingresar
+                      </Button>
+                    </Col>
+                  </Row>
+
+                  <Row>
+                    <Col sm="12" className='buttonGoogle'>
+                      <GoogleLogin
+                        clientId="570853508603-01cnrc4ipnh08c3usuuqtr4q8bb5bf5b.apps.googleusercontent.com"
+                        buttonText="Ingreso Google"
+                        onSuccess={this.responseGoogle}
+                        onFailure={this.responseGoogle}
+                        cookiePolicy={'single_host_origin'}
+                        style={{ width: '200px'}}
+                      />
+                      {/*
+                       
+                      <GoogleLogout
+                       clientId="570853508603-01cnrc4ipnh08c3usuuqtr4q8bb5bf5b.apps.googleusercontent.com"
+                       buttonText="Salir"
+                       onLogoutSuccess={this.responseGoogle}
+                      />
+                     */}
+                    </Col>
+                  </Row>
                 </CardBody>
-                <CardFooter>
-                  <Button
-                    block
-                    className="mb-3"
-                    color="primary"
-                    size="lg"
-                    type="submit"
-                  >
-                    Get Started
-                  </Button>
-                </CardFooter>
               </Card>
             </Form>
           </Col>
         </Container>
       </div>
-    </>
-  );
-};
-
-const validate = (values) => {
-  let errors = {};
-  if(!values.email){
-    errors.email = "*required";
+    </>);
   }
-  if(!values.password){
-    errors.password = "*required";
-  }
-  return errors;
 }
 
-const LoginForm = reduxForm({
-  form: 'login',
-  validate,
-  enableReinitialize: true,
-})(Login);
+const LoginState = reduxForm({
+  form: 'Login',
 
+})(Login);
 export default connect(
   (state) => ({
-
+    undefined
   }),
   (dispatch) => ({
-    signin(values) {
-      dispatch(loginActions.signin({
-        email: values.email,
-        password: values.password,
-      }));
+    loging(email, password) {
+      dispatch(action.signin({
+        email,
+        password
+      }))
     }
   })
-)(LoginForm);
+)(LoginState)

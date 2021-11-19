@@ -14,8 +14,8 @@
             font-size: 5em;
             font-weight: 900;
             color: $black;
-            text-transform: lowercase;
-            margin-left: -5px;
+           // text-transform: lowercase;
+            //margin-left: -5px;
             z-index: 1;
           }
         }
@@ -250,7 +250,9 @@
 
     &.pricing-page, &.login-page, &.lock-page, &.register-page {
       min-height: 100vh;
-      background: radial-gradient($background-black, $background-states-black);
+      background-image: url('../../../img/pexels-lukas-1420701.jpg');
+      background-repeat: no-repeat;
+      background-size: cover;
     }
 }
 

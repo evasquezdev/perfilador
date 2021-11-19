@@ -28,7 +28,7 @@ export const sendMailKO = () => ({
 export const sendEmail = ({
   text,
   header,
-  // file,
+  file,
   Filter
 
 }) => ({
@@ -36,7 +36,7 @@ export const sendEmail = ({
   payload: {
     text,
     header,
-    // file,
+   file,
     Filter
   }
 });

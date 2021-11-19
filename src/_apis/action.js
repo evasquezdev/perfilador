@@ -38,7 +38,7 @@ export const sendEmail = (
   token,
   text,
   header,
-  //file,
+  file,
   Filter
 ) => new Promise((resolve, reject) => {
   let data = {"filters": null}
@@ -49,17 +49,22 @@ export const sendEmail = (
        'value': Filter[key]
      }  
   });
-  data.filters = Filter
+  data.filters = Filter;
+  let json = {
+    "sms_text": header + '|' + text,
+    "filters": info,
+  }
+  let json_end =  JSON.stringify(json)
+  console.log('json', json_end)
+  const datas = new FormData();
+  datas.append('json_data', json_end);
+  datas.append('file', file);
   fetch(`${URL}/filters/send_email/`, {
     method: 'POST',
     headers: {
-      "Content-type": "application/json",
       Authorization: `Token ${token}`,
     },
-    body: JSON.stringify({
-      "sms_text": header + '|' + text,
-      "filters": info,
-    })
+    body: datas
   }).then((resultado) => {
       if (resultado.ok) {
         resultado.json().then((res) => resolve(res));

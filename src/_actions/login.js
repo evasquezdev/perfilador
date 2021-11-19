@@ -70,3 +70,89 @@ export const logOut = () => ({
   type: types.LOGOFF_SUCCEEDED,
   payload: {}
 });
+
+
+export const forgot = ({
+  email,
+}) => ({
+  type: types.POST_FORGOT_PASS,
+  payload: {
+    email,
+  }
+});
+
+export const forgotOK = ({
+  user,
+}) => ({
+  type: types.POST_FORGOT_PASS_OK,
+  payload: {
+    user,
+  }
+});
+
+export const forgotKO = ({
+  error,
+}) => ({
+  type: types.POST_FORGOT_PASS_KO,
+  payload: {
+    error,
+  }
+});
+
+export const confirm = ({
+  email,
+  token
+}) => ({
+  type: types.POST_CONFIRM_TOKEN,
+  payload: {
+    email,
+    token
+  }
+});
+
+export const confirmOK = ({
+  user,
+}) => ({
+  type: types.POST_CONFIRM_TOKEN_OK,
+  payload: {
+    user,
+  }
+});
+
+export const confirmKO = ({
+  error,
+}) => ({
+  type: types.POST_CONFIRM_TOKEN_OK,
+  payload: {
+    error,
+  }
+});
+
+export const reset = ({
+  email,
+  token
+}) => ({
+  type: types.POST_RESET_PASS,
+  payload: {
+    email,
+    token
+  }
+});
+
+export const resetOK = ({
+  user,
+}) => ({
+  type: types.POST_RESET_PASS_OK,
+  payload: {
+    user,
+  }
+});
+
+export const resetKO = ({
+  error,
+}) => ({
+  type: types.POST_RESET_PASS_KO,
+  payload: {
+    error,
+  }
+});

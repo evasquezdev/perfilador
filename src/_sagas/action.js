@@ -47,7 +47,7 @@ function* sendEmail(action) {
     const {
       text,
       header,
-      // file,
+      file,
       Filter
     } = action.payload;
     const token = yield select(reducers.getUserToken);
@@ -56,7 +56,7 @@ function* sendEmail(action) {
       token,
       text,
       header,
-      // file,
+      file,
       Filter
     );
     yield put(actions.sendEmailOK({

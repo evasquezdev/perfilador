@@ -21892,7 +21892,10 @@ Copyright (c) 2015 Daniel Eden
 
 .full-page.pricing-page, .full-page.login-page, .full-page.lock-page, .full-page.register-page {
   min-height: 100vh;
-  background: radial-gradient(#1e1e2f, #1e1e24); }
+  background-image: url('../img/background.jpg') !important;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
 
 @media (max-width: 767.98px) {
   .landing-page .section-story-overview .image-container:nth-child(2) {

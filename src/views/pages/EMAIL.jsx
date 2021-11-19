@@ -360,7 +360,7 @@ class DatabasesForm extends React.Component {
 
   delay () {
     setTimeout(function() { //Start the timer
-      window.location.reload()
+   //   window.location.reload()
   }.bind(this), 2000)
   }
 
@@ -666,7 +666,7 @@ class DatabasesForm extends React.Component {
                       />
                 </FormGroup>
                 <Row>
-                {/*  <Col>
+                  <Col>
                     <FormGroup>
                       <Button color="info" size="sm"
                         style={{ fontSize: 13, height: 40 }}>
@@ -684,7 +684,7 @@ class DatabasesForm extends React.Component {
                         {FilterForm.file.name}
                       </span>}
                     </FormGroup>
-                  </Col>*/}
+                  </Col>
                   <Col>
                     <Button
                       color="info"

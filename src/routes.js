@@ -49,12 +49,12 @@ import Company from 'views/pages/Company';
 import User from 'views/pages/User.jsx';
 
 import Login from "views/pages/Login.js";
-
+import RecoverPassword from 'views/pages/RecoverPassword'
 const routes = [
   {
     collapse: true,
     name: "Administración",
-    icon: "tim-icons icon-money-coins",
+    icon: "tim-icons icon-badge",
     state: "pagesCollapseCosting",
     views: [
       {
@@ -83,21 +83,21 @@ const routes = [
   {
     path: "/databases",
     name: "Base de Datos",
-    icon: "tim-icons icon-image-02",
+    icon: "tim-icons icon-laptop",
     component: Databases,
     layout: "/admin",
   },
   {
     path: "/enviosSMS",
     name: "envios SMS",
-    icon: "tim-icons icon-notes",
+    icon: "tim-icons icon-send",
     component: SMS,
     layout: "/admin",
   },
   {
     path: "/enviosEmail",
     name: "envios correo",
-    icon: "tim-icons icon-notes",
+    icon: "tim-icons icon-email-85",
     component: EMAIL,
     layout: "/admin",
   },
@@ -115,6 +115,14 @@ const routes = [
     component: Login,
     layout: "/auth",
     invisible: true,
+  },
+  {
+    path: "/recover",
+    name: "Recover Password",
+    icon: "tim-icons icon-bank",
+    component: RecoverPassword,
+    layout: "/auth",
+    invisible: true
   },
 ];
 

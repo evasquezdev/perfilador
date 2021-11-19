@@ -118,7 +118,7 @@ class Databases extends React.Component {
       <TabContent activeTab={this.state.vTabs}>
         <TabPane tabId='vt1'>
           <Row>
-            <Col sm={12} md={{ size: 6, offset: 3 }}>
+            <Col style={{marginTop: '60px'}} sm={12} md={{ size: 8, offset: 2 }}>
               <Card>
                 <CardHeader>
                   <CardTitle tag="h4">Nueva Base de Datos</CardTitle>
@@ -171,11 +171,11 @@ class Databases extends React.Component {
                         })}
                       />
                     </FormGroup>
-                      */}
-                    <Row>
-                      <Col dm='12'>
+                      */}                
+                  <Row>
+                  <Col sm='7'>
                         <FormGroup>
-                          <Button color="info" size="sm">
+                          <Button color="info" size="lg">
                             <Input type="file"
                               accept=".xlsx"
                               disabled={loading}
@@ -189,37 +189,44 @@ class Databases extends React.Component {
                                 })
                               }}
                             />
-                            <Label>Subir Archivo</Label>
+                             <i className="tim-icons icon-cloud-upload-94" />
+                        {" "}
+                            <Label>Subir Base de Datos</Label>
                           </Button>
                           {file && <span className="form-text text-info">
                             {file.name}
                           </span>}
                         </FormGroup>
-                      </Col>
-                    </Row>
-                  </Form>
-                  <Row>
-                    <Col dm='6'>
-                      <Button type="submit" 
+                    </Col>
+                    <Col sm='5'>
+                      <Button type="submit" size="lg"
                       onClick={()=> postDb(this.state.dbForm.file, this.state.dbForm.name, this.state.dbForm.abbreviation)}
                       color="success" disabled={loading}>
-                        <i className="tim-icons icon-cloud-upload-94" />
+                        <i className="tim-icons icon-single-copy-04" />
                         {" "}
+                        <Label>
                         Crear Base de Datos
+                        </Label>
                       </Button>
                     </Col>
-                    <Col>
+                    {/*<Col sm='4'>
                       <Button
-                        className="btn-round"
-                        color="primary"
+                      size="lg"
+                      ///  className="btn-round"
+                        color="default"
                         onClick={() => {
                           window.open(`${process.env.PUBLIC_URL}/Formato DB.xlsx`)
                         }}
                       >
-                        <i className="tim-icons icon-cloud-download-93" /> Descargar Formato DB
+                        <i className="tim-icons icon-cloud-download-93" /> 
+                        {" "}
+                        <Label>
+                        Descargar Formato
+                        </Label>
                       </Button>
-                    </Col>
+                      </Col>*/}
                   </Row>
+                  </Form>
                 </CardBody>
               </Card>
             </Col>
