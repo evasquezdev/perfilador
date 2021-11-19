@@ -360,7 +360,7 @@ class DatabasesForm extends React.Component {
 
   delay () {
     setTimeout(function() { //Start the timer
-   //   window.location.reload()
+      window.location.reload()
   }.bind(this), 2000)
   }
 

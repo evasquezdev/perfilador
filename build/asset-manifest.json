@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/static/css/main.cd779556.chunk.css",
-    "main.js": "/static/js/main.b7b933ff.chunk.js",
-    "main.js.map": "/static/js/main.b7b933ff.chunk.js.map",
+    "main.js": "/static/js/main.e81d29ed.chunk.js",
+    "main.js.map": "/static/js/main.e81d29ed.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.52f3214c.js",
     "runtime-main.js.map": "/static/js/runtime-main.52f3214c.js.map",
     "static/css/2.f4cb9c36.chunk.css": "/static/css/2.f4cb9c36.chunk.css",
@@ -12,7 +12,7 @@
     "static/css/2.f4cb9c36.chunk.css.map": "/static/css/2.f4cb9c36.chunk.css.map",
     "static/css/main.cd779556.chunk.css.map": "/static/css/main.cd779556.chunk.css.map",
     "static/js/2.915ada29.chunk.js.LICENSE.txt": "/static/js/2.915ada29.chunk.js.LICENSE.txt",
-    "static/js/main.b7b933ff.chunk.js.LICENSE.txt": "/static/js/main.b7b933ff.chunk.js.LICENSE.txt",
+    "static/js/main.e81d29ed.chunk.js.LICENSE.txt": "/static/js/main.e81d29ed.chunk.js.LICENSE.txt",
     "static/media/black-dashboard-pro-react.scss?v=1.2.0": "/static/media/pexels-lukas-1420701.e57d119a.jpg",
     "static/media/emilyz.jpg": "/static/media/emilyz.48a62490.jpg",
     "static/media/jana.jpg": "/static/media/jana.918ef8bd.jpg",
@@ -28,6 +28,6 @@
     "static/css/2.f4cb9c36.chunk.css",
     "static/js/2.915ada29.chunk.js",
     "static/css/main.cd779556.chunk.css",
-    "static/js/main.b7b933ff.chunk.js"
+    "static/js/main.e81d29ed.chunk.js"
   ]
 }
