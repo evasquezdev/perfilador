@@ -15,14 +15,16 @@ function* sendMail(action) {
   try {
     const {
       text,
-      Filter
+      Filter,
+      dbs
     } = action.payload;
     const token = yield select(reducers.getUserToken);
     const response = yield call(
       api.sendMail,
       token,
       text,
-      Filter
+      Filter,
+      dbs
     );
     yield put(actions.sendMailOK({
       msg: response
@@ -48,7 +50,8 @@ function* sendEmail(action) {
       text,
       header,
       file,
-      Filter
+      Filter,
+      dbs
     } = action.payload;
     const token = yield select(reducers.getUserToken);
     const response = yield call(
@@ -57,7 +60,8 @@ function* sendEmail(action) {
       text,
       header,
       file,
-      Filter
+      Filter,
+      dbs
     );
     yield put(actions.sendEmailOK({
       msg: response

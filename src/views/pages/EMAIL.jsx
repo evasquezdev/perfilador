@@ -365,7 +365,7 @@ class DatabasesForm extends React.Component {
   delay() {
     setTimeout(function () { //Start the timer
       window.location.reload()
-    }.bind(this), 2000)
+    }.bind(this), 4000)
   }
 
   handleSelectChange = (event) => {
@@ -792,7 +792,7 @@ class DatabasesForm extends React.Component {
                             color="info"
                             disabled={loadingAction}
                             onClick={() => {
-                              sendMail(FilterForm, this.state.Form)
+                              sendMail(FilterForm, this.state.Form, dbsSelected)
                               this.setState({
                                 FilterForm: {
                                   ...FilterForm,
@@ -877,7 +877,7 @@ export default connect(
         Form: FilterForm
       })
     },
-    sendMail(FilterForm, Form) {
+    sendMail(FilterForm, Form, dbs) {
       console.log('Form', Form, 'FilterForm', FilterForm)
       if (
         (!FilterForm.header || FilterForm.header === "") ||
@@ -901,7 +901,8 @@ export default connect(
         console.log(FilterForm)
         dispatch(messageActions.sendEmail({
           ...FilterForm,
-          Filter: Form
+          Filter: Form,
+          dbs: dbs
         }))
       }
       // }

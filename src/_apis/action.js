@@ -3,7 +3,8 @@ import URL from './routes';
 export const sendMail = (
   token,
   text,
-  Filter
+  Filter,
+  dbs
 ) => new Promise((resolve, reject) => {
   let data = {"filters": null}
   let info = []
@@ -13,6 +14,8 @@ export const sendMail = (
        'value': Filter[key]
      }  
   });
+
+  let DB = dbs.join()
   data.filters = Filter
   fetch(`${URL}/filters/send_sms/`, {
     method: 'POST',
@@ -23,6 +26,7 @@ export const sendMail = (
     body: JSON.stringify({
       "sms_text": text,
       "filters": info,
+      'db_names': DB
     })
   }).then((resultado) => {
       if (resultado.ok) {
@@ -39,7 +43,8 @@ export const sendEmail = (
   text,
   header,
   file,
-  Filter
+  Filter,
+  dbs
 ) => new Promise((resolve, reject) => {
   let data = {"filters": null}
   let info = []
@@ -50,9 +55,11 @@ export const sendEmail = (
      }  
   });
   data.filters = Filter;
+  let DB = dbs.join()
   let json = {
     "sms_text": header + '|' + text,
     "filters": info,
+    'db_names': DB
   }
   let json_end =  JSON.stringify(json)
   console.log('json', json_end)

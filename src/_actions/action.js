@@ -2,13 +2,15 @@ import * as types from '../_types/action';
 
 export const sendMail = ({
   text,
-  Filter
+  Filter,
+  dbs
 
 }) => ({
   type: types.SEND_EMAIL,
   payload: {
     text,
-    Filter
+    Filter,
+    dbs
   }
 });
 
@@ -29,7 +31,8 @@ export const sendEmail = ({
   text,
   header,
   file,
-  Filter
+  Filter,
+  dbs
 
 }) => ({
   type: types.SEND_MAIL,
@@ -37,7 +40,8 @@ export const sendEmail = ({
     text,
     header,
    file,
-    Filter
+    Filter,
+    dbs
   }
 });
 

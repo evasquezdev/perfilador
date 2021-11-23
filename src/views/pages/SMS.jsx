@@ -353,7 +353,7 @@ class DatabasesForm extends React.Component {
   delay() {
     setTimeout(function () { //Start the timer
       window.location.reload()
-    }.bind(this), 2000)
+    }.bind(this), 4000)
   }
   handleSelectChange = (event) => {
     let opts = [], opt;
@@ -744,7 +744,7 @@ class DatabasesForm extends React.Component {
                           color="info"
                           disabled={loadingAction}
                           onClick={() => {
-                            sendMail(FilterForm, this.state.Form)
+                            sendMail(FilterForm, this.state.Form, dbsSelected)
                             this.setState({
                               FilterForm: {
                                 ...FilterForm,
@@ -827,7 +827,7 @@ export default connect(
         Form: FilterForm
       })
     },
-    sendMail(FilterForm, Form) {
+    sendMail(FilterForm, Form,dbsSelected) {
       console.log('Form', Form, 'FilterForm', FilterForm)
       if (
         !FilterForm.text || FilterForm.text === "") {
@@ -838,7 +838,8 @@ export default connect(
       } else {
         dispatch(messageActions.sendMail({
           ...FilterForm,
-          Filter: Form
+          Filter: Form,
+          dbs: dbsSelected
         }))
 
 
