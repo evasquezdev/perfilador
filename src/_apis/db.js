@@ -17,6 +17,23 @@ export const getdbs = (
   }).catch((error) => reject(error));
 });
 
+export const getdbsFilter = (
+  token
+) => new Promise((resolve, reject) => {
+  fetch(`${URL}/databases/get_dabatases/`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Token ${token}`,
+    }
+  }).then((resultado) => {
+    if (resultado.ok) {
+      resultado.json().then((res) => resolve(res));
+    } else {
+      reject("error");
+    }
+  }).catch((error) => reject(error));
+});
+
 export const postdb = (
   token,
   file,

@@ -3,11 +3,18 @@ import * as types from '../_types/db';
 const stateShape = {
   loading: false,
   dbs: [],
+  dbsfilter: []
 };
 
 const db = (state = stateShape, action) => {
   switch(action.type){
     case types.GET_DBS: {
+      return {
+        ...state,
+        loading: true,
+      }
+    }
+    case types.GET_DBS_FILTER: {
       return {
         ...state,
         loading: true,
@@ -23,11 +30,28 @@ const db = (state = stateShape, action) => {
         dbs,
       }
     }
+    case types.GET_DBS_FILTER_OK: {
+      const {
+        dbsfilter
+      } = action.payload;
+      return {
+        ...state,
+        loading: false,
+        dbsfilter,
+      }
+    }
     case types.GET_DBS_KO: {
       return {
         ...state,
         loading: false,
         dbs: null,
+      }
+    }
+    case types.GET_DBS_FILTER_KO: {
+      return {
+        ...state,
+        loading: false,
+        dbsfilter: null,
       }
     }
     case types.POST_DB: {
@@ -72,4 +96,5 @@ const db = (state = stateShape, action) => {
 export default db;
 
 export const getDBs = (state) => state.dbs;
+export const getDbsFilter = (state) => state.dbsfilter;
 export const getDBloading = (state) => state.loading;

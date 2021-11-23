@@ -34,7 +34,9 @@ function* postCompany(action) {
     const {
       name,
       smsQuantity,
-      emailQuantity
+      emailQuantity,
+      price_per_email,
+      price_per_sms
     } = action.payload;
     const token = yield select(reducers.getUserToken);
     const response = yield call(
@@ -42,7 +44,9 @@ function* postCompany(action) {
       token,
       name,
       smsQuantity,
-      emailQuantity
+      emailQuantity,
+      price_per_email,
+      price_per_sms
     );
     yield put(actions.postCompanyOK({
       msg: response
@@ -96,7 +100,9 @@ function* patchCompany(action) {
       id,
       name,
       smsQuantity,
-      emailQuantity
+      emailQuantity,
+      price_per_email,
+      price_per_sms
     } = action.payload;
     const token = yield select(reducers.getUserToken);
     const response = yield call(
@@ -105,7 +111,9 @@ function* patchCompany(action) {
       id,
       name,
       smsQuantity,
-      emailQuantity
+      emailQuantity,
+      price_per_email,
+      price_per_sms
     );
     yield put(actions.patchCompanyOK({
       msg: response

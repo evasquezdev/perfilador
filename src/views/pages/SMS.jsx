@@ -21,6 +21,8 @@ import { connect } from 'react-redux';
 import * as selector from '../../_reducers';
 import * as filterActions from '../../_actions/filter';
 import * as modalActions from '../../_actions/modal';
+import * as DBActions from '../../_actions/db';
+
 import Modal from '../../components/Modal';
 import * as messageActions from '../../_actions/action';
 import { FadeLoader } from "react-spinners";
@@ -68,6 +70,7 @@ class DatabasesForm extends React.Component {
       text: '',
       file: null,
     },
+    dbsSelected: [],
     departamentSelect: null,
     range: [
       {
@@ -352,14 +355,26 @@ class DatabasesForm extends React.Component {
       window.location.reload()
     }.bind(this), 2000)
   }
+  handleSelectChange = (event) => {
+    let opts = [], opt;
+    for (let i = 0, len = event.target.options.length; i < len; i++) {
+      opt = event.target.options[i];
+      if (opt.selected) {
+        opts.push(opt.value);
+      }
+    }
+    this.setState({ dbsSelected: opts });
+  };
 
   componentDidMount() {
     const {
       getDeps,
       getInfo,
+      getDB,
     } = this.props;
     getDeps();
     getInfo()
+    getDB()
   }
   render() {
     const {
@@ -372,21 +387,25 @@ class DatabasesForm extends React.Component {
       sendMail,
       handleSubmit,
       info,
-      reset
+      reset,
+      userCompany,
+      dbs
     } = this.props;
     const {
       FilterForm,
       departamentos,
       municipios,
       departamentSelect,
-      municipiosTotal
+      municipiosTotal,
+      dbsSelected
     } = this.state;
     let name;
     let filteredmuns = municipios.filter(m => m.name === departamentSelect)
     return (<div className="content">
       <Modal />
+      {userCompany.has_sms ?
       <Row>
-        <Col xs="6">{console.log(filteredmuns[0] && filteredmuns[0].minicipios)}
+        <Col sm="4">{console.log(filteredmuns[0] && filteredmuns[0].minicipios)}
           <Form onSubmit={handleSubmit(filterData.bind(this))}>
             <Card>
               <CardBody>
@@ -606,6 +625,88 @@ class DatabasesForm extends React.Component {
           </div>}
         </Col>
         */}
+          {<Col sm="4">
+              <Card>
+                {
+                  <CardBody>
+                    <CardTitle>
+                      Creditos disponibles
+                    </CardTitle>
+                    <ListGroup>
+                      <ListGroupItem className="justify-content-between" style={{ backgroundColor: '#344675' }}>
+                        <Row>
+                          <Col xs="6" >
+                            Mensajes restantes por SMS
+                          </Col>
+                          {loading === false ?
+                            <Col xs="6" style={{ textAlign: 'right' }}>
+                              <Badge pill color="info">{info && info.sms_credit}</Badge>
+
+                            </Col>
+                            :
+                            <Col md={{ size: 2, offset: 4 }} style={{ textAlign: 'right', marginLeft: 170 }}>
+                              <FadeLoader css={override} size={1} color={"#1d8cf8 "} margin={-10} />
+                            </Col>
+                          }
+                        </Row>
+                      </ListGroupItem>
+                      <ListGroupItem className="justify-content-between" style={{ backgroundColor: '#344675' }}>
+                        <Row>
+                          <Col xs="6" >
+                            Total Filtrado
+                          </Col>
+
+                          {loading === false ?
+                            <Col xs="6" style={{ textAlign: 'right' }}>
+                              <Badge pill color="info">{filteredData && filteredData.count}</Badge>
+                            </Col>
+                            :
+                            <Col md={{ size: 2, offset: 4 }} style={{ textAlign: 'right', marginLeft: 170 }}>
+                              <FadeLoader css={override} size={1} color={"#1d8cf8 "} margin={-10} />
+                            </Col>
+                          }
+                        </Row>
+                      </ListGroupItem>
+                    </ListGroup>
+                  </CardBody>
+
+                }
+
+              </Card>
+              <Card>
+              <CardBody>
+                <CardTitle>
+                  Base de Datos
+                </CardTitle>
+                <ListGroup>
+                  <ListGroup className="justify-content-between" style={{ backgroundColor: '#344675' }}>
+                    <Row>{console.log(dbsSelected)}
+                      <Col>
+
+                        {dbs &&
+                          <Input
+                            type="select"
+                            name="selectMulti"
+                            id="exampleSelectMulti1"
+                            multiple
+                            value={dbsSelected}
+                            //ref={this.createService}
+                            onChange={this.handleSelectChange}
+                            style={{ height: '200px' }}
+                          >
+                            {dbs.map((size, idx) =>
+                              <option key={idx} value={size.value}>
+                                {size.label}
+                              </option>
+                            )}
+                          </Input>}
+                      </Col>
+                    </Row>
+                  </ListGroup >
+                </ListGroup>
+              </CardBody>
+            </Card>
+            </Col>}
         <Col>
           <Row>
             <Col>
@@ -664,60 +765,26 @@ class DatabasesForm extends React.Component {
               </Card>
             </Col>
           </Row>
-          <Row>
-
-            {<Col xs="12">
-              <Card>
-                {
-                  <CardBody>
-                    <CardTitle>
-                      Creditos disponibles
-                    </CardTitle>
-                    <ListGroup>
-                      <ListGroupItem className="justify-content-between" style={{ backgroundColor: '#344675' }}>
-                        <Row>
-                          <Col xs="6" >
-                            Mensajes restantes por SMS
-                          </Col>
-                          {loading === false ?
-                            <Col xs="6" style={{ textAlign: 'right' }}>
-                              <Badge pill color="info">{info && info.sms_credit}</Badge>
-
-                            </Col>
-                            :
-                            <Col md={{ size: 2, offset: 4 }} style={{ textAlign: 'right', marginLeft: 170 }}>
-                              <FadeLoader css={override} size={1} color={"#1d8cf8 "} margin={-10} />
-                            </Col>
-                          }
-                        </Row>
-                      </ListGroupItem>
-                      <ListGroupItem className="justify-content-between" style={{ backgroundColor: '#344675' }}>
-                        <Row>
-                          <Col xs="6" >
-                            Total Filtrado
-                          </Col>
-
-                          {loading === false ?
-                            <Col xs="6" style={{ textAlign: 'right' }}>
-                              <Badge pill color="info">{filteredData && filteredData.count}</Badge>
-                            </Col>
-                            :
-                            <Col md={{ size: 2, offset: 4 }} style={{ textAlign: 'right', marginLeft: 170 }}>
-                              <FadeLoader css={override} size={1} color={"#1d8cf8 "} margin={-10} />
-                            </Col>
-                          }
-                        </Row>
-                      </ListGroupItem>
-                    </ListGroup>
-                  </CardBody>
-
-                }
-
-              </Card>
-            </Col>}
-          </Row>
         </Col>
       </Row>
+        :
+        <Row>
+        <Col sm='4'>
+        </Col>
+        <Col sm='4'>
+        <Card>
+            <CardTitle  style={{textAlign: 'center'}}>
+            <br></br>
+              <Label>
+              Hola, tu usuario no cuenta con los permisos asignados en este momento, comunicate con tu administrador!
+              </Label>
+              <br></br>
+              <i className="tim-icons icon-settings" />
+            </CardTitle>
+        </Card>
+        </Col>
+      </Row>
+      }
     </div >);
   }
 }
@@ -737,8 +804,14 @@ export default connect(
     loading: selector.getFilterloading(state),
     userInfo: selector.getUserMsgInfo(state),
     loadingAction: selector.getActionloading(state),
+    dbs: selector.getDbsFilter(state),
+    userCompany: selector.getUserCompany(state)
+
   }),
   (dispatch) => ({
+    getDB() {
+      dispatch(DBActions.getDbsFilter())
+    },
     getDeps() {
       dispatch(filterActions.getfilter())
     },
@@ -746,7 +819,10 @@ export default connect(
       dispatch(filterActions.filterInfo())
     },
     filterData(FilterForm) {
-      dispatch(filterActions.filterData({ FilterForm: FilterForm }))
+      dispatch(filterActions.filterData({
+        FilterForm: FilterForm,
+        dbs: this.state.dbsSelected
+      }))
       this.setState({
         Form: FilterForm
       })

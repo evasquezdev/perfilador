@@ -20,13 +20,17 @@ export const fetchCompanyKO = () => ({
 export const postCompany = ({
   name,
   smsQuantity,
-  emailQuantity
+  emailQuantity,
+  price_per_email,
+  price_per_sms
 }) => ({
   type: types.POST_COMPANY,
   payload: {
     name,
     smsQuantity,
-    emailQuantity
+    emailQuantity,
+    price_per_email,
+    price_per_sms
   }
 });
 export const postCompanyOK = ({
@@ -77,14 +81,18 @@ export const patchCompany = ({
   id,
   name,
   smsQuantity,
-  emailQuantity
+  emailQuantity,
+  price_per_email,
+  price_per_sms
 }) => ({
   type: types.PATCH_COMPANY,
   payload: {
     id,
     name,
     smsQuantity,
-    emailQuantity
+    emailQuantity,
+    price_per_email,
+    price_per_sms
   }
 });
 export const patchCompanyOK = ({

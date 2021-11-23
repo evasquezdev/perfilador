@@ -25,9 +25,12 @@ export default combineReducers({
 //login
 export const getUserToken = (state) => loginHandler.getUserToken(state.login);
 export const getUserMsgInfo = (state) => loginHandler.getUserMsgInfo(state.login);
+export const getUserCompany = (state) => loginHandler.getUserCompany(state.login);
+
 
 //db
 export const getDBs = (state) => dbHandler.getDBs(state.db);
+export const getDbsFilter = (state) => dbHandler.getDbsFilter(state.db);
 export const getDBloading = (state) => dbHandler.getDBloading(state.db);
 
 //modal

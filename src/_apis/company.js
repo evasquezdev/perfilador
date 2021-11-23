@@ -22,12 +22,16 @@ export const postCompany = (
   token,
   name,
   smsQuantity,
-  emailQuantity
+  emailQuantity,
+  price_per_email,
+  price_per_sms
 ) => new Promise((resolve, reject) => {
   let dbData = new FormData();
   dbData.append('name', name);
   dbData.append('quantity_of_sms', smsQuantity);
   dbData.append('quantity_of_emails', emailQuantity);
+  dbData.append('price_per_email', price_per_email);
+  dbData.append('price_per_sms', price_per_sms);
   fetch(`${URL}/company/`, {
     method: 'POST',
     headers: {
@@ -68,12 +72,16 @@ export const patchCompany = (
   id,
   name,
   smsQuantity,
-  emailQuantity
+  emailQuantity,
+  price_per_email,
+  price_per_sms
 ) => new Promise((resolve, reject) => {
   let dbData = new FormData();
   dbData.append('name', name);
   dbData.append('quantity_of_sms', smsQuantity);
   dbData.append('quantity_of_emails', emailQuantity);
+  dbData.append('price_per_email', price_per_email);
+  dbData.append('price_per_sms', price_per_sms);
 
   fetch(`${URL}/company/${id}/`, {
     method: 'PATCH',

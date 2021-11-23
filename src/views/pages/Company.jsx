@@ -43,6 +43,8 @@ class CompanyForm extends React.Component {
     name: '',
     smsQuantity: '',
     emailQuantity: '',
+    priceSMS: 0,
+    priceEMAIL: 0,
     edit: false
   }
 
@@ -73,6 +75,8 @@ class CompanyForm extends React.Component {
       name: data.name,
       smsQuantity: data.quantity_of_sms,
       emailQuantity: data.quantity_of_emails,
+      priceEMAIL: data.price_per_email,
+      priceSMS: data.price_per_sms,
       edit: true
     })
   }
@@ -95,7 +99,9 @@ class CompanyForm extends React.Component {
       name,
       smsQuantity,
       emailQuantity,
-      edit
+      edit,
+      priceSMS,
+      priceEMAIL
     } = this.state
     return (<div className="content">
       <Modal />
@@ -130,7 +136,21 @@ class CompanyForm extends React.Component {
                 }}
               />
             </FormGroup>
-            <Label>Cantidad de Email: </Label>
+            <Label>Precio por SMS: </Label>
+            <FormGroup>
+              <Input
+                type="text"
+                value={priceSMS}
+                placeholder={'Cantidad'}
+                //disabled={loadingAction}
+                onChange={(e) => {
+                  this.setState({
+                    priceSMS: e.target.value
+                  })
+                }}
+              />
+            </FormGroup>
+            <Label>Cantidad de Correos: </Label>
             <FormGroup>
               <Input
                 type="text"
@@ -144,6 +164,20 @@ class CompanyForm extends React.Component {
                 }}
               />
             </FormGroup>
+            <Label>Precio por Correo: </Label>
+            <FormGroup>
+              <Input
+                type="text"
+                value={priceEMAIL}
+                placeholder={'Cantidad'}
+                //disabled={loadingAction}
+                onChange={(e) => {
+                  this.setState({
+                    priceEMAIL: e.target.value
+                  })
+                }}
+              />
+            </FormGroup>
             {edit ?
               <Button
                 color="info"
@@ -151,12 +185,14 @@ class CompanyForm extends React.Component {
                 //  disabled={loadingAction}
                 onClick={e => {
                   e.preventDefault();
-                  patchCompany(id, name, smsQuantity, emailQuantity)
+                  patchCompany(id, name, smsQuantity, emailQuantity, priceSMS, priceEMAIL)
                   this.setState({
                     id: null,
                     name: '',
                     smsQuantity: '',
-                    emailQuantity: ''
+                    emailQuantity: '',
+                    priceEMAIL: 0,
+                    priceSMS: 0
                   })
                 }}
               >
@@ -168,11 +204,13 @@ class CompanyForm extends React.Component {
                 //  disabled={loadingAction}
                 onClick={e => {
                   e.preventDefault();
-                  postCompany(name, smsQuantity, emailQuantity)
+                  postCompany(name, smsQuantity, emailQuantity, priceSMS, priceEMAIL)
                   this.setState({
                     name: '',
                     smsQuantity: '',
-                    emailQuantity: ''
+                    emailQuantity: '',
+                    priceEMAIL: 0,
+                    priceSMS: 0
                   })
                 }}
               >
@@ -190,6 +228,8 @@ class CompanyForm extends React.Component {
                   name: index.name,
                   email: index.quantity_of_emails,
                   sms: index.quantity_of_sms,
+                  pricesms: index.price_per_email,
+                  priceemail:index.price_per_sms,
                   actions: (<>
 
                     <div className="" >
@@ -240,10 +280,28 @@ class CompanyForm extends React.Component {
                   filterable: true,
                 },
                 {
+                  Header: "Precio por Correo",
+                  accessor: "priceemail",
+                  filterMethod: (filter, row) =>
+                  matchSorter(row, filter.value, { keys: ["priceEMAIL"] }),
+                  filterAll: true,
+                  sortable: true,
+                  filterable: true,
+                },
+                {
                   Header: "SMS",
                   accessor: "sms",
                   filterMethod: (filter, row) =>
                     matchSorter(row, filter.value, { keys: ["sms"] }),
+                  filterAll: true,
+                  sortable: true,
+                  filterable: true,
+                },
+                {
+                  Header: "Precio por SMS",
+                  accessor: "pricesms",
+                  filterMethod: (filter, row) =>
+                  matchSorter(row, filter.value, { keys: ["priceSMS"] }),
                   filterAll: true,
                   sortable: true,
                   filterable: true,
@@ -288,23 +346,29 @@ export default connect(
     getDeps() {
       dispatch(filterActions.fetchCompany())
     },
-    postCompany(name, sms, email) {
+    postCompany(name, sms, email, priceSMS, priceEMAIL) {
+      console.log(name, sms, email, priceSMS, priceEMAIL)
       dispatch(filterActions.postCompany({
         name: name,
         smsQuantity: sms,
-        emailQuantity: email
+        emailQuantity: email,
+        price_per_email: priceEMAIL,
+        price_per_sms: priceSMS
+        
       }))
     },
     deleteCompany(id) {
       dispatch(filterActions.deleteCompany({ id }))
     },
-    patchCompany(id, name, sms, email) {
+    patchCompany(id, name, sms, email, priceSMS, priceEMAIL) {
       console.log(id,name, sms, email)
       dispatch(filterActions.patchCompany({
         id: id,
         name: name,
         smsQuantity: sms,
-        emailQuantity: email
+        emailQuantity: email,
+        price_per_email:priceEMAIL,
+        price_per_sms: priceSMS,
       }))
     }
   })

@@ -86,3 +86,21 @@ export const deleteDbOK = ({
 export const deleteDbKO = () => ({
   type: types.POST_DELETE_DB_KO
 });
+
+
+export const getDbsFilter = () => ({
+  type: types.GET_DBS_FILTER
+});
+
+export const getDbsFilterOK = ({
+  dbsfilter
+}) => ({
+  type: types.GET_DBS_FILTER_OK,
+  payload: {
+    dbsfilter
+  }
+});
+
+export const getDbsFilterKO = () => ({
+  type: types.GET_DBS_FILTER_KO
+});

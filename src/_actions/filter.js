@@ -39,11 +39,13 @@ export const getFilterKO = () => ({
 
 
 export const filterData = ({
-  FilterForm
+  FilterForm,
+  dbs
 }) => ({
   type: types.FILTER_DATA,
   payload: {
-    FilterForm
+    FilterForm,
+    dbs
   }
 });
 

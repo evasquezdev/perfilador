@@ -77,7 +77,8 @@ export const changeFlag = (
 
 export const getFilterData = (
   token,
-  FilterForm
+  FilterForm,
+  dbs
 ) => new Promise((resolve, reject) => {
   let data = {"filters": null}
   let info = []
@@ -88,7 +89,7 @@ export const getFilterData = (
      }  
   });
   data.filters = FilterForm
-   
+  let DB = dbs.join()
   fetch(`${URL}/filters/get_filtered_data/`, {
     method: 'POST',
     headers: {
@@ -97,6 +98,7 @@ export const getFilterData = (
     },
     body: JSON.stringify({
       "filters": info,
+      "db_names": DB
     })
   }).then((resultado) => {
     if (resultado.ok) {

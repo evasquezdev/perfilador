@@ -43,6 +43,8 @@ import Rtl from "views/pages/Rtl.js";
 import Lock from "views/pages/Lock.js";*/
 import Databases from "views/pages/Databases";
 import SMS from 'views/pages/SMS';
+import DashSMS from 'views/pages/DashboardSMS';
+import DashEmail from 'views/pages/DashboardEmail';
 import EMAIL from 'views/pages/EMAIL';
 import Filters from 'views/pages/Filters';
 import Company from 'views/pages/Company';
@@ -99,6 +101,20 @@ const routes = [
     name: "envios correo",
     icon: "tim-icons icon-email-85",
     component: EMAIL,
+    layout: "/admin",
+  },
+  {
+    path: "/dashboard_sms",
+    name: "Dashboard SMS",
+    icon: "tim-icons icon-send",
+    component: DashSMS,
+    layout: "/admin",
+  },
+  {
+    path: "/dashboard_email",
+    name: "Dashboard correo",
+    icon: "tim-icons icon-email-85",
+    component: DashEmail,
     layout: "/admin",
   },
   {

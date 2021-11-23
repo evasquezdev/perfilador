@@ -25,6 +25,21 @@ function* getdb() {
   }
 }
 
+function* getdbFilter() {
+  try {
+    const token = yield select(reducers.getUserToken);
+    const response = yield call(
+      api.getdbsFilter,
+      token
+    );
+    yield put(actions.getDbsFilterOK({
+      dbsfilter: response
+    }));
+  } catch (error) {
+    yield put(actions.getDbsFilterKO());
+  }
+}
+
 function* postdb(action) {
   try {
     const {
@@ -117,6 +132,10 @@ function* dbSaga() {
   yield takeLatest(
     types.GET_DBS,
     getdb,
+  );
+  yield takeLatest(
+    types.GET_DBS_FILTER,
+    getdbFilter,
   );
   yield takeLatest(
     types.POST_DB,

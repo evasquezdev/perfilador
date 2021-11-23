@@ -49,3 +49,7 @@ export const getUserMsgInfo = (state) => ({
   quantity_of_emails: state.user.company.quantity_of_emails,
   quantity_of_sms: state.user.company.quantity_of_sms,
 })
+
+export const getUserCompany = (state) => {
+  return state.user ? state.user.company : null;
+}
