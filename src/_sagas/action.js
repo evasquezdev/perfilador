@@ -16,6 +16,9 @@ function* sendMail(action) {
     const {
       text,
       Filter,
+      date,
+      time,
+      company,
       dbs
     } = action.payload;
     const token = yield select(reducers.getUserToken);
@@ -24,6 +27,9 @@ function* sendMail(action) {
       token,
       text,
       Filter,
+      date,
+      time,
+      company,
       dbs
     );
     yield put(actions.sendMailOK({
@@ -51,6 +57,9 @@ function* sendEmail(action) {
       header,
       file,
       Filter,
+      date,
+      time,
+      company,
       dbs
     } = action.payload;
     const token = yield select(reducers.getUserToken);
@@ -61,6 +70,9 @@ function* sendEmail(action) {
       header,
       file,
       Filter,
+      date,
+      time,
+      company,
       dbs
     );
     yield put(actions.sendEmailOK({

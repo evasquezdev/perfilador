@@ -173,7 +173,7 @@ class Databases extends React.Component {
                     </FormGroup>
                       */}                
                   <Row>
-                  <Col sm='7'>
+                  <Col sm='4'>
                         <FormGroup>
                           <Button color="info" size="lg">
                             <Input type="file"
@@ -198,7 +198,7 @@ class Databases extends React.Component {
                           </span>}
                         </FormGroup>
                     </Col>
-                    <Col sm='5'>
+                    <Col sm='4'>
                       <Button type="submit" size="lg"
                       onClick={()=> postDb(this.state.dbForm.file, this.state.dbForm.name, this.state.dbForm.abbreviation)}
                       color="success" disabled={loading}>
@@ -209,22 +209,7 @@ class Databases extends React.Component {
                         </Label>
                       </Button>
                     </Col>
-                    {/*<Col sm='4'>
-                      <Button
-                      size="lg"
-                      ///  className="btn-round"
-                        color="default"
-                        onClick={() => {
-                          window.open(`${process.env.PUBLIC_URL}/Formato DB.xlsx`)
-                        }}
-                      >
-                        <i className="tim-icons icon-cloud-download-93" /> 
-                        {" "}
-                        <Label>
-                        Descargar Formato
-                        </Label>
-                      </Button>
-                      </Col>*/}
+                   
                   </Row>
                   </Form>
                 </CardBody>

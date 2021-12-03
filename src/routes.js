@@ -47,6 +47,7 @@ import DashSMS from 'views/pages/DashboardSMS';
 import DashEmail from 'views/pages/DashboardEmail';
 import EMAIL from 'views/pages/EMAIL';
 import Filters from 'views/pages/Filters';
+import Campaing from 'views/pages/campaing';
 import Company from 'views/pages/Company';
 import User from 'views/pages/User.jsx';
 
@@ -58,20 +59,24 @@ const routes = [
     name: "Administración",
     icon: "tim-icons icon-badge",
     state: "pagesCollapseCosting",
+    permission: 'master',
     views: [
       {
         path: "/user",
         name: "Usuarios",
         mini: "U",
         component: User,
-        layout: "/admin"
+        layout: "/admin",
+        permission: 'master'
       },
       {
         path: "/company",
         name: "Empresas",
         mini: "E",
         component: Company,
-        layout: "/admin"
+        layout: "/admin",
+        permission: 'master'
+
       },
     ]
   },
@@ -122,6 +127,13 @@ const routes = [
     name: "Manejo de filtros",
     icon: "tim-icons icon-notes",
     component: Filters,
+    layout: "/admin",
+  },
+  {
+    path: "/Campanas",
+    name: "Campañas",
+    icon: "tim-icons icon-notes",
+    component: Campaing,
     layout: "/admin",
   },
   {

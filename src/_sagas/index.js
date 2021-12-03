@@ -6,6 +6,7 @@ import actionSaga from './action';
 import dashboardSaga from './dashboard';
 import companySaga from './company';
 import userSaga from './user'
+import CampaingSaga from './campaing';
 
 function* mainSaga() {
   yield all([
@@ -15,7 +16,8 @@ function* mainSaga() {
     fork(actionSaga),
     fork(dashboardSaga),
     fork(companySaga),
-    fork(userSaga)
+    fork(userSaga),
+    fork(CampaingSaga)
   ]);
 }
 

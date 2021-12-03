@@ -18,11 +18,12 @@ const history = createBrowserHistory();
 
 const App = ({
     token,
+    user
 }) => (<BrowserRouter history={history}>
     <Switch>
         {token ? 
         <>
-            <Route path="/" render={(props) => <AdminLayout {...props} />} />
+            <Route path="/" render={(props) => <AdminLayout {...props} user={user} />} />
         </> :
         <>
             <Route path="/" render={(props) => <AuthLayout {...props} />} />
@@ -34,7 +35,8 @@ const App = ({
 
 export default connect(
     (state) => ({
-        token: selector.getUserToken(state)
+        token: selector.getUserToken(state),
+        user : selector.getUserCompany(state)
     }),
     (dispatch) => ({
     })

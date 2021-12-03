@@ -89,6 +89,12 @@ function* getdata(action) {
       data: response
     }));
   } catch (error) {
+    for (let index = 0; index < 10; index++) {
+      yield put(actions.filterData({
+        FilterForm: action.payload.FilterForm,
+        dbs: action.payload.dbs
+      })); 
+    }
     yield put(actions.filterDataKO());
     yield put(modalActions.showError({
       title: 'Hubo un error',

@@ -9,6 +9,7 @@ import action, * as actionHandler from './action';
 import dashboard, * as dashboardHandler from './dashboard';
 import company, * as companyHandler from './company';
 import user, * as userHandler from './user';
+import campaing , * as campaingHandler from './campaing';
 
 export default combineReducers({
   login,
@@ -19,6 +20,7 @@ export default combineReducers({
   dashboard,
   company,
   user,
+  campaing,
   form: reducerForm,
 });
 
@@ -62,3 +64,9 @@ export const getCompanyloading = (state) => companyHandler.getCompanyloading(sta
 //user
 export const getUser = (state) => userHandler.getUser(state.user);
 export const getUserloading = (state) => userHandler.getUserloading(state.user);
+
+//campaing
+export const getCampaing = (state) => campaingHandler.getCampaing(state.campaing);
+export const getCampaingloading = (state) => campaingHandler.getCampaingloading(state.campaing);
+export const getCampaingData = (state) => campaingHandler.getCampaingData(state.campaing);
+export const getCampaingloadingData = (state) => campaingHandler.getCampaingloadingData(state.campaing);

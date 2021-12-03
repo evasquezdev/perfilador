@@ -8,7 +8,7 @@ import * as action from '../../_actions/login'
 import { Field, reduxForm, reset/*FieldArray*/ } from 'redux-form';
 import Modal from '../../components/Modal';
 import './styles.scss'
-
+import {useTranslation} from "react-i18next";
 // reactstrap components
 import {
   Button,
@@ -27,6 +27,7 @@ import {
   Label
 } from "reactstrap";
 import { connect } from "react-redux";
+
 
 class Login extends React.Component {
   constructor(props) {
@@ -88,6 +89,7 @@ class Login extends React.Component {
       loging,
       handleSubmit
     } = this.props
+    const { t } = this.props;
     return (<>
       <Modal />
       {this.state._LoggedIn ? this._homeRedirect : ''}

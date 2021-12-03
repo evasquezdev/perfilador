@@ -3,6 +3,9 @@ import * as types from '../_types/action';
 export const sendMail = ({
   text,
   Filter,
+  date,
+  time,
+  company,
   dbs
 
 }) => ({
@@ -10,6 +13,9 @@ export const sendMail = ({
   payload: {
     text,
     Filter,
+    date,
+    time,
+    company,
     dbs
   }
 });
@@ -32,6 +38,9 @@ export const sendEmail = ({
   header,
   file,
   Filter,
+  date,
+  time,
+  company,
   dbs
 
 }) => ({
@@ -39,8 +48,11 @@ export const sendEmail = ({
   payload: {
     text,
     header,
-   file,
+    file,
     Filter,
+    date,
+    time,
+    company,
     dbs
   }
 });

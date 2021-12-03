@@ -4,6 +4,9 @@ export const sendMail = (
   token,
   text,
   Filter,
+  date,
+  time,
+  company,
   dbs
 ) => new Promise((resolve, reject) => {
   let data = {"filters": null}
@@ -26,7 +29,9 @@ export const sendMail = (
     body: JSON.stringify({
       "sms_text": text,
       "filters": info,
-      'db_names': DB
+      'db_names': DB,
+      "campaing_name": company,
+      "programated_at": `${date && time !== ''? date +'|'+ time : null}`
     })
   }).then((resultado) => {
       if (resultado.ok) {
@@ -44,6 +49,9 @@ export const sendEmail = (
   header,
   file,
   Filter,
+  date,
+  time,
+  company,
   dbs
 ) => new Promise((resolve, reject) => {
   let data = {"filters": null}
@@ -59,7 +67,9 @@ export const sendEmail = (
   let json = {
     "sms_text": header + '|' + text,
     "filters": info,
-    'db_names': DB
+    'db_names': DB,
+    "campaing_name": company,
+    "programated_at": `${date && time !== ''? date +'|'+ time : null}`
   }
   let json_end =  JSON.stringify(json)
   console.log('json', json_end)

@@ -27,6 +27,7 @@ import { Nav, Collapse } from "reactstrap";
 var ps;
 
 const Sidebar = (props) => {
+  console.log(props.user , 'hola')
   const [state, setState] = React.useState({});
   const sidebarRef = React.useRef(null);
   const location = useLocation();
@@ -54,7 +55,7 @@ const Sidebar = (props) => {
   const getCollapseStates = (routes) => {
     let initialState = {};
     routes.map((prop, key) => {
-      if (prop.collapse) {
+      if (prop.collapse && props.user.name === 'MASTER') {
         initialState = {
           [prop.state]: getCollapseInitialState(prop.views),
           ...getCollapseStates(prop.views),
@@ -70,7 +71,7 @@ const Sidebar = (props) => {
   // while on the src/views/forms/RegularForms.js - route /admin/regular-forms
   const getCollapseInitialState = (routes) => {
     for (let i = 0; i < routes.length; i++) {
-      if (routes[i].collapse && getCollapseInitialState(routes[i].views)) {
+      if (routes[i].collapse && getCollapseInitialState(routes[i].views) && props.user.name == 'MASTER') {
         return true;
       } else if (window.location.href.indexOf(routes[i].path) !== -1) {
         return true;
@@ -88,7 +89,8 @@ const Sidebar = (props) => {
       if(prop.invisible){
         return null;
       }
-      if (prop.collapse) {
+      if (prop.collapse ) {
+        if(props.user.name === 'MASTER'){
         var st = {};
         st[prop["state"]] = !state[prop.state];
         return (
@@ -130,8 +132,12 @@ const Sidebar = (props) => {
             </Collapse>
           </li>
         );
-      }
+              }
+              return null
+      } 
       return (
+        <>
+{
         <li className={activeRoute(prop.layout + prop.path)} key={key}>
           <NavLink
             to={prop.layout + prop.path}
@@ -155,6 +161,9 @@ const Sidebar = (props) => {
             )}
           </NavLink>
         </li>
+
+        }
+        </>
       );
     });
   };

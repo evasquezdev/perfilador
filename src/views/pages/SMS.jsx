@@ -11,6 +11,10 @@ import {
   Input,
   Row,
   Col,
+  Modal,
+  ModalBody,
+  ModalHeader,
+  ModalFooter,
   ListGroup, ListGroupItem, Badge
 } from "reactstrap";
 import Select from "react-select";
@@ -23,9 +27,9 @@ import * as filterActions from '../../_actions/filter';
 import * as modalActions from '../../_actions/modal';
 import * as DBActions from '../../_actions/db';
 
-import Modal from '../../components/Modal';
+import ModalN from '../../components/Modal';
 import * as messageActions from '../../_actions/action';
-import { FadeLoader } from "react-spinners";
+import { FadeLoader, ClimbingBoxLoader } from "react-spinners";
 import { css } from "@emotion/react";
 
 const override = css`
@@ -33,6 +37,14 @@ const override = css`
   margin: 0 auto;
   border-color: red;
   size: 10px
+`;
+
+const overrideCubo = css`
+  display: block;
+  margin: 20% auto;
+  border-color: red;
+  size: 30px
+  zIndex: 2
 `;
 
 const data = {
@@ -68,10 +80,113 @@ class DatabasesForm extends React.Component {
       sms_email: '0',
       header: '',
       text: '',
+      company: '',
+      date: '',
+      time: '',
       file: null,
     },
+    loading: false,
+    editModal: false,
     dbsSelected: [],
     departamentSelect: null,
+    time: [
+      {
+        label: '12:00AM',
+        value: 0
+      },
+      {
+        label: '1:00AM',
+        value: 1
+      },
+      {
+        label: '2:00AM',
+        value: 2
+      },
+      {
+        label: '3:00AM',
+        value: 3
+      },
+      {
+        label: '4:00AM',
+        value: 4
+      },
+      {
+        label: '5:00AM',
+        value: 5
+      },
+      {
+        label: '6:00AM',
+        value: 6
+      },
+      {
+        label: '7:00AM',
+        value: 7
+      },
+      {
+        label: '8:00AM',
+        value: 8
+      },
+      {
+        label: '9:00AM',
+        value: 9
+      },
+      {
+        label: '10:00AM',
+        value: 10
+      },
+      {
+        label: '11:00AM',
+        value: 11
+      },
+      {
+        label: '12:00PM',
+        value: 12
+      },
+      {
+        label: '1:00PM',
+        value: 13
+      },
+      {
+        label: '2:00PM',
+        value: 14
+      },
+      {
+        label: '3:00PM',
+        value: 15
+      },
+      {
+        label: '4:00PM',
+        value: 16
+      },
+      {
+        label: '5:00PM',
+        value: 17
+      },
+      {
+        label: '6:00PM',
+        value: 18
+      },
+      {
+        label: '7:00PM',
+        value: 19
+      },
+      {
+        label: '8:00PM',
+        value: 20
+      },
+      {
+        label: '9:00PM',
+        value: 21
+      },
+      {
+        label: '10:00PM',
+        value: 22
+      },
+      {
+        label: '11:00PM',
+        value: 23
+      },
+    ],
     range: [
       {
         label: 'Menor',
@@ -298,6 +413,70 @@ class DatabasesForm extends React.Component {
     </>
   )
 
+  FormSelectTime = ({
+    input: { onChange },
+    placeholder,
+    value,
+    options,
+  }) => (
+    <>
+      <Select
+        className="react-select info"
+        classNamePrefix="react-select"
+        onChange={value => {
+          onChange(value.value)
+          this.setState({
+            FilterForm: {
+              ...this.state.FilterForm,
+              time: value.value
+            }
+          })
+        }}
+        value={value}
+        options={options.map(companyOptions => {
+          return {
+            value: companyOptions.value,
+            label: `${companyOptions.label}`
+          }
+        })}
+        placeholder={placeholder}
+        formNoValidate
+      />
+    </>
+  );
+
+  FormDateTime = ({
+    input: { onChange },
+    placeholder,
+    value,
+  }) => (
+    <>
+      <ReactDatetime
+        inputProps={{
+          className: "form-control",
+          placeholder,
+        }}
+        style={{ color: 'black' }}
+        timeFormat={false}
+        value={value}
+        onChange={value => onChange(
+
+          this.setState({
+            FilterForm: {
+              ...this.state.FilterForm,
+              date: (
+                (value._d).getFullYear() + '/' +(parseInt((value._d).getMonth()) + 1)+ '/' +(value._d).getDate())
+            }
+          
+        
+        }))}
+        formNoValidate
+      />
+
+      <label className="error">{this.state.error}</label>
+    </>
+  )
+
   FormDate = ({
     input: { onChange },
     placeholder,
@@ -366,6 +545,30 @@ class DatabasesForm extends React.Component {
     this.setState({ dbsSelected: opts });
   };
 
+  
+  toggleEditModal = () => {
+    this.setState({
+      editModal: !this.state.editModal
+    });
+  }
+
+  checkPageMode = () => {
+    let pageMode = document.body.classList.contains('white-content');
+    let bgclass;
+    let headerclass;
+    switch (pageMode) {
+      case true:
+        bgclass = "bg-ligh";
+        headerclass = "";
+        break;
+      default:
+        bgclass = "bg-dark";
+        headerclass = "text-primary";
+        break;
+    }
+    return { bg: bgclass, hc: headerclass };
+  }
+
   componentDidMount() {
     const {
       getDeps,
@@ -397,12 +600,77 @@ class DatabasesForm extends React.Component {
       municipios,
       departamentSelect,
       municipiosTotal,
-      dbsSelected
+      dbsSelected,
+      editModal
     } = this.state;
     let name;
     let filteredmuns = municipios.filter(m => m.name === departamentSelect)
-    return (<div className="content">
-      <Modal />
+    const pageMode=this.checkPageMode();
+    let inverted = pageMode.bg==="bg-ligh" ? 'inverted' : '';
+    return (
+    <>
+     <div className={`blackdiv ${this.state.loading? 'spinner' : 'NoSpinner'} `} id="blackdiv" 
+      >
+        <div className="ui segment">
+          <div className={`ui active transition ${inverted} visible dimmer`}>
+            <div className="content">
+            <ClimbingBoxLoader css={overrideCubo} zIndex={2} size={25} color={"#1d8cf8 "} margin={0} />
+
+            </div>
+          </div>
+          <div style={{minHeight:400}}><p>&nbsp;</p></div>
+        </div>
+      </div>
+    <div className="content">
+      <ModalN />
+      <Modal
+        isOpen={editModal}
+        toggle={this.toggleEditModal}
+        modalClassName={this.checkPageMode()}
+
+      >
+        <ModalHeader className="justify-content-center" toggle={this.toggleImportModal}>
+          Seleccionar Fecha y Hora
+        </ModalHeader>
+        <ModalBody
+          style={{ height: '800px !important' }}
+        >
+          <Row>
+            <Col sm={12}>
+              <Label>Fecha</Label>
+              <Field
+                name={'time'}
+                component={this.FormDateTime}
+                // validate={[this.verifyNumber]}
+                // icon= "icon-key-25"
+                placeholder=""
+              // type="file"
+              />
+            </Col>
+          </Row>
+          <Row>
+            <Col sm={12}>
+              <Label>Hora</Label>
+              <Field
+                name={`hora`}
+                component={this.FormSelectTime}
+                //		validate={[this.required, this.verifyNumberProduction]}
+                placeholder="Hora"
+                type='number'
+                options={this.state.time}
+              />
+            </Col>
+          </Row>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="secondary" onClick={() => this.toggleEditModal()}>
+            Cerrar
+          </Button>
+          <Button color="primary" onClick={() => this.toggleEditModal()}>
+            Guardar Cambios
+          </Button>
+        </ModalFooter>
+      </Modal>
       {userCompany.has_sms ?
       <Row>
         <Col sm="4">{console.log(filteredmuns[0] && filteredmuns[0].minicipios)}
@@ -751,7 +1019,7 @@ class DatabasesForm extends React.Component {
                                 text: ''
                               }
                             })
-                            this.delay()
+                           // this.delay()
                           }}
                           style={{ fontSize: 13, height: 40 }}
                         >
@@ -760,6 +1028,20 @@ class DatabasesForm extends React.Component {
 
                       </Col>
                     </Row>
+                    <Row>
+                        <Col>
+                          <FormGroup>
+                            <Button
+                              onClick={() => this.toggleEditModal()}
+                            >
+                              Programar Envio
+                            </Button>
+                            {
+                              
+                            }
+                          </FormGroup>
+                        </Col>
+                      </Row>
                   </Form>
                 </CardBody>
               </Card>
@@ -785,7 +1067,8 @@ class DatabasesForm extends React.Component {
         </Col>
       </Row>
       }
-    </div >);
+    </div >
+    </>);
   }
 }
 
@@ -819,10 +1102,20 @@ export default connect(
       dispatch(filterActions.filterInfo())
     },
     filterData(FilterForm) {
-      dispatch(filterActions.filterData({
-        FilterForm: FilterForm,
-        dbs: this.state.dbsSelected
-      }))
+      this.setState({
+        loading: !this.state.loading
+      })
+      setTimeout(function () { //Start the timer
+        dispatch(filterActions.filterData({
+          FilterForm: FilterForm,
+          dbs: this.state.dbsSelected
+        }))
+        this.setState({
+          loading: !this.state.loading
+        })
+      }.bind(this), 2500)
+
+     
       this.setState({
         Form: FilterForm
       })

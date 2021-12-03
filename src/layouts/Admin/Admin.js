@@ -34,6 +34,7 @@ import logo from "assets/img/react-logo.png";
 var ps;
 
 const Admin = (props) => {
+  console.log(props,'props')
   const [activeColor, setActiveColor] = React.useState("blue");
   const [sidebarMini, setSidebarMini] = React.useState(true);
   const [opacity, setOpacity] = React.useState(0);
@@ -176,7 +177,7 @@ const Admin = (props) => {
       </div>
       <Sidebar
         {...props}
-        routes={routes}
+      routes={routes}
         activeColor={activeColor}
         logo={{
           outterLink: "https://www.creative-tim.com/",

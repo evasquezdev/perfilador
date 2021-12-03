@@ -6,3 +6,15 @@
     text-align: center;
   }
 }
+.spinner{
+  background-color: rgb(255, 255, 255);
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  z-index: 1;
+  opacity: 0.9;
+ 
+}
+.NoSpinner{
+  display: none;
+}
