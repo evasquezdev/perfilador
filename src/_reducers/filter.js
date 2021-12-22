@@ -6,7 +6,8 @@ const stateShape = {
   municipalities: [],
   data: null,
   filters: [],
-  info: []
+  info: [],
+  history: [],
 };
 
 const filter = (state = stateShape, action) => {
@@ -102,11 +103,20 @@ const filter = (state = stateShape, action) => {
       const {
         data
       } = action.payload;
-      return {
+      let history = state.history;
+      if (state.data !== null){
+        history = [
+          state.data,
+          ...state.history,
+        ]
+      }
+      const test = {
         ...state,
         loading: false,
         data,
+        history
       }
+      return test
     }
     case types.FILTER_DATA_KO: {
       return {
@@ -130,4 +140,5 @@ export const getFilters = (state) => state.filters;
 export const getDepartments = (state) => state.deparments;
 export const getMunicipalities = (state) => state.municipalities;
 export const getFilterData = (state) => state.data;
+export const getFilterDataHistory = (state) => state.history;
 export const getFilterloading = (state) => state.loading;

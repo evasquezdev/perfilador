@@ -64,8 +64,6 @@ class Login extends React.Component {
     const {
       authGoogle
     } = this.props
-    console.log('response', response)
-    console.log('profile', response.profileObj)
     authGoogle(response.access_token,)
   }
 

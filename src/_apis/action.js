@@ -72,7 +72,6 @@ export const sendEmail = (
     "programated_at": `${date && time !== ''? date +'|'+ time : null}`
   }
   let json_end =  JSON.stringify(json)
-  console.log('json', json_end)
   const datas = new FormData();
   datas.append('json_data', json_end);
   datas.append('file', file);
