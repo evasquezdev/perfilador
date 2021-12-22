@@ -1,33 +1,27 @@
 {
   "files": {
-    "main.css": "/static/css/main.284314f1.chunk.css",
-    "main.js": "/static/js/main.58c183d4.chunk.js",
-    "main.js.map": "/static/js/main.58c183d4.chunk.js.map",
+    "main.css": "/static/css/main.af1cc557.chunk.css",
+    "main.js": "/static/js/main.244c6e31.chunk.js",
+    "main.js.map": "/static/js/main.244c6e31.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.52f3214c.js",
     "runtime-main.js.map": "/static/js/runtime-main.52f3214c.js.map",
     "static/css/2.f4cb9c36.chunk.css": "/static/css/2.f4cb9c36.chunk.css",
-    "static/js/2.a5578cdb.chunk.js": "/static/js/2.a5578cdb.chunk.js",
-    "static/js/2.a5578cdb.chunk.js.map": "/static/js/2.a5578cdb.chunk.js.map",
+    "static/js/2.08ec2b34.chunk.js": "/static/js/2.08ec2b34.chunk.js",
+    "static/js/2.08ec2b34.chunk.js.map": "/static/js/2.08ec2b34.chunk.js.map",
     "index.html": "/index.html",
     "static/css/2.f4cb9c36.chunk.css.map": "/static/css/2.f4cb9c36.chunk.css.map",
-    "static/css/main.284314f1.chunk.css.map": "/static/css/main.284314f1.chunk.css.map",
-    "static/js/2.a5578cdb.chunk.js.LICENSE.txt": "/static/js/2.a5578cdb.chunk.js.LICENSE.txt",
-    "static/js/main.58c183d4.chunk.js.LICENSE.txt": "/static/js/main.58c183d4.chunk.js.LICENSE.txt",
+    "static/css/main.af1cc557.chunk.css.map": "/static/css/main.af1cc557.chunk.css.map",
+    "static/js/2.08ec2b34.chunk.js.LICENSE.txt": "/static/js/2.08ec2b34.chunk.js.LICENSE.txt",
     "static/media/black-dashboard-pro-react.scss?v=1.2.0": "/static/media/pexels-lukas-1420701.e57d119a.jpg",
-    "static/media/emilyz.jpg": "/static/media/emilyz.48a62490.jpg",
-    "static/media/jana.jpg": "/static/media/jana.918ef8bd.jpg",
-    "static/media/lora.jpg": "/static/media/lora.5084ee01.jpg",
     "static/media/mike.jpg": "/static/media/mike.da320cd2.jpg",
     "static/media/nucleo-icons.css": "/static/media/nucleo.bd5cce8b.eot",
-    "static/media/react-logo.08021286.png": "/static/media/react-logo.08021286.png",
-    "static/media/robi.jpg": "/static/media/robi.ed6d75d2.jpg",
-    "static/media/tania.jpg": "/static/media/tania.bc44d816.jpg"
+    "static/media/react-logo.08021286.png": "/static/media/react-logo.08021286.png"
   },
   "entrypoints": [
     "static/js/runtime-main.52f3214c.js",
     "static/css/2.f4cb9c36.chunk.css",
-    "static/js/2.a5578cdb.chunk.js",
-    "static/css/main.284314f1.chunk.css",
-    "static/js/main.58c183d4.chunk.js"
+    "static/js/2.08ec2b34.chunk.js",
+    "static/css/main.af1cc557.chunk.css",
+    "static/js/main.244c6e31.chunk.js"
   ]
 }
