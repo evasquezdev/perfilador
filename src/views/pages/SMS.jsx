@@ -908,8 +908,11 @@ class DatabasesForm extends React.Component {
                           </Col>
                           {loading === false ?
                             <Col xs="6" style={{ textAlign: 'right' }}>
-                              <Badge pill color="info">{info && info.sms_credit}</Badge>
-
+                              <Badge pill color="info">
+                                <h3 style={{margin: 0}}>
+                                  {info && info.sms_credit}
+                                </h3>
+                              </Badge>
                             </Col>
                             :
                             <Col md={{ size: 2, offset: 4 }} style={{ textAlign: 'right', marginLeft: 170 }}>
@@ -926,7 +929,11 @@ class DatabasesForm extends React.Component {
 
                           {loading === false ?
                             <Col xs="6" style={{ textAlign: 'right' }}>
-                              <Badge pill color="info">{filteredData && filteredData.count}</Badge>
+                              <Badge pill color="info">
+                                <h3 style={{margin: 0}}>
+                                  {filteredData ? filteredData.count : 0}
+                                </h3>
+                              </Badge>
                             </Col>
                             :
                             <Col md={{ size: 2, offset: 4 }} style={{ textAlign: 'right', marginLeft: 170 }}>
@@ -1121,7 +1128,6 @@ export default connect(
       })
     },
     sendMail(FilterForm, Form,dbsSelected) {
-      console.log('Form', Form, 'FilterForm', FilterForm)
       if (
         !FilterForm.text || FilterForm.text === "") {
         dispatch(modalActions.showError({

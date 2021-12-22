@@ -47,6 +47,7 @@ export const getFilters = (state) => filterHandler.getFilters(state.filter);
 export const getDepartments = (state) => filterHandler.getDepartments(state.filter);
 export const getMunicipalities = (state) => filterHandler.getMunicipalities(state.filter);
 export const getFilterData = (state) => filterHandler.getFilterData(state.filter);
+export const getFilterDataHistory = (state) => filterHandler.getFilterDataHistory(state.filter);
 export const getFilterloading = (state) => filterHandler.getFilterloading(state.filter);
 
 //action

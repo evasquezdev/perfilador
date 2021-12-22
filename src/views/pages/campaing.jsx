@@ -307,7 +307,6 @@ export default connect(
       dispatch(filterActions.changeFlag({ 
         value: value, 
         flag: flag }))
-      console.log('flag', flag)
     },
     sendMail(FilterForm) {
       if (

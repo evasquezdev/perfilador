@@ -594,6 +594,7 @@ class DatabasesForm extends React.Component {
       departments,
       municipalities,
       filteredData,
+      history,
       loading,
       filterData,
       loadingAction,
@@ -811,57 +812,11 @@ class DatabasesForm extends React.Component {
               </Card>
             </Form>
           </Col>
-          
-          {<Col xs="4">
-            <Card>
-              {
-                <CardBody>
-                  <CardTitle>
-                    Creditos disponibles
-                  </CardTitle>
-                  <ListGroup>
-                    <ListGroupItem className="justify-content-between" style={{ backgroundColor: '#344675' }}>
-                      <Row>
-                        <Col xs="6">
-                          Mensajes restantes por correo
-                        </Col>
-                        {loading === false ?
-                          <Col xs="6" style={{ textAlign: 'right' }}>
-                            <Badge pill color="info">{info && info.email_credit}</Badge>
-                          </Col>
-                          :
-                          <Col md={{ size: 2, offset: 4 }} style={{ textAlign: 'right', marginLeft: 170 }}>
-                            <FadeLoader css={override} size={1} color={"#1d8cf8 "} margin={-10} />
-                          </Col>
-                        }
-                      </Row>
-                    </ListGroupItem>
-                    <ListGroupItem className="justify-content-between" style={{ backgroundColor: '#344675' }}>
-                      <Row>
-                        <Col xs="6">
-                          Total Filtrado
-                        </Col>
-
-                        {loading === false ?
-                          <Col xs="6" style={{ textAlign: 'right' }}>
-                            <Badge pill color="info">{filteredData && filteredData.count}</Badge>
-                          </Col>
-                          :
-                          <Col md={{ size: 2, offset: 4 }} style={{ textAlign: 'right', marginLeft: 170 }}>
-                            <FadeLoader css={override} size={1} color={"#1d8cf8 "} margin={-10} />
-                          </Col>
-                        }
-                      </Row>
-                    </ListGroupItem>
-                  </ListGroup>
-                </CardBody>
-
-              }
-
-            </Card>
+            <Col xs="4">
             <Card>
               <CardBody>
                 <CardTitle>
+                  <i className={"tim-icons icon-app"} style={{ fontSize: '100px', color:"white", marginRight: "50px", marginLeft: "50px"}}/>
                   Base de Datos
                 </CardTitle>
                 <ListGroup>
@@ -892,7 +847,58 @@ class DatabasesForm extends React.Component {
                 </ListGroup>
               </CardBody>
             </Card>
-          </Col>}
+          </Col>
+          <Col xs="4">
+            <Card>
+                <CardBody>
+                  <CardTitle>
+                    Resultados
+                  </CardTitle>
+                  <ListGroup>
+                    <ListGroupItem className="justify-content-between" style={{ backgroundColor: '#344675' }}>
+                      <Row>
+                        <Col xs="6">
+                          Total Filtrado
+                        </Col>
+                        {loading === false ?
+                          <Col xs="6" style={{ textAlign: 'right' }}>
+                            <Badge pill color="info">
+                              <h3 style={{margin: 0}}>
+                                {filteredData && filteredData.count ? filteredData.count : 0}
+                              </h3>
+                            </Badge>
+                          </Col>
+                          :
+                          <Col md={{ size: 2, offset: 4 }} style={{ textAlign: 'right', marginLeft: 170 }}>
+                            <FadeLoader css={override} size={1} color={"#1d8cf8 "} margin={-10} />
+                          </Col>
+                        }
+                      </Row>
+                    </ListGroupItem>
+                  </ListGroup>
+                  <ListGroup>
+                    {
+                      history.map((data) => (
+                        <ListGroupItem className="justify-content-between" style={{ backgroundColor: '#344675', marginTop: '10px'}}>
+                          <Row>
+                            <Col xs="6">
+                              Previo Filtrado
+                            </Col>
+                            <Col xs="6" style={{ textAlign: 'right' }}>
+                              <Badge pill color="info">
+                                <h6 style={{margin: 0}}>
+                                  {data.count}
+                                </h6>
+                              </Badge>
+                            </Col>
+                          </Row>
+                        </ListGroupItem>
+                      ))
+                    }
+                  </ListGroup>
+                </CardBody>
+            </Card>
+            </Col>
         </Row>
         :
         <Row>
@@ -928,6 +934,7 @@ export default connect(
     departments: selector.getFilters(state),
     municipalities: selector.getMunicipalities(state),
     filteredData: selector.getFilterData(state),
+    history: selector.getFilterDataHistory(state),
     loading: selector.getFilterloading(state),
     userInfo: selector.getUserMsgInfo(state),
     loadingAction: selector.getActionloading(state),
@@ -965,7 +972,6 @@ export default connect(
       })
     },
     sendMail(FilterForm, Form, dbs) {
-      console.log('Form', Form, 'FilterForm', FilterForm)
       if (
         (!FilterForm.header || FilterForm.header === "") ||
         (!FilterForm.text || FilterForm.text === "")
@@ -977,7 +983,6 @@ export default connect(
       }
 
       else {
-        console.log(FilterForm)
         dispatch(messageActions.sendEmail({
           ...FilterForm,
           Filter: Form,

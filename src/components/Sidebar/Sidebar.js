@@ -27,7 +27,6 @@ import { Nav, Collapse } from "reactstrap";
 var ps;
 
 const Sidebar = (props) => {
-  console.log(props.user , 'hola')
   const [state, setState] = React.useState({});
   const sidebarRef = React.useRef(null);
   const location = useLocation();

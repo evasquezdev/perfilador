@@ -72,7 +72,6 @@ class CompanyForm extends React.Component {
     </>
   )
   editCompany(data) {
-    console.log('data', data)
     this.setState({
       id: data.user_id,
       name: data.user_name,

@@ -33,7 +33,6 @@ import logo from "assets/img/react-logo.png";
 var ps;
 
 const Admin = (props) => {
-  console.log(props,'props')
   const [activeColor, setActiveColor] = React.useState("blue");
   const [sidebarMini, setSidebarMini] = React.useState(true);
   const [opacity, setOpacity] = React.useState(0);

@@ -69,7 +69,6 @@ class CompanyForm extends React.Component {
     </>
   )
   editCompany(data) {
-    console.log('data', data)
     this.setState({
       id: data.id,
       name: data.name,
@@ -347,7 +346,6 @@ export default connect(
       dispatch(filterActions.fetchCompany())
     },
     postCompany(name, sms, email, priceSMS, priceEMAIL) {
-      console.log(name, sms, email, priceSMS, priceEMAIL)
       dispatch(filterActions.postCompany({
         name: name,
         smsQuantity: sms,
@@ -361,7 +359,6 @@ export default connect(
       dispatch(filterActions.deleteCompany({ id }))
     },
     patchCompany(id, name, sms, email, priceSMS, priceEMAIL) {
-      console.log(id,name, sms, email)
       dispatch(filterActions.patchCompany({
         id: id,
         name: name,
