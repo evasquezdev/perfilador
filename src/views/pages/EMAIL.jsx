@@ -82,11 +82,26 @@ class DatabasesForm extends React.Component {
       file: null,
       company: '',
       date: '',
-      time: ''
+      time: '',
+      countText: 0
     },
     loading: false,
     editModal: false,
     dbsSelected: [],
+    sex: [
+      {
+        value: 'F',
+        label: "Femenino"
+      },
+      {
+        value: 'M',
+        label: "Masculino"
+      },
+      {
+        value: 'D',
+        label: "Desconocido"
+      },
+    ],
     departamentSelect: null,
     time: [
       {
@@ -346,6 +361,33 @@ class DatabasesForm extends React.Component {
     </>
   );
 
+  FormSelectSexo = ({
+    input: { onChange },
+    placeholder,
+    value,
+    options,
+  }) => (
+    <>
+      <Select
+        className="react-select info"
+        classNamePrefix="react-select"
+        onChange={value => {
+          onChange(value.value)
+          // this.setState({
+          //  departamentSelect: value.value
+          //})
+        }}
+        value={value}
+        options={this.state.sex
+
+        }
+        placeholder={placeholder}
+        formNoValidate
+      />
+    </>
+  );
+
+
 
   FormSelect = ({
     input: { onChange },
@@ -601,7 +643,8 @@ class DatabasesForm extends React.Component {
       handleSubmit,
       info,
       dbs,
-      userCompany
+      userCompany,
+      loadingData
     } = this.props;
     const {
       FilterForm,
@@ -610,7 +653,8 @@ class DatabasesForm extends React.Component {
       departamentSelect,
       municipiosTotal,
       dbsSelected,
-      editModal
+      editModal,
+      countText
     } = this.state;
     let name;
     const pageMode=this.checkPageMode();
@@ -618,7 +662,7 @@ class DatabasesForm extends React.Component {
     let filteredmuns = municipios.filter(m => m.name === departamentSelect)
     return (
     <>
-      <div className={`blackdiv ${this.state.loading? 'spinner' : 'NoSpinner'} `} id="blackdiv" 
+      <div className={`blackdiv ${loadingData? 'spinner' : 'NoSpinner'} `} id="blackdiv" 
       >
         <div className="ui segment">
           <div className={`ui active transition ${inverted} visible dimmer`}>
@@ -725,7 +769,7 @@ class DatabasesForm extends React.Component {
                                     </Col>
                                   </Row>
                                   :
-                                  (index.type === 'string' && index.name !== "DEPARTAMENTO" && index.name !== 'MUNICIPIO') ?
+                                  (index.type === 'string' && index.name !== "DEPARTAMENTO_TANGO" && index.name !== 'MUNICIPIO_TANGO'&& index.name !== "SEXO") ?
                                     <FormGroup>
                                       <Field
                                         name={`${index.name}|${index.type}`}
@@ -737,7 +781,7 @@ class DatabasesForm extends React.Component {
                                     </FormGroup>
 
                                     :
-                                    index.name === 'DEPARTAMENTO' ?
+                                    index.name === 'DEPARTAMENTO_TANGO' ?
                                       <Row>
                                         <Col>
                                           <FormGroup >
@@ -753,7 +797,7 @@ class DatabasesForm extends React.Component {
                                         </Col>
                                       </Row>
                                       :
-                                      index.name === 'MUNICIPIO' ?
+                                      index.name === 'MUNICIPIO_TANGO' ?
                                         <Row>
                                           <Col>
                                             <FormGroup >
@@ -764,6 +808,22 @@ class DatabasesForm extends React.Component {
                                                 placeholder="Municipios"
                                                 //   type='number'
                                                 options={departamentSelect ? (filteredmuns[0] && filteredmuns[0].minicipios) : municipiosTotal}
+                                              />
+                                            </FormGroup>
+                                          </Col>
+                                        </Row>
+                                        :
+                                        index.name === 'SEXO' ?
+                                        <Row>
+                                          <Col>
+                                            <FormGroup >
+                                              <Field
+                                                name={`sexo`}
+                                                component={this.FormSelectSexo}
+                                                //		validate={[this.required, this.verifyNumberProduction]}
+                                                placeholder="SEXO"
+                                                //   type='number'se
+                                               
                                               />
                                             </FormGroup>
                                           </Col>
@@ -1043,17 +1103,23 @@ class DatabasesForm extends React.Component {
                             maxHeight: '200px',
                             minHeight: '150px'
                           }}
+                          maxlength="160"
+                          
                           value={FilterForm.text}
                           disabled={loadingAction}
                           onChange={(e) => {
                             this.setState({
                               FilterForm: {
                                 ...FilterForm,
-                                text: e.target.value
+                                text: e.target.value,
+                               countText: e.target.value.length
                               }
                             })
                           }}
                         />
+                        <p>
+                          {this.state.FilterForm.countText}/160
+                        </p>
                       </FormGroup>
                       <Row>
                         <Col>
@@ -1164,7 +1230,8 @@ export default connect(
     loadingAction: selector.getActionloading(state),
     info: selector.getInfo(state),
     dbs: selector.getDbsFilter(state),
-    userCompany: selector.getUserCompany(state)
+    userCompany: selector.getUserCompany(state),
+    loadingData: selector.getFilterloadingData(state)
   }),
   (dispatch) => ({
     getDB() {
@@ -1177,18 +1244,13 @@ export default connect(
       dispatch(filterActions.filterInfo())
     },
     filterData(FilterForm) {
-      this.setState({
-        loading: !this.state.loading
-      })
-      setTimeout(function () { //Start the timer
+  
+    
         dispatch(filterActions.filterData({
           FilterForm: FilterForm,
           dbs: this.state.dbsSelected
         }))
-        this.setState({
-          loading: !this.state.loading
-        })
-      }.bind(this), 2500)
+     
 
      
       this.setState({

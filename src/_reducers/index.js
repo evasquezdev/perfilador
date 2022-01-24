@@ -49,6 +49,7 @@ export const getMunicipalities = (state) => filterHandler.getMunicipalities(stat
 export const getFilterData = (state) => filterHandler.getFilterData(state.filter);
 export const getFilterDataHistory = (state) => filterHandler.getFilterDataHistory(state.filter);
 export const getFilterloading = (state) => filterHandler.getFilterloading(state.filter);
+export const getFilterloadingData = (state) => filterHandler.getFilterloadingData(state.filter);
 
 //action
 export const getActionloading = (state) => actionHandler.getActionloading(state.action);
@@ -68,6 +69,9 @@ export const getUserloading = (state) => userHandler.getUserloading(state.user);
 
 //campaing
 export const getCampaing = (state) => campaingHandler.getCampaing(state.campaing);
+export const getCampaingSMS = (state) => campaingHandler.getCampaingSMS(state.campaing);
+
 export const getCampaingloading = (state) => campaingHandler.getCampaingloading(state.campaing);
 export const getCampaingData = (state) => campaingHandler.getCampaingData(state.campaing);
+export const getCampaingDataSMS = (state) => campaingHandler.getCampaingDataSMS(state.campaing);
 export const getCampaingloadingData = (state) => campaingHandler.getCampaingloadingData(state.campaing);

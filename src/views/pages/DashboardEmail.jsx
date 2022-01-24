@@ -11,6 +11,10 @@ import {
   Input,
   Row,
   Col,
+  Modal,
+  ModalBody,
+  ModalHeader,
+  ModalFooter,
   ListGroup, ListGroupItem, Badge
 } from "reactstrap";
 import Select from "react-select";
@@ -22,7 +26,7 @@ import { connect } from 'react-redux';
 import * as selector from '../../_reducers';
 import * as Actions from '../../_actions/campaing';
 import * as modalActions from '../../_actions/modal';
-import Modal from '../../components/Modal';
+import ModalN from '../../components/Modal';
 import { css } from "@emotion/react";
 import { FadeLoader } from "react-spinners";
 
@@ -69,6 +73,8 @@ const afterSubmit = (result, dispatch) =>
 class DatabasesForm extends React.Component {
   state = {
     campaingSelect: null,
+    campaingSelect:[],
+    editModal: false,
     data: [
       {
         value: "hola",
@@ -133,6 +139,42 @@ class DatabasesForm extends React.Component {
     </>
   )
 
+  toggleEditModal = () => {
+    this.setState({
+      editModal: !this.state.editModal
+    });
+  }
+
+  
+
+
+  checkPageMode = () => {
+    let pageMode = document.body.classList.contains('white-content');
+    let bgclass;
+    let headerclass;
+    switch (pageMode) {
+      case true:
+        bgclass = "bg-ligh";
+        headerclass = "";
+        break;
+      default:
+        bgclass = "bg-dark";
+        headerclass = "text-primary";
+        break;
+    }
+    return { bg: bgclass, hc: headerclass };
+  }
+
+  handleSelectChange = (event) => {
+    let opts = [], opt;
+    for (let i = 0, len = event.target.options.length; i < len; i++) {
+      opt = event.target.options[i];
+      if (opt.selected) {
+        opts.push(opt.value);
+      }
+    }
+    this.setState({campaingSelect: opts});
+  };
 
   delay() {
     setTimeout(function () { //Start the timer
@@ -151,17 +193,62 @@ class DatabasesForm extends React.Component {
       campaing,
       loadingData,
       userCompany,
-      campaingData
+      campaingData,
+      downloadFile
     } = this.props;
     const {
-
+      editModal
     } = this.state;
     let name;
     return (<div className="content">
-      <Modal />
+      <ModalN />
+      <Modal
+        isOpen={editModal}
+        toggle={this.toggleEditModal}
+        modalClassName={this.checkPageMode()}
+
+      >
+        <ModalHeader className="justify-content-center" toggle={this.toggleImportModal}>
+          Selecciona las Campañas
+        </ModalHeader>
+        <ModalBody
+          style={{ height: '800px !important' }}
+        >
+          <Row>
+            <Col sm={12}>
+              <Label>Campañas</Label>
+       
+                  <Input 
+                    type="select" 
+                    name="selectMulti" 
+                    id="exampleSelectMulti1" 
+                    multiple
+                    ref={this.createService}
+                    onChange={this.handleSelectChange}
+                    value={this.state.campaingSelect}
+                    style={{height: '200px', color: 'black'}}
+                  >
+                    {campaing.map((client,idx) => 
+                      <option key={idx} value={client.campaign_id}>
+                        {client.campaign_name} 
+                      </option>
+                    )}
+                  </Input>
+            </Col>
+          </Row>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="secondary" onClick={() => this.toggleEditModal()}>
+            Cerrar
+          </Button>
+          <Button color="primary" onClick={() => downloadFile(this.state.campaingSelect)}>
+            Descargar
+          </Button>
+        </ModalFooter>
+      </Modal>
       {userCompany.has_sms ?
         <Row>
-          <Col sm='12'>
+          <Col sm='8'>
             <Card>
               <CardBody>
                 <Label>
@@ -181,6 +268,15 @@ class DatabasesForm extends React.Component {
                 </FormGroup>
               </CardBody>
             </Card>
+          </Col>
+          <Col sm='4'>
+            <Button
+            className="mt-4 ml-5"
+            color="info"
+            onClick={() => this.toggleEditModal()}
+            >
+              Descargar Datos de Campañas
+            </Button>
           </Col>
           <Col sm='4'>
             <Card>
@@ -224,7 +320,7 @@ class DatabasesForm extends React.Component {
                   <ListGroupItem className="justify-content-between" style={{ backgroundColor: '#344675' }}>
                     <Row>
                       <Col xs="6">
-                        $ Costo Real
+                        Q Costo Real
                       </Col>
                       {loadingData === false ?
                         <Col xs="6" style={{ textAlign: 'right' }}>
@@ -240,7 +336,7 @@ class DatabasesForm extends React.Component {
                   <ListGroupItem className="justify-content-between" style={{ backgroundColor: '#344675' }}>
                     <Row>
                       <Col xs="6">
-                        $ Costo Invertido
+                        Q Costo Invertido
                       </Col>
                       {loadingData === false ?
                         <Col xs="6" style={{ textAlign: 'right' }}>
@@ -299,7 +395,7 @@ class DatabasesForm extends React.Component {
                   <ListGroupItem className="justify-content-between" style={{ backgroundColor: '#344675' }}>
                     <Row>
                       <Col xs="6">
-                        $ Costo
+                        Q Costo
                       </Col>
                       {loadingData === false ?
                         <Col xs="6" style={{ textAlign: 'right' }}>
@@ -358,7 +454,7 @@ class DatabasesForm extends React.Component {
                   <ListGroupItem className="justify-content-between" style={{ backgroundColor: '#344675' }}>
                     <Row>
                       <Col xs="6">
-                        $ Costo
+                        Q Costo
                       </Col>
                       {loadingData === false ?
                         <Col xs="6" style={{ textAlign: 'right' }}>
@@ -418,7 +514,7 @@ class DatabasesForm extends React.Component {
                   <ListGroupItem className="justify-content-between" style={{ backgroundColor: '#344675' }}>
                     <Row>
                       <Col xs="6">
-                        $ Costo
+                        Q Costo
                       </Col>
                       {loadingData === false ?
                         <Col xs="6" style={{ textAlign: 'right' }}>
@@ -478,7 +574,7 @@ class DatabasesForm extends React.Component {
                   <ListGroupItem className="justify-content-between" style={{ backgroundColor: '#344675' }}>
                     <Row>
                       <Col xs="6">
-                        $ Costo
+                        Q Costo
                       </Col>
                       {loadingData === false ?
                         <Col xs="6" style={{ textAlign: 'right' }}>
@@ -537,7 +633,7 @@ class DatabasesForm extends React.Component {
                   <ListGroupItem className="justify-content-between" style={{ backgroundColor: '#344675' }}>
                     <Row>
                       <Col xs="6">
-                        $ Costo
+                        Q Costo
                       </Col>
                       {loadingData === false ?
                         <Col xs="6" style={{ textAlign: 'right' }}>
@@ -603,5 +699,10 @@ export default connect(
         id
       }))
     },
+    downloadFile(campaing) {
+      dispatch(Actions.getCampaingFILE({
+        id:campaing
+      }))
+    }
   })
 )(Databases);

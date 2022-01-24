@@ -61,7 +61,7 @@ function* getFilterInfo() {
     }));
     
   } catch (error) {
-    yield put(actions.filterInfo());
+    //yield put(actions.filterInfo());
     yield put(modalActions.showError({
       title: 'Hubo un error',
       message: 'No se pudo obtener la cantidad total de Data disponible',

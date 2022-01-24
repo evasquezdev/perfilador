@@ -209,7 +209,23 @@ class Databases extends React.Component {
                         </Label>
                       </Button>
                     </Col>
-                   
+            
+                     <Col sm='4'>
+                      <Button
+                      size="lg"
+                      ///  className="btn-round"
+                        color="default"
+                        onClick={() => {
+                          window.open(`${process.env.PUBLIC_URL}/Formato DB.xlsx`)
+                        }}
+                      >
+                        <i className="tim-icons icon-cloud-download-93" /> 
+                        {" "}
+                        <Label>
+                        Descargar Formato
+                        </Label>
+                      </Button>
+                      </Col>
                   </Row>
                   </Form>
                 </CardBody>
@@ -235,7 +251,7 @@ class Databases extends React.Component {
           <Row>
             <Col md="12">
               <Row>
-                {loading ? 'loading...' : dbs.map((db, i) =>
+                {loading ? 'loading...' :dbs&& dbs.map((db, i) =>
                 (<>{(this.state.rangeSelect === db.ingested || this.state.rangeSelect === 'All') &&
                   <Col xs="6" md="2" key={i}>
                     <Card>

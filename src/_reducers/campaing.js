@@ -4,7 +4,9 @@ const stateShape = {
   loading: false,
   loadingData: false,
   campaing: [],
-  campaingData: []
+  campaingSMS: [],
+  campaingData: [],
+  campaingDataSMS: []
 };
 
 const campaing = (state = stateShape, action) => {
@@ -32,6 +34,31 @@ const campaing = (state = stateShape, action) => {
         campaing: [],
       }
     }
+
+    case types.FETCH_CAMPAINGSMS: {
+      return {
+        ...state,
+        loading: true,
+      }
+    }
+    case types.FETCH_CAMPAINGSMS_OK: {
+      const {
+        campaingSMS
+      } = action.payload;
+      return {
+        ...state,
+        loading: false,
+        campaingSMS
+      }
+    }
+    case types.FETCH_CAMPAINGSMS_KO: {
+      return {
+        ...state,
+        loading: false,
+        campaingSMS: [],
+      }
+    }
+
     case types.GET_CAMPAING: {
       return {
         ...state,
@@ -55,6 +82,30 @@ const campaing = (state = stateShape, action) => {
         campaingData: [],
       }
     }
+
+    case types.GET_CAMPAINGSMS: {
+      return {
+        ...state,
+        loadingData: true,
+      }
+    }
+    case types.GET_CAMPAINGSMS_OK: {
+      const {
+        campaingDataSMS
+      } = action.payload;
+      return {
+        ...state,
+        loadingData: false,
+        campaingDataSMS
+      }
+    }
+    case types.GET_CAMPAINGSMS_KO: {
+      return {
+        ...state,
+        loadingData: false,
+        campaingDataSMS: [],
+      }
+    }
     default: {
       return {
         ...state,
@@ -66,7 +117,10 @@ const campaing = (state = stateShape, action) => {
 export default campaing;
 
 export const getCampaing = (state) => state.campaing;
+export const getCampaingSMS = (state) => state.campaingSMS;
+
 export const getCampaingloading = (state) => state.loading;
 
 export const getCampaingData = (state) => state.campaingData;
+export const getCampaingDataSMS = (state) => state.campaingDataSMS;
 export const getCampaingloadingData = (state) => state.loadingData;

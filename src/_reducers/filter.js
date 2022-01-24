@@ -2,6 +2,7 @@ import * as types from '../_types/filter';
 
 const stateShape = {
   loading: false,
+  loadingData: false,
   deparments: [],
   municipalities: [],
   data: null,
@@ -96,7 +97,7 @@ const filter = (state = stateShape, action) => {
     case types.FILTER_DATA: {
       return {
         ...state,
-        loading: true,
+        loadingData: true,
       }
     }
     case types.FILTER_DATA_OK: {
@@ -112,7 +113,7 @@ const filter = (state = stateShape, action) => {
       }
       const test = {
         ...state,
-        loading: false,
+        loadingData: false,
         data,
         history
       }
@@ -121,7 +122,7 @@ const filter = (state = stateShape, action) => {
     case types.FILTER_DATA_KO: {
       return {
         ...state,
-        loading: false,
+        loadingData: false,
         data: null,
       }
     }
@@ -142,3 +143,4 @@ export const getMunicipalities = (state) => state.municipalities;
 export const getFilterData = (state) => state.data;
 export const getFilterDataHistory = (state) => state.history;
 export const getFilterloading = (state) => state.loading;
+export const getFilterloadingData = (state) => state.loadingData;

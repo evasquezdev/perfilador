@@ -90,13 +90,6 @@ const routes = [
     path: "/Filtros",
     name: "Manejo de filtros",
     icon: "tim-icons icon-bullet-list-67",
-    component: EMAIL,
-    layout: "/admin",
-  },
-  {
-    path: "/Campanas",
-    name: "Campañas",
-    icon: "tim-icons icon-notes",
     component: Campaing,
     layout: "/admin",
   },
