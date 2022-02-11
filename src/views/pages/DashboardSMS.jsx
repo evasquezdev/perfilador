@@ -399,7 +399,7 @@ class DatabasesForm extends React.Component {
                       <ListGroupItem className="justify-content-between" style={{ backgroundColor: '#344675' }}>
                         <Row>
                           <Col xs="8">
-                            Fecha de envio
+                            % de efectividad
                           </Col>
                           {loadingData === false ?
                             <Col xs="4" style={{ textAlign: 'right' }}>

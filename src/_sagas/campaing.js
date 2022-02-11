@@ -146,6 +146,34 @@ function* GetCampaingFILE(action) {
   }
 }
 
+function* GetCampaingFILEANALITIC(action) {
+  try {
+    const token = yield select(reducers.getUserToken);
+    const {
+      id
+    } = action.payload;
+    const response = yield call(
+      api.getCampaingFILEANALITIC,
+      token,
+      id
+    );
+    yield put(
+      actions.getCampaingFILEANALITICOK({
+      campaingDataSMSFILE: response,
+      
+    },
+   
+    ));
+ 
+  } catch (error) {
+    yield put(actions.getCampaingFILEANALITICKO());
+    yield put(modalActions.showError({
+      title: 'Hubo un error',
+      message: 'No se pudo descargar los datos',
+    }));
+  }
+}
+
 function* CampaingSaga() {
   yield takeLatest(
     types.FETCH_CAMPAING,
@@ -171,6 +199,10 @@ function* CampaingSaga() {
     types.GET_CAMPAINGFILE,
     GetCampaingFILE,
   );
+  yield takeLatest(
+    types.GET_CAMPAINGFILEANALITIC,
+    GetCampaingFILEANALITIC
+  )
 }
 
 export default CampaingSaga;

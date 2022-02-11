@@ -1248,7 +1248,8 @@ export default connect(
     
         dispatch(filterActions.filterData({
           FilterForm: FilterForm,
-          dbs: this.state.dbsSelected
+          dbs: this.state.dbsSelected,
+          index: '1'
         }))
      
 

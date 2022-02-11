@@ -121,3 +121,25 @@ export const getCampaingFILEOK = ({
 export const getCampaingFILEKO = () => ({
   type: types.GET_CAMPAINGFILE_KO
 })
+
+export const getCampaingFILEAnalitic = ({
+  id
+}) => ({
+  type: types.GET_CAMPAINGFILEANALITIC,
+  payload: {
+    id
+  }
+});
+
+export const getCampaingFILEANALITICOK = ({
+  campaingDataFILE
+}) => ({
+  type: types.GET_CAMPAINGFILEANALITIC_OK,
+  payload: {
+    campaingDataFILE
+  }
+});
+
+export const getCampaingFILEANALITICKO = () => ({
+  type: types.GET_CAMPAINGFILEANALITIC_KO
+})

@@ -1075,7 +1075,6 @@ class DatabasesForm extends React.Component {
                         </p>
                     </FormGroup>
                     <Row>
-
                       <Col>
                         <Button
                           color="info"
@@ -1172,14 +1171,11 @@ export default connect(
       dispatch(filterActions.filterInfo())
     },
     filterData(FilterForm) {
-    
         dispatch(filterActions.filterData({
           FilterForm: FilterForm,
-          dbs: this.state.dbsSelected
+          dbs: this.state.dbsSelected,
+          index: '0'
         }))
-    
-
-     
       this.setState({
         Form: FilterForm
       })

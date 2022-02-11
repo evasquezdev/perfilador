@@ -78,7 +78,8 @@ export const changeFlag = (
 export const getFilterData = (
   token,
   FilterForm,
-  dbs
+  dbs,
+  index
 ) => new Promise((resolve, reject) => {
   let data = {"filters": null}
   let info = []
@@ -97,6 +98,7 @@ export const getFilterData = (
       Authorization: `Token ${token}`,
     },
     body: JSON.stringify({
+      "sms_or_email" : index,
       "filters": info,
       "db_names": DB
     })

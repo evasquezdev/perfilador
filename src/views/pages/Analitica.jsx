@@ -20,6 +20,7 @@ import {
 } from "reactstrap";
 import Select from "react-select";
 import { Field, reduxForm, reset/*FieldArray*/ } from 'redux-form';
+import { Table } from "reactstrap";
 
 import ReactDatetime from "react-datetime";
 import { connect } from 'react-redux';
@@ -27,10 +28,11 @@ import * as selector from '../../_reducers';
 import * as filterActions from '../../_actions/filter';
 import * as modalActions from '../../_actions/modal';
 import * as DBActions from '../../_actions/db';
+import * as Actions from '../../_actions/campaing';
 
 import ModalN from '../../components/Modal';
 import * as messageActions from '../../_actions/action';
-import { FadeLoader,ClimbingBoxLoader} from "react-spinners";
+import { FadeLoader, ClimbingBoxLoader } from "react-spinners";
 import { css } from "@emotion/react";
 
 const override = css`
@@ -82,12 +84,28 @@ class DatabasesForm extends React.Component {
       file: null,
       company: '',
       date: '',
-      time: ''
+      time: '',
+      download: false
     },
     loading: false,
     editModal: false,
     dbsSelected: [],
+    campaingSelect:[],
     departamentSelect: null,
+    sex: [
+      {
+        value: 'F',
+        label: "Femenino"
+      },
+      {
+        value: 'M',
+        label: "Masculino"
+      },
+      {
+        value: 'D',
+        label: "Desconocido"
+      },
+    ],
     time: [
       {
         label: '12:00AM',
@@ -517,6 +535,32 @@ class DatabasesForm extends React.Component {
     </>
   )
 
+  FormSelectSexo = ({
+    input: { onChange },
+    placeholder,
+    value,
+    options,
+  }) => (
+    <>
+      <Select
+        className="react-select info"
+        classNamePrefix="react-select"
+        onChange={value => {
+          onChange(value.value)
+          // this.setState({
+          //  departamentSelect: value.value
+          //})
+        }}
+        value={value}
+        options={this.state.sex
+
+        }
+        placeholder={placeholder}
+        formNoValidate
+      />
+    </>
+  );
+
   FormCheck = ({
     input,
     placeholder,
@@ -554,6 +598,17 @@ class DatabasesForm extends React.Component {
         opts.push(opt.value);
       }
     }
+    this.setState({campaingSelect: opts});
+  };
+
+  handleSelectChangeDB = (event) => {
+    let opts = [], opt;
+    for (let i = 0, len = event.target.options.length; i < len; i++) {
+      opt = event.target.options[i];
+      if (opt.selected) {
+        opts.push(opt.value);
+      }
+    }
     this.setState({ dbsSelected: opts });
   };
   checkPageMode = () => {
@@ -583,11 +638,13 @@ class DatabasesForm extends React.Component {
     const {
       getDeps,
       getInfo,
-      getDB
+      getDB,
+      fetchCampaing
     } = this.props;
     getDeps();
     getInfo();
-    getDB()
+    getDB();
+    fetchCampaing()
   }
   render() {
     const {
@@ -602,7 +659,10 @@ class DatabasesForm extends React.Component {
       handleSubmit,
       info,
       dbs,
-      userCompany
+      userCompany,
+      campaing,
+      downloadFile,
+      loadingData
     } = this.props;
     const {
       FilterForm,
@@ -611,15 +671,17 @@ class DatabasesForm extends React.Component {
       departamentSelect,
       municipiosTotal,
       dbsSelected,
-      editModal
+      editModal,
+      download
     } = this.state;
     let name;
-    const pageMode=this.checkPageMode();
-    let inverted = pageMode.bg==="bg-ligh" ? 'inverted' : '';
+    const pageMode = this.checkPageMode();
+    let inverted = pageMode.bg === "bg-ligh" ? 'inverted' : '';
     let filteredmuns = municipios.filter(m => m.name === departamentSelect)
+    
     return (
-    <>
-      <div className={`blackdiv ${this.state.loading? 'spinner' : 'NoSpinner'} `} id="blackdiv" 
+      <>
+       <div className={`blackdiv ${loadingData? 'spinner' : 'NoSpinner'} `} id="blackdiv" 
       >
         <div className="ui segment">
           <div className={`ui active transition ${inverted} visible dimmer`}>
@@ -631,40 +693,40 @@ class DatabasesForm extends React.Component {
           <div style={{minHeight:400}}><p>&nbsp;</p></div>
         </div>
       </div>
-    <div className="content">
-      <ModalN />
-      <Modal
+        <div className="content">
+          <ModalN />
+          <Modal
         isOpen={editModal}
         toggle={this.toggleEditModal}
         modalClassName={this.checkPageMode()}
 
       >
         <ModalHeader className="justify-content-center" toggle={this.toggleImportModal}>
-          Seleccionar Fecha y Hora
+          Selecciona las Campañas
         </ModalHeader>
         <ModalBody
           style={{ height: '800px !important' }}
         >
           <Row>
             <Col sm={12}>
-              <Label>Fecha</Label>
-              <Field
-                name={'time'}
-                component={this.FormDateTime}
-                placeholder=""
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col sm={12}>
-              <Label>Hora</Label>
-              <Field
-                name={`hora`}
-                component={this.FormSelectTime}
-                placeholder="Hora"
-                type='number'
-                options={this.state.time}
-              />
+              <Label>Campañas</Label>
+       
+                  <Input 
+                    type="select" 
+                    name="selectMulti" 
+                    id="exampleSelectMulti1" 
+                    multiple
+                    ref={this.createService}
+                    onChange={this.handleSelectChange}
+                    value={this.state.campaingSelect}
+                    style={{height: '200px', color: 'black'}}
+                  >
+                    {campaing.map((client,idx) => 
+                      <option key={idx} value={client.campaign_id}>
+                        {client.campaign_name} 
+                      </option>
+                    )}
+                  </Input>
             </Col>
           </Row>
         </ModalBody>
@@ -672,255 +734,284 @@ class DatabasesForm extends React.Component {
           <Button color="secondary" onClick={() => this.toggleEditModal()}>
             Cerrar
           </Button>
-          <Button color="primary" onClick={() => this.toggleEditModal()}>
-            Guardar Cambios
+          <Button color="primary" onClick={() => downloadFile(this.state.campaingSelect)}>
+            Descargar
           </Button>
         </ModalFooter>
       </Modal>
-      {userCompany.has_emails ?
-        <Row>
-          <Col xs="4">
-            <Form onSubmit={handleSubmit(filterData.bind(this))}>
-              <Card>
-                <CardBody>
-                  <CardTitle>
-                    Filtros
-                  </CardTitle>
-                  {departments && departments.map((index, id) => (
-                    <>
-                      {
-                        index.valid === true && (<>
-                          <Label>{index.name}</Label>
-                          <Row>
-                            <Col xs="12">
-                              <FormGroup>
-                                {index.type === 'int' ?
-                                  <Row>
-                                    <Col>
-                                      <FormGroup >
-                                        <Field
-                                          name={`${index.name}|${index.type}-1`}
-                                          component={this.FormInput}
-                                          placeholder="Min"
-                                          type='number'
-                                          options={this.state.range}
-                                        />
-                                      </FormGroup>
-                                    </Col>
-                                    <Col>
-                                      <FormGroup >
-                                        <Field
-                                          name={`${index.name}|${index.type}-2`}
-                                          component={this.FormInput}
-                                          placeholder="Max"
-                                          type='number'
-                                          options={this.state.range}
-                                        />
-                                      </FormGroup>
-                                    </Col>
-                                  </Row>
-                                  :
-                                  (index.type === 'string' && index.name !== "DEPARTAMENTO" && index.name !== 'MUNICIPIO') ?
-                                    <FormGroup>
-                                      <Field
-                                        name={`${index.name}|${index.type}`}
-                                        component={this.FormInput}
-                                        // validate={[this.verifyNumber]}
-                                        // icon= "icon-key-25"
-                                        placeholder=""
-                                      />
-                                    </FormGroup>
-
-                                    :
-                                    index.name === 'DEPARTAMENTO' ?
+          {userCompany.has_emails ?
+            <Row>
+              <Col xs="4">
+                <Form onSubmit={handleSubmit(filterData.bind(this))}>
+                  <Card>
+                    <CardBody>
+                      <CardTitle>
+                        Filtros
+                      </CardTitle>
+                      {departments && departments.map((index, id) => (
+                        <>
+                          {
+                            index.valid === true && (<>
+                              <Label>{index.name}</Label>
+                              <Row>
+                                <Col xs="12">
+                                  <FormGroup>
+                                    {index.type === 'int' ?
                                       <Row>
                                         <Col>
                                           <FormGroup >
                                             <Field
                                               name={`${index.name}|${index.type}-1`}
-                                              component={this.FormSelect}
-                                              placeholder="Departamentos"
-                                              options={departamentos}
+                                              component={this.FormInput}
+                                              placeholder="Min"
+                                              type='number'
+                                              options={this.state.range}
+                                            />
+                                          </FormGroup>
+                                        </Col>
+                                        <Col>
+                                          <FormGroup >
+                                            <Field
+                                              name={`${index.name}|${index.type}-2`}
+                                              component={this.FormInput}
+                                              placeholder="Max"
+                                              type='number'
+                                              options={this.state.range}
                                             />
                                           </FormGroup>
                                         </Col>
                                       </Row>
                                       :
-                                      index.name === 'MUNICIPIO' ?
-                                        <Row>
-                                          <Col>
-                                            <FormGroup >
-                                              <Field
-                                                name={`${index.name}|${index.type}-1`}
-                                                component={this.FormSelectMunicipio}
-                                                placeholder="Municipios"
-                                                options={departamentSelect ? (filteredmuns[0] && filteredmuns[0].minicipios) : municipiosTotal}
-                                              />
-                                            </FormGroup>
-                                          </Col>
-                                        </Row>
+                                      (index.type === 'string' && index.name !== "DEPARTAMENTO_TANGO" && index.name !== 'MUNICIPIO_TANGO'&& index.name !== "SEXO") ?
+                                        <FormGroup>
+                                          <Field
+                                            name={`${index.name}|${index.type}`}
+                                            component={this.FormInput}
+                                            // validate={[this.verifyNumber]}
+                                            // icon= "icon-key-25"
+                                            placeholder=""
+                                          />
+                                        </FormGroup>
+
                                         :
-                                        <Row>
-                                          <Col sm='6'>
-                                            <FormGroup >
-                                              <Label>Fecha Inicio</Label>
-                                              <Field
-                                                name={`${index.name}|${index.type}-1`}
-                                                component={this.FormDate}
-                                                //validate={[this.verifyDate]}
-                                                placeholder="Seleccione Fecha"
-                                              />
-                                            </FormGroup>
-                                          </Col>
-                                          <Col sm='6'>
-                                            <FormGroup >
-                                              <Label>Fecha Fin</Label>
-                                              <Field
-                                                name={`${index.name}|${index.type}-2`}
-                                                component={this.FormDate}
-                                                //validate={[this.verifyDate]}
-                                                placeholder="Seleccione Fecha"
-                                              />
-                                            </FormGroup>
-                                          </Col>
-                                        </Row>
-                                }
-                              </FormGroup>
-                            </Col>
-                          </Row>
-                        </>)
+                                        index.name === 'DEPARTAMENTO_TANGO' ?
+                                          <Row>
+                                            <Col>
+                                              <FormGroup >
+                                                <Field
+                                                  name={`${index.name}|${index.type}-1`}
+                                                  component={this.FormSelect}
+                                                  placeholder="Departamentos"
+                                                  options={departamentos}
+                                                />
+                                              </FormGroup>
+                                            </Col>
+                                          </Row>
+                                          :
+                                          index.name === 'MUNICIPIO_TANGO' ?
+                                            <Row>
+                                              <Col>
+                                                <FormGroup >
+                                                  <Field
+                                                    name={`${index.name}|${index.type}-1`}
+                                                    component={this.FormSelectMunicipio}
+                                                    placeholder="Municipios"
+                                                    options={departamentSelect ? (filteredmuns[0] && filteredmuns[0].minicipios) : municipiosTotal}
+                                                  />
+                                                </FormGroup>
+                                              </Col>
+                                            </Row>
+                                             :
+                                             index.name === 'SEXO' ?
+                                             <Row>
+                                             <Col>
+                                                   <FormGroup >
+                                                     <Field
+                                                       name={`sexo`}
+                                                       component={this.FormSelectSexo}
+                                                       //		validate={[this.required, this.verifyNumberProduction]}
+                                                       placeholder="SEXO"
+                                                       //   type='number'se
+                                                      
+                                                     />
+                                                   </FormGroup>
+                                                 </Col>
+                                               </Row>
+                                            :
+                                            <Row>
+                                              <Col sm='6'>
+                                                <FormGroup >
+                                                  <Label>Fecha Inicio</Label>
+                                                  <Field
+                                                    name={`${index.name}|${index.type}-1`}
+                                                    component={this.FormDate}
+                                                    //validate={[this.verifyDate]}
+                                                    placeholder="Seleccione Fecha"
+                                                  />
+                                                </FormGroup>
+                                              </Col>
+                                              <Col sm='6'>
+                                                <FormGroup >
+                                                  <Label>Fecha Fin</Label>
+                                                  <Field
+                                                    name={`${index.name}|${index.type}-2`}
+                                                    component={this.FormDate}
+                                                    //validate={[this.verifyDate]}
+                                                    placeholder="Seleccione Fecha"
+                                                  />
+                                                </FormGroup>
+                                              </Col>
+                                            </Row>
+                                    }
+                                  </FormGroup>
+                                </Col>
+                              </Row>
+                            </>)
+                          }
+                        </>
+                      ))
                       }
-                    </>
-                  ))
-                  }
-                  {this.state.FilterForm.municipality === '' ?
-                    <Button className="mt-3"
-                      color="info"
-                    >
-                      Filtrar
-                    </Button>
-                    :
-                    <Button className="mt-3"
-                      color="info"
-                      disabled
-                    >
-                      Filtrar
-                    </Button>
-                  }
+                      {this.state.FilterForm.municipality === '' ?
+                        <Button className="mt-3"
+                          color="info"
+                        >
+                          Filtrar
+                        </Button>
+                        :
+                        <Button className="mt-3"
+                          color="info"
+                          disabled
+                        >
+                          Filtrar
+                        </Button>
+                      }
 
-                </CardBody>
-              </Card>
-            </Form>
-          </Col>
-            <Col xs="4">
-            <Card>
-              <CardBody>
-                <CardTitle>
-                  <i className={"tim-icons icon-app"} style={{ fontSize: '100px', color:"white", marginRight: "50px", marginLeft: "50px"}}/>
-                  Base de Datos
-                </CardTitle>
-                <ListGroup>
-                  <ListGroup className="justify-content-between" style={{ backgroundColor: '#344675' }}>
-                    <Row>
-                      <Col>
+                    </CardBody>
+                  </Card>
+                </Form>
+              </Col>
+              <Col xs="4">
+                <Card>
+                  <CardBody>
+                    <CardTitle>
+                      <i className={"tim-icons icon-app"} style={{ fontSize: '100px', color: "white", marginRight: "50px", marginLeft: "50px" }} />
+                      Base de Datos
+                    </CardTitle>
+                    <ListGroup>
+                      <ListGroup className="justify-content-between" style={{ backgroundColor: '#344675' }}>
+                        <Row>
+                          <Col>
 
-                        {dbs &&
-                          <Input
-                            type="select"
-                            name="selectMulti"
-                            id="exampleSelectMulti1"
-                            multiple
-                            value={dbsSelected}
-                            //ref={this.createService}
-                            onChange={this.handleSelectChange}
-                            style={{ height: '200px' }}
-                          >
-                            {dbs.map((size, idx) =>
-                              <option key={idx} value={size.value}>
-                                {size.label}
-                              </option>
-                            )}
-                          </Input>}
-                      </Col>
-                    </Row>
-                  </ListGroup >
-                </ListGroup>
-              </CardBody>
-            </Card>
-          </Col>
-          <Col xs="4">
-            <Card>
-                <CardBody>
-                  <CardTitle>
-                    Resultados
-                  </CardTitle>
-                  <ListGroup>
-                    <ListGroupItem className="justify-content-between" style={{ backgroundColor: '#344675' }}>
-                      <Row>
-                        <Col xs="6">
-                          Total Filtrado
-                        </Col>
-                        {loading === false ?
-                          <Col xs="6" style={{ textAlign: 'right' }}>
-                            <Badge pill color="info">
-                              <h3 style={{margin: 0}}>
-                                {filteredData && filteredData.count ? filteredData.count : 0}
-                              </h3>
-                            </Badge>
+                            {dbs &&
+                              <Input
+                                type="select"
+                                name="selectMulti"
+                                id="exampleSelectMulti1"
+                                multiple
+                                value={dbsSelected}
+                                //ref={this.createService}
+                                onChange={this.handleSelectChangeDB}
+                                style={{ height: '200px' }}
+                              >
+                                {dbs.map((size, idx) =>
+                                  <option key={idx} value={size.value}>
+                                    {size.label}
+                                  </option>
+                                )}
+                              </Input>}
                           </Col>
-                          :
-                          <Col md={{ size: 2, offset: 4 }} style={{ textAlign: 'right', marginLeft: 170 }}>
-                            <FadeLoader css={override} size={1} color={"#1d8cf8 "} margin={-10} />
+                        </Row>
+                      </ListGroup >
+                    </ListGroup>
+                  </CardBody>
+                </Card>
+              </Col>
+              <Col xs="4">
+                <Card>
+                  <CardBody>
+                    <CardTitle>
+                      Resultados
+                    </CardTitle>
+                    <ListGroup>
+                      <ListGroupItem className="justify-content-between" style={{ backgroundColor: '#344675' }}>
+                        <Row>
+                          <Col xs="6">
+                            Total Filtrado
                           </Col>
-                        }
-                      </Row>
-                    </ListGroupItem>
-                  </ListGroup>
-                  <ListGroup>
-                    {
-                      history.map((data) => (
-                        <ListGroupItem className="justify-content-between" style={{ backgroundColor: '#344675', marginTop: '10px'}}>
-                          <Row>
-                            <Col xs="6">
-                              Previo Filtrado
-                            </Col>
+                          {loading === false ?
                             <Col xs="6" style={{ textAlign: 'right' }}>
                               <Badge pill color="info">
-                                <h6 style={{margin: 0}}>
-                                  {data.count}
-                                </h6>
+                                <h3 style={{ margin: 0 }}>
+                                  {filteredData && filteredData.count ? filteredData.count : 0}
+                                </h3>
                               </Badge>
                             </Col>
-                          </Row>
-                        </ListGroupItem>
-                      ))
+                            :
+                            <Col md={{ size: 2, offset: 4 }} style={{ textAlign: 'right', marginLeft: 170 }}>
+                              <FadeLoader css={override} size={1} color={"#1d8cf8 "} margin={-10} />
+                            </Col>
+                          }
+                        </Row>
+                      </ListGroupItem>
+                    </ListGroup>
+                    <ListGroup>
+                      {
+                        history.map((data) => (
+                          <ListGroupItem className="justify-content-between" style={{ backgroundColor: '#344675', marginTop: '10px' }}>
+                            <Row>
+                              <Col xs="6">
+                                Previo Filtrado
+                              </Col>
+                              <Col xs="6" style={{ textAlign: 'right' }}>
+                                <Badge pill color="info">
+                                  <h6 style={{ margin: 0 }}>
+                                    {data.count}
+                                  </h6>
+                                </Badge>
+                              </Col>
+                            </Row>
+                          </ListGroupItem>
+                        ))
+                      }
+                    </ListGroup>
+                    {console.log(filteredData && filteredData),
+                      download &&
+                    <Button
+                      className="mt-4 ml-5"
+                      color="info"
+                      onClick={() => this.toggleEditModal()}
+                    >
+                      Descargar Datos de Campañas
+                    </Button>
                     }
-                  </ListGroup>
-                </CardBody>
-            </Card>
-            </Col>
-        </Row>
-        :
-        <Row>
-          <Col sm='4'>
-          </Col>
-          <Col sm='4'>
-            <Card>
-              <CardTitle style={{ textAlign: 'center' }}>
-                <br></br>
-                <Label>
-                  Hola, tu usuario no cuenta con los permisos asignados en este momento, comunicate con tu administrador!
-                </Label>
-                <br></br>
-                <i className="tim-icons icon-settings" />
-              </CardTitle>
-            </Card>
-          </Col>
-        </Row>
+                  </CardBody>
+                </Card>
+              </Col>
+              <Col sm='12'>
 
-      }
-    </div >
-    </>);
+              </Col>
+            </Row>
+            :
+            <Row>
+              <Col sm='4'>
+              </Col>
+              <Col sm='4'>
+                <Card>
+                  <CardTitle style={{ textAlign: 'center' }}>
+                    <br></br>
+                    <Label>
+                      Hola, tu usuario no cuenta con los permisos asignados en este momento, comunicate con tu administrador!
+                    </Label>
+                    <br></br>
+                    <i className="tim-icons icon-settings" />
+                  </CardTitle>
+                </Card>
+              </Col>
+            </Row>
+
+          }
+        </div >
+      </>);
   }
 }
 
@@ -940,7 +1031,11 @@ export default connect(
     loadingAction: selector.getActionloading(state),
     info: selector.getInfo(state),
     dbs: selector.getDbsFilter(state),
-    userCompany: selector.getUserCompany(state)
+    userCompany: selector.getUserCompany(state),
+    campaing: selector.getCampaing(state),
+    loadingData: selector.getFilterloadingData(state)
+
+
   }),
   (dispatch) => ({
     getDB() {
@@ -953,23 +1048,23 @@ export default connect(
       dispatch(filterActions.filterInfo())
     },
     filterData(FilterForm) {
-      this.setState({
-        loading: !this.state.loading
-      })
-      setTimeout(function () { //Start the timer
-        dispatch(filterActions.filterData({
-          FilterForm: FilterForm,
-          dbs: this.state.dbsSelected
-        }))
-        this.setState({
-          loading: !this.state.loading
-        })
-      }.bind(this), 2500)
-
-     
-      this.setState({
-        Form: FilterForm
-      })
+      dispatch(filterActions.filterData({
+        FilterForm: FilterForm,
+        dbs: this.state.dbsSelected,
+        index: 0
+      }))
+    this.setState({
+      Form: FilterForm,
+      download: true
+    })
+  },
+    fetchCampaing() {
+      dispatch(Actions.fetchCampaing())
+    },
+    downloadFile(campaing) {
+      dispatch(Actions.getCampaingFILEAnalitic({
+        id:campaing
+      }))
     },
     sendMail(FilterForm, Form, dbs) {
       if (

@@ -75,14 +75,16 @@ function* getdata(action) {
   try {
     const {
       FilterForm,
-      dbs
+      dbs,
+      index
     } = action.payload;
     const token = yield select(reducers.getUserToken);
     const response = yield call(
       api.getFilterData,
       token,
       FilterForm,
-      dbs
+      dbs,
+      index
     );
  
     yield put(actions.filterDataOK({
