@@ -403,7 +403,7 @@ class DatabasesForm extends React.Component {
                           </Col>
                           {loadingData === false ?
                             <Col xs="4" style={{ textAlign: 'right' }}>
-                              <Badge pill color="info">{campaingData.shipping_date ? campaingData.shipping_date.slice(0, 10) : '0'}</Badge>
+                              <Badge pill color="info">{campaingData.efectivity ? campaingData.efectivity : '0'}</Badge>
                             </Col>
                             :
                             <Col md={{ size: 2, offset: 2 }} style={{ textAlign: 'right', marginLeft: 350, marginTop: '-8px' }}>
