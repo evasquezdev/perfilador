@@ -94,7 +94,8 @@ function* getdata(action) {
     for (let index = 0; index < 10; index++) {
       yield put(actions.filterData({
         FilterForm: action.payload.FilterForm,
-        dbs: action.payload.dbs
+        dbs: action.payload.dbs,
+        index: index
       })); 
     }
     yield put(actions.filterDataKO());

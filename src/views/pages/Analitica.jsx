@@ -827,7 +827,7 @@ class DatabasesForm extends React.Component {
                                              <Col>
                                                    <FormGroup >
                                                      <Field
-                                                       name={`sexo`}
+                                                      name={`${index.name}|${index.type}`}
                                                        component={this.FormSelectSexo}
                                                        //		validate={[this.required, this.verifyNumberProduction]}
                                                        placeholder="SEXO"

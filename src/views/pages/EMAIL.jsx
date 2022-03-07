@@ -30,7 +30,7 @@ import * as DBActions from '../../_actions/db';
 
 import ModalN from '../../components/Modal';
 import * as messageActions from '../../_actions/action';
-import { FadeLoader,ClimbingBoxLoader} from "react-spinners";
+import { FadeLoader, ClimbingBoxLoader } from "react-spinners";
 import { css } from "@emotion/react";
 
 const override = css`
@@ -83,7 +83,8 @@ class DatabasesForm extends React.Component {
       company: '',
       date: '',
       time: '',
-      countText: 0
+      countText: 0,
+      filesize: 0
     },
     loading: false,
     editModal: false,
@@ -485,7 +486,11 @@ class DatabasesForm extends React.Component {
         accept=".jpg,.png,.jpeg"
         // disabled={loading}
         color="info"
-        onChange={e => (onChange(e.target.files[0]), this.setState({
+        onChange={e => (onChange(e.target.files[0]), 
+          this.setState({
+            filesize : e.target.files[0].size
+          }),
+          this.setState({
           FilterForm: {
             ...this.state.FilterForm,
             file: e.target.files[0]
@@ -657,221 +662,221 @@ class DatabasesForm extends React.Component {
       countText
     } = this.state;
     let name;
-    const pageMode=this.checkPageMode();
-    let inverted = pageMode.bg==="bg-ligh" ? 'inverted' : '';
+    const pageMode = this.checkPageMode();
+    let inverted = pageMode.bg === "bg-ligh" ? 'inverted' : '';
     let filteredmuns = municipios.filter(m => m.name === departamentSelect)
     return (
-    <>
-      <div className={`blackdiv ${loadingData? 'spinner' : 'NoSpinner'} `} id="blackdiv" 
-      >
-        <div className="ui segment">
-          <div className={`ui active transition ${inverted} visible dimmer`}>
-            <div className="content">
-            <ClimbingBoxLoader css={overrideCubo} zIndex={2} size={25} color={"#1d8cf8 "} margin={0} />
-
-            </div>
-          </div>
-          <div style={{minHeight:400}}><p>&nbsp;</p></div>
-        </div>
-      </div>
-    <div className="content">
-      <ModalN />
-      <Modal
-        isOpen={editModal}
-        toggle={this.toggleEditModal}
-        modalClassName={this.checkPageMode()}
-
-      >
-        <ModalHeader className="justify-content-center" toggle={this.toggleImportModal}>
-          Seleccionar Fecha y Hora
-        </ModalHeader>
-        <ModalBody
-          style={{ height: '800px !important' }}
+      <>
+        <div className={`blackdiv ${loadingData ? 'spinner' : 'NoSpinner'} `} id="blackdiv"
         >
-          <Row>
-            <Col sm={12}>
-              <Label>Fecha</Label>
-              <Field
-                name={'time'}
-                component={this.FormDateTime}
-                // validate={[this.verifyNumber]}
-                // icon= "icon-key-25"
-                placeholder=""
-              // type="file"
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col sm={12}>
-              <Label>Hora</Label>
-              <Field
-                name={`hora`}
-                component={this.FormSelectTime}
-                //		validate={[this.required, this.verifyNumberProduction]}
-                placeholder="Hora"
-                type='number'
-                options={this.state.time}
-              />
-            </Col>
-          </Row>
-        </ModalBody>
-        <ModalFooter>
-          <Button color="secondary" onClick={() => this.toggleEditModal()}>
-            Cerrar
-          </Button>
-          <Button color="primary" onClick={() => this.toggleEditModal()}>
-            Guardar Cambios
-          </Button>
-        </ModalFooter>
-      </Modal>
-      {userCompany.has_emails ?
-        <Row>
-          <Col xs="4">
-            <Form onSubmit={handleSubmit(filterData.bind(this))}>
-              <Card>
-                <CardBody>
-                  <CardTitle>
-                    Filtros
-                  </CardTitle>
-                  {departments && departments.map((index, id) => (
-                    <>
-                      {
-                        index.valid === true && (<>
-                          <Label>{index.name}</Label>
-                          <Row>
-                            <Col xs="12">
-                              <FormGroup>
-                                {index.type === 'int' ?
-                                  <Row>
-                                    <Col>
-                                      <FormGroup >
-                                        <Field
-                                          name={`${index.name}|${index.type}-1`}
-                                          component={this.FormInput}
-                                          //		validate={[this.required, this.verifyNumberProduction]}
-                                          placeholder="Min"
-                                          type='number'
-                                          options={this.state.range}
-                                        />
-                                      </FormGroup>
-                                    </Col>
-                                    <Col>
-                                      <FormGroup >
-                                        <Field
-                                          name={`${index.name}|${index.type}-2`}
-                                          component={this.FormInput}
-                                          //		validate={[this.required, this.verifyNumberProduction]}
-                                          placeholder="Max"
-                                          type='number'
-                                          options={this.state.range}
-                                        />
-                                      </FormGroup>
-                                    </Col>
-                                  </Row>
-                                  :
-                                  (index.type === 'string' && index.name !== "DEPARTAMENTO_TANGO"
-                                  && index.name !== "DEPARTAMENTO_ROMEO" 
-                                  && index.name !== "DEPARTAMENTO" 
-                                  && index.name !== 'MUNICIPIO_TANGO'
-                                  && index.name !== "MUNICIPIO_ROMEO" 
-                                  && index.name !== "MUNICIPIO" 
-                                  && index.name !== "SEXO") ?
-                                    <FormGroup>
-                                      <Field
-                                        name={`${index.name}|${index.type}`}
-                                        component={this.FormInput}
-                                        // validate={[this.verifyNumber]}
-                                        // icon= "icon-key-25"
-                                        placeholder=""
-                                      />
-                                    </FormGroup>
+          <div className="ui segment">
+            <div className={`ui active transition ${inverted} visible dimmer`}>
+              <div className="content">
+                <ClimbingBoxLoader css={overrideCubo} zIndex={2} size={25} color={"#1d8cf8 "} margin={0} />
 
-                                    :
-                                    (index.name === 'DEPARTAMENTO_TANGO' || index.name === 'DEPARTAMENTO_ROMEO' ||
-                                    index.name === 'DEPARTAMENTO' ) ?
+              </div>
+            </div>
+            <div style={{ minHeight: 400 }}><p>&nbsp;</p></div>
+          </div>
+        </div>
+        <div className="content">
+          <ModalN />
+          <Modal
+            isOpen={editModal}
+            toggle={this.toggleEditModal}
+            modalClassName={this.checkPageMode()}
+
+          >
+            <ModalHeader className="justify-content-center" toggle={this.toggleImportModal}>
+              Seleccionar Fecha y Hora
+            </ModalHeader>
+            <ModalBody
+              style={{ height: '800px !important' }}
+            >
+              <Row>
+                <Col sm={12}>
+                  <Label>Fecha</Label>
+                  <Field
+                    name={'time'}
+                    component={this.FormDateTime}
+                    // validate={[this.verifyNumber]}
+                    // icon= "icon-key-25"
+                    placeholder=""
+                  // type="file"
+                  />
+                </Col>
+              </Row>
+              <Row>
+                <Col sm={12}>
+                  <Label>Hora</Label>
+                  <Field
+                    name={`hora`}
+                    component={this.FormSelectTime}
+                    //		validate={[this.required, this.verifyNumberProduction]}
+                    placeholder="Hora"
+                    type='number'
+                    options={this.state.time}
+                  />
+                </Col>
+              </Row>
+            </ModalBody>
+            <ModalFooter>
+              <Button color="secondary" onClick={() => this.toggleEditModal()}>
+                Cerrar
+              </Button>
+              <Button color="primary" onClick={() => this.toggleEditModal()}>
+                Guardar Cambios
+              </Button>
+            </ModalFooter>
+          </Modal>
+          {userCompany.has_emails ?
+            <Row>
+              <Col xs="4">
+                <Form onSubmit={handleSubmit(filterData.bind(this))}>
+                  <Card>
+                    <CardBody>
+                      <CardTitle>
+                        Filtros
+                      </CardTitle>
+                      {departments && departments.map((index, id) => (
+                        <>
+                          {
+                            index.valid === true && (<>
+                              <Label>{index.name}</Label>
+                              <Row>
+                                <Col xs="12">
+                                  <FormGroup>
+                                    {index.type === 'int' ?
                                       <Row>
                                         <Col>
                                           <FormGroup >
                                             <Field
                                               name={`${index.name}|${index.type}-1`}
-                                              component={this.FormSelect}
+                                              component={this.FormInput}
                                               //		validate={[this.required, this.verifyNumberProduction]}
-                                              placeholder="Departamentos"
-                                              // type='number'
-                                              options={departamentos}
+                                              placeholder="Min"
+                                              type='number'
+                                              options={this.state.range}
+                                            />
+                                          </FormGroup>
+                                        </Col>
+                                        <Col>
+                                          <FormGroup >
+                                            <Field
+                                              name={`${index.name}|${index.type}-2`}
+                                              component={this.FormInput}
+                                              //		validate={[this.required, this.verifyNumberProduction]}
+                                              placeholder="Max"
+                                              type='number'
+                                              options={this.state.range}
                                             />
                                           </FormGroup>
                                         </Col>
                                       </Row>
                                       :
-                                      (index.name === 'MUNICIPIO_TANGO'||
-                                      index.name === "MUNICIPIO_ROMEO" ||
-                                      index.name === "MUNICIPIO") ?
-                                        <Row>
-                                          <Col>
-                                            <FormGroup >
-                                              <Field
-                                                name={`${index.name}|${index.type}-1`}
-                                                component={this.FormSelectMunicipio}
-                                                //		validate={[this.required, this.verifyNumberProduction]}
-                                                placeholder="Municipios"
-                                                //   type='number'
-                                                options={departamentSelect ? (filteredmuns[0] && filteredmuns[0].minicipios) : municipiosTotal}
-                                              />
-                                            </FormGroup>
-                                          </Col>
-                                        </Row>
+                                      (index.type === 'string' && index.name !== "DEPARTAMENTO_TANGO"
+                                        && index.name !== "DEPARTAMENTO_ROMEO"
+                                        && index.name !== "DEPARTAMENTO"
+                                        && index.name !== 'MUNICIPIO_TANGO'
+                                        && index.name !== "MUNICIPIO_ROMEO"
+                                        && index.name !== "MUNICIPIO"
+                                        && index.name !== "SEXO") ?
+                                        <FormGroup>
+                                          <Field
+                                            name={`${index.name}|${index.type}`}
+                                            component={this.FormInput}
+                                            // validate={[this.verifyNumber]}
+                                            // icon= "icon-key-25"
+                                            placeholder=""
+                                          />
+                                        </FormGroup>
+
                                         :
-                                        index.name === 'SEXO' ?
-                                        <Row>
-                                          <Col>
-                                            <FormGroup >
-                                              <Field
-                                                name={`sexo`}
-                                                component={this.FormSelectSexo}
-                                                //		validate={[this.required, this.verifyNumberProduction]}
-                                                placeholder="SEXO"
-                                                //   type='number'se
-                                               
-                                              />
-                                            </FormGroup>
-                                          </Col>
-                                        </Row>
-                                        :
-                                        <Row>
-                                          <Col sm='6'>
-                                            <FormGroup >
-                                              <Label>Fecha Inicio</Label>
-                                              <Field
-                                                name={`${index.name}|${index.type}-1`}
-                                                component={this.FormDate}
-                                                //validate={[this.verifyDate]}
-                                                placeholder="Seleccione Fecha"
-                                              />
-                                            </FormGroup>
-                                          </Col>
-                                          <Col sm='6'>
-                                            <FormGroup >
-                                              <Label>Fecha Fin</Label>
-                                              <Field
-                                                name={`${index.name}|${index.type}-2`}
-                                                component={this.FormDate}
-                                                //validate={[this.verifyDate]}
-                                                placeholder="Seleccione Fecha"
-                                              />
-                                            </FormGroup>
-                                          </Col>
-                                        </Row>
-                                }
-                              </FormGroup>
-                            </Col>
-                          </Row>
-                        </>)
+                                        (index.name === 'DEPARTAMENTO_TANGO' || index.name === 'DEPARTAMENTO_ROMEO' ||
+                                          index.name === 'DEPARTAMENTO') ?
+                                          <Row>
+                                            <Col>
+                                              <FormGroup >
+                                                <Field
+                                                  name={`${index.name}|${index.type}-1`}
+                                                  component={this.FormSelect}
+                                                  //		validate={[this.required, this.verifyNumberProduction]}
+                                                  placeholder="Departamentos"
+                                                  // type='number'
+                                                  options={departamentos}
+                                                />
+                                              </FormGroup>
+                                            </Col>
+                                          </Row>
+                                          :
+                                          (index.name === 'MUNICIPIO_TANGO' ||
+                                            index.name === "MUNICIPIO_ROMEO" ||
+                                            index.name === "MUNICIPIO") ?
+                                            <Row>
+                                              <Col>
+                                                <FormGroup >
+                                                  <Field
+                                                    name={`${index.name}|${index.type}-1`}
+                                                    component={this.FormSelectMunicipio}
+                                                    //		validate={[this.required, this.verifyNumberProduction]}
+                                                    placeholder="Municipios"
+                                                    //   type='number'
+                                                    options={departamentSelect ? (filteredmuns[0] && filteredmuns[0].minicipios) : municipiosTotal}
+                                                  />
+                                                </FormGroup>
+                                              </Col>
+                                            </Row>
+                                            :
+                                            index.name === 'SEXO' ?
+                                              <Row>
+                                                <Col>
+                                                  <FormGroup >
+                                                    <Field
+                                                      name={`${index.name}|${index.type}`}
+                                                      component={this.FormSelectSexo}
+                                                      //		validate={[this.required, this.verifyNumberProduction]}
+                                                      placeholder="SEXO"
+                                                    //   type='number'se
+
+                                                    />
+                                                  </FormGroup>
+                                                </Col>
+                                              </Row>
+                                              :
+                                              <Row>
+                                                <Col sm='6'>
+                                                  <FormGroup >
+                                                    <Label>Fecha Inicio</Label>
+                                                    <Field
+                                                      name={`${index.name}|${index.type}-1`}
+                                                      component={this.FormDate}
+                                                      //validate={[this.verifyDate]}
+                                                      placeholder="Seleccione Fecha"
+                                                    />
+                                                  </FormGroup>
+                                                </Col>
+                                                <Col sm='6'>
+                                                  <FormGroup >
+                                                    <Label>Fecha Fin</Label>
+                                                    <Field
+                                                      name={`${index.name}|${index.type}-2`}
+                                                      component={this.FormDate}
+                                                      //validate={[this.verifyDate]}
+                                                      placeholder="Seleccione Fecha"
+                                                    />
+                                                  </FormGroup>
+                                                </Col>
+                                              </Row>
+                                    }
+                                  </FormGroup>
+                                </Col>
+                              </Row>
+                            </>)
+                          }
+                        </>
+                      ))
                       }
-                    </>
-                  ))
-                  }
-                  {/*      <Label>Sexo</Label>
+                      {/*      <Label>Sexo</Label>
                 <FormGroup>
                   <label>
                     <Field name="sex" component="input" type="radio" value="M" />{' '}
@@ -905,35 +910,35 @@ class DatabasesForm extends React.Component {
                     Ambos
                   </label>
                 </FormGroup>*/}
-                  {this.state.FilterForm.municipality === '' ?
-                    <Button className="mt-3"
-                      color="info"
+                      {this.state.FilterForm.municipality === '' ?
+                        <Button className="mt-3"
+                          color="info"
 
-                    // onClick={e => {
-                    // e.preventDefault();
-                    // filterData(FilterForm)
-                    //}}
-                    >
-                      Filtrar
-                    </Button>
-                    :
-                    <Button className="mt-3"
-                      color="info"
-                      disabled
-                    // onClick={e => {
-                    //  e.preventDefault();
-                    // filterData(FilterForm)
-                    // }}
-                    >
-                      Filtrar
-                    </Button>
-                  }
+                        // onClick={e => {
+                        // e.preventDefault();
+                        // filterData(FilterForm)
+                        //}}
+                        >
+                          Filtrar
+                        </Button>
+                        :
+                        <Button className="mt-3"
+                          color="info"
+                          disabled
+                        // onClick={e => {
+                        //  e.preventDefault();
+                        // filterData(FilterForm)
+                        // }}
+                        >
+                          Filtrar
+                        </Button>
+                      }
 
-                </CardBody>
-              </Card>
-            </Form>
-          </Col>
-          {/*   <Col xs="3">
+                    </CardBody>
+                  </Card>
+                </Form>
+              </Col>
+              {/*   <Col xs="3">
           {filteredData && <div style={{
             maxHeight: '45rem',
             overflowY: 'scroll'
@@ -971,256 +976,263 @@ class DatabasesForm extends React.Component {
           </div>}
         </Col>
         */}
-          {<Col xs="4">
-            <Card>
-              {
-                <CardBody>
-                  <CardTitle>
-                    Creditos disponibles
-                  </CardTitle>
-                  <ListGroup>
-                    <ListGroupItem className="justify-content-between" style={{ backgroundColor: '#344675' }}>
-                      <Row>
-                        <Col xs="6">
-                          Mensajes restantes por correo
-                        </Col>
-                        {loading === false ?
-                          <Col xs="6" style={{ textAlign: 'right' }}>
-                            <Badge pill color="info">
-                              <h3 style={{margin: 0}}>
-                                {info && info.email_credit}
-                              </h3>
-                            </Badge>
-                          </Col>
-                          :
-                          <Col md={{ size: 2, offset: 4 }} style={{ textAlign: 'right', marginLeft: 170 }}>
-                            <FadeLoader css={override} size={1} color={"#1d8cf8 "} margin={-10} />
-                          </Col>
-                        }
-                      </Row>
-                    </ListGroupItem>
-                    <ListGroupItem className="justify-content-between" style={{ backgroundColor: '#344675' }}>
-                      <Row>
-                        <Col xs="6">
-                          Total Filtrado
-                        </Col>
+              {<Col xs="4">
+                <Card>
+                  {
+                    <CardBody>
+                      <CardTitle>
+                        Creditos disponibles
+                      </CardTitle>
+                      <ListGroup>
+                        <ListGroupItem className="justify-content-between" style={{ backgroundColor: '#344675' }}>
+                          <Row>
+                            <Col xs="6">
+                              Mensajes restantes por correo
+                            </Col>
+                            {loading === false ?
+                              <Col xs="6" style={{ textAlign: 'right' }}>
+                                <Badge pill color="info">
+                                  <h3 style={{ margin: 0 }}>
+                                    {info && info.email_credit}
+                                  </h3>
+                                </Badge>
+                              </Col>
+                              :
+                              <Col md={{ size: 2, offset: 4 }} style={{ textAlign: 'right', marginLeft: 170 }}>
+                                <FadeLoader css={override} size={1} color={"#1d8cf8 "} margin={-10} />
+                              </Col>
+                            }
+                          </Row>
+                        </ListGroupItem>
+                        <ListGroupItem className="justify-content-between" style={{ backgroundColor: '#344675' }}>
+                          <Row>
+                            <Col xs="6">
+                              Total Filtrado
+                            </Col>
 
-                        {loading === false ?
-                          <Col xs="6" style={{ textAlign: 'right' }}>
-                            <Badge pill color="info">
-                              <h3 style={{margin: 0}}>
-                                {filteredData ? filteredData.count : 0}
-                              </h3>
-                            </Badge>
-                          </Col>
-                          :
-                          <Col md={{ size: 2, offset: 4 }} style={{ textAlign: 'right', marginLeft: 170 }}>
-                            <FadeLoader css={override} size={1} color={"#1d8cf8 "} margin={-10} />
-                          </Col>
-                        }
-                      </Row>
-                    </ListGroupItem>
-                  </ListGroup>
-                </CardBody>
+                            {loading === false ?
+                              <Col xs="6" style={{ textAlign: 'right' }}>
+                                <Badge pill color="info">
+                                  <h3 style={{ margin: 0 }}>
+                                    {filteredData ? filteredData.count : 0}
+                                  </h3>
+                                </Badge>
+                              </Col>
+                              :
+                              <Col md={{ size: 2, offset: 4 }} style={{ textAlign: 'right', marginLeft: 170 }}>
+                                <FadeLoader css={override} size={1} color={"#1d8cf8 "} margin={-10} />
+                              </Col>
+                            }
+                          </Row>
+                        </ListGroupItem>
+                      </ListGroup>
+                    </CardBody>
 
-              }
+                  }
 
-            </Card>
-            <Card>
-              <CardBody>
-                <CardTitle>
-                  Base de Datos
-                </CardTitle>
-                <ListGroup>
-                  <ListGroup className="justify-content-between" style={{ backgroundColor: '#344675' }}>
-                    <Row>
-                      <Col>
-
-                        {dbs &&
-                          <Input
-                            type="select"
-                            name="selectMulti"
-                            id="exampleSelectMulti1"
-                            multiple
-                            value={dbsSelected}
-                            //ref={this.createService}
-                            onChange={this.handleSelectChange}
-                            style={{ height: '200px' }}
-                          >
-                            {dbs.map((size, idx) =>
-                              <option key={idx} value={size.value}>
-                                {size.label}
-                              </option>
-                            )}
-                          </Input>}
-                      </Col>
-                    </Row>
-                  </ListGroup >
-                </ListGroup>
-              </CardBody>
-            </Card>
-          </Col>}
-          <Col>
-            <Row>
-              <Col>
+                </Card>
                 <Card>
                   <CardBody>
                     <CardTitle>
-                      Enviar Mensaje
+                      Base de Datos
                     </CardTitle>
-                    <Form onSubmit={handleSubmit(sendMail.bind(this))}>
-                      <FormGroup>
-                        <Label>
-                          Campaña
-                        </Label>
-                        <Input type="input"
-                          value={FilterForm.company}
-                          disabled={loadingAction}
-                          onChange={(e) => {
-                            this.setState({
-                              FilterForm: {
-                                ...FilterForm,
-                                company: e.target.value
-                              }
-                            })
-                          }}
-                        />
-                      </FormGroup>
-                      <FormGroup>
-                        <Label>
-                          Titulo mensaje
-                        </Label>
-                        <Input type="input"
-                          value={FilterForm.header}
-                          disabled={loadingAction}
-                          onChange={(e) => {
-                            this.setState({
-                              FilterForm: {
-                                ...FilterForm,
-                                header: e.target.value
-                              }
-                            })
-                          }}
-                        />
-                      </FormGroup>
-                      <FormGroup>
-                        <Label>
-                          Mensaje
-                        </Label>
-                        <Input type="textarea"
-                          style={{
-                            maxHeight: '200px',
-                            minHeight: '150px'
-                          }}
-                          maxlength="160"
-                          
-                          value={FilterForm.text}
-                          disabled={loadingAction}
-                          onChange={(e) => {
-                            this.setState({
-                              FilterForm: {
-                                ...FilterForm,
-                                text: e.target.value,
-                               countText: e.target.value.length
-                              }
-                            })
-                          }}
-                        />
-                        <p>
-                          {this.state.FilterForm.countText}/160
-                        </p>
-                      </FormGroup>
-                      <Row>
-                        <Col>
-                          <FormGroup>
-                            <Button color="info" size="sm"
-                              style={{ fontSize: 13, height: 40 }}>
-                              <Field
-                                name={`file`}
-                                component={this.FormFile}
-                                // validate={[this.verifyNumber]}
-                                // icon= "icon-key-25"
-                                placeholder=""
-                                type="file"
-                              />
-                              Subir Imagen Adjunta
-                            </Button>
-                            {FilterForm.file && <span className="form-text text-info">
-                              {FilterForm.file.name}
-                            </span>}
-                          </FormGroup>
-                        </Col>
-                        <Col>
-                          {//date
-                          }
-                          <Button
-                            color="info"
-                            disabled={loadingAction}
-                            onClick={() => {
-                              sendMail(FilterForm, this.state.Form, dbsSelected)
-                              this.setState({
-                                FilterForm: {
-                                  ...FilterForm,
-                                  text: '',
-                                  header: '',
-                                  company: '',
-                                  date: '',
-                                  time: ''
-                                }
-                              })
-                              // this.delay()
-                            }}
-                            style={{ fontSize: 13, height: 40 }}
-                          >
-                            Enviar Mensaje
-                          </Button>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col>
-                          <FormGroup>
-                            <Button
-                              onClick={() => this.toggleEditModal()}
-                            >
-                              Programar Envio
-                            </Button>
-                            {
+                    <ListGroup>
+                      <ListGroup className="justify-content-between" style={{ backgroundColor: '#344675' }}>
+                        <Row>
+                          <Col>
 
-                            }
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                    </Form>
+                            {dbs &&
+                              <Input
+                                type="select"
+                                name="selectMulti"
+                                id="exampleSelectMulti1"
+                                multiple
+                                value={dbsSelected}
+                                //ref={this.createService}
+                                onChange={this.handleSelectChange}
+                                style={{ height: '200px' }}
+                              >
+                                {dbs.map((size, idx) =>
+                                  <option key={idx} value={size.value}>
+                                    {size.label}
+                                  </option>
+                                )}
+                              </Input>}
+                          </Col>
+                        </Row>
+                      </ListGroup >
+                    </ListGroup>
                   </CardBody>
+                </Card>
+              </Col>}
+              <Col>
+                <Row>
+                  <Col>
+                    <Card>
+                      <CardBody>
+                        <CardTitle>
+                          Enviar Mensaje
+                        </CardTitle>
+                        <Form onSubmit={handleSubmit(sendMail.bind(this))}>
+                          <FormGroup>
+                            <Label>
+                              Campaña
+                            </Label>
+                            <Input type="input"
+                              value={FilterForm.company}
+                              disabled={loadingAction}
+                              onChange={(e) => {
+                                this.setState({
+                                  FilterForm: {
+                                    ...FilterForm,
+                                    company: e.target.value
+                                  }
+                                })
+                              }}
+                            />
+                          </FormGroup>
+                          <FormGroup>
+                            <Label>
+                              Titulo mensaje
+                            </Label>
+                            <Input type="input"
+                              value={FilterForm.header}
+                              disabled={loadingAction}
+                              onChange={(e) => {
+                                this.setState({
+                                  FilterForm: {
+                                    ...FilterForm,
+                                    header: e.target.value
+                                  }
+                                })
+                              }}
+                            />
+                          </FormGroup>
+                          <FormGroup>
+                            <Label>
+                              Mensaje
+                            </Label>
+                            <Input type="textarea"
+                              style={{
+                                maxHeight: '200px',
+                                minHeight: '150px'
+                              }}
+                              maxlength="160"
+
+                              value={FilterForm.text}
+                              disabled={loadingAction}
+                              onChange={(e) => {
+                                this.setState({
+                                  FilterForm: {
+                                    ...FilterForm,
+                                    text: e.target.value,
+                                    countText: e.target.value.length
+                                  }
+                                })
+                              }}
+                            />
+                            <p>
+                              {this.state.FilterForm.countText}/160
+                            </p>
+                          </FormGroup>
+                          <Row>
+                            <Col>
+                              <FormGroup>
+                                <Button color="info" size="sm"
+                                  style={{ fontSize: 13, height: 40 }}>
+                                  <Field
+                                    name={`file`}
+                                    component={this.FormFile}
+                                    // validate={[this.verifyNumber]}
+                                    // icon= "icon-key-25"
+                                    placeholder=""
+                                    type="file"
+                                  />
+                                  Subir Imagen Adjunta
+                                </Button>
+                                {FilterForm.file && <span className="form-text text-info">
+                                  {FilterForm.file.name}
+                                </span>}
+                                {
+                                  this.state.filesize > 25000000  &&
+                                  <span className="form-text text-info">
+                                  Limite de archivo son 25mb, su imagen contiene {this.state.filesize*0.000001}mb
+                                </span>
+
+                                }
+                              </FormGroup>
+                            </Col>
+                            <Col>
+                              {//date
+                              }
+                              <Button
+                                color="info"
+                                disabled={this.state.filesize > 25000000 ? true: false }
+                                onClick={() => {
+                                  sendMail(FilterForm, this.state.Form, dbsSelected)
+                                  this.setState({
+                                    FilterForm: {
+                                      ...FilterForm,
+                                      text: '',
+                                      header: '',
+                                      company: '',
+                                      date: '',
+                                      time: ''
+                                    }
+                                  })
+                                  // this.delay()
+                                }}
+                                style={{ fontSize: 13, height: 40 }}
+                              >
+                                Enviar Mensaje
+                              </Button>
+                            </Col>
+                          </Row>
+                          <Row>
+                            <Col>
+                              <FormGroup>
+                                <Button
+                                  onClick={() => this.toggleEditModal()}
+                                >
+                                  Programar Envio
+                                </Button>
+                                {
+
+                                }
+                              </FormGroup>
+                            </Col>
+                          </Row>
+                        </Form>
+                      </CardBody>
+                    </Card>
+                  </Col>
+                </Row>
+                <Row>
+
+                </Row>
+              </Col>
+            </Row>
+            :
+            <Row>
+              <Col sm='4'>
+              </Col>
+              <Col sm='4'>
+                <Card>
+                  <CardTitle style={{ textAlign: 'center' }}>
+                    <br></br>
+                    <Label>
+                      Hola, tu usuario no cuenta con los permisos asignados en este momento, comunicate con tu administrador!
+                    </Label>
+                    <br></br>
+                    <i className="tim-icons icon-settings" />
+                  </CardTitle>
                 </Card>
               </Col>
             </Row>
-            <Row>
 
-            </Row>
-          </Col>
-        </Row>
-        :
-        <Row>
-          <Col sm='4'>
-          </Col>
-          <Col sm='4'>
-            <Card>
-              <CardTitle style={{ textAlign: 'center' }}>
-                <br></br>
-                <Label>
-                  Hola, tu usuario no cuenta con los permisos asignados en este momento, comunicate con tu administrador!
-                </Label>
-                <br></br>
-                <i className="tim-icons icon-settings" />
-              </CardTitle>
-            </Card>
-          </Col>
-        </Row>
-
-      }
-    </div >
-    </>);
+          }
+        </div >
+      </>);
   }
 }
 
@@ -1253,16 +1265,16 @@ export default connect(
       dispatch(filterActions.filterInfo())
     },
     filterData(FilterForm) {
-  
-    
-        dispatch(filterActions.filterData({
-          FilterForm: FilterForm,
-          dbs: this.state.dbsSelected,
-          index: '1'
-        }))
-     
 
-     
+
+      dispatch(filterActions.filterData({
+        FilterForm: FilterForm,
+        dbs: this.state.dbsSelected,
+        index: '1'
+      }))
+
+
+
       this.setState({
         Form: FilterForm
       })
