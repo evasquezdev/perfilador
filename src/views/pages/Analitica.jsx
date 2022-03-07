@@ -782,7 +782,13 @@ class DatabasesForm extends React.Component {
                                         </Col>
                                       </Row>
                                       :
-                                      (index.type === 'string' && index.name !== "DEPARTAMENTO_TANGO" && index.name !== 'MUNICIPIO_TANGO'&& index.name !== "SEXO") ?
+                                      (index.type === 'string' && index.name !== "DEPARTAMENTO_TANGO"
+                                && index.name !== "DEPARTAMENTO_ROMEO" 
+                                && index.name !== "DEPARTAMENTO" 
+                                && index.name !== 'MUNICIPIO_TANGO'
+                                && index.name !== "MUNICIPIO_ROMEO" 
+                                && index.name !== "MUNICIPIO" 
+                                && index.name !== "SEXO") ?
                                         <FormGroup>
                                           <Field
                                             name={`${index.name}|${index.type}`}
@@ -794,7 +800,8 @@ class DatabasesForm extends React.Component {
                                         </FormGroup>
 
                                         :
-                                        index.name === 'DEPARTAMENTO_TANGO' ?
+                                        (index.name === 'DEPARTAMENTO_TANGO' || index.name === 'DEPARTAMENTO_ROMEO' ||
+                                        index.name === 'DEPARTAMENTO' ) ?
                                           <Row>
                                             <Col>
                                               <FormGroup >
@@ -808,7 +815,9 @@ class DatabasesForm extends React.Component {
                                             </Col>
                                           </Row>
                                           :
-                                          index.name === 'MUNICIPIO_TANGO' ?
+                                          (index.name === 'MUNICIPIO_TANGO'||
+                                          index.name === "MUNICIPIO_ROMEO" ||
+                                          index.name === "MUNICIPIO") ?
                                             <Row>
                                               <Col>
                                                 <FormGroup >
