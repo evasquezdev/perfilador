@@ -133,6 +133,44 @@ function* changeFlag(action) {
   }
 }
 
+
+function* downloadgetdata(action) {
+  try {
+    const {
+      FilterForm,
+      dbs,
+      index
+    } = action.payload;
+    const token = yield select(reducers.getUserToken);
+    const response = yield call(
+      api.getDownloadFilterData,
+      token,
+      FilterForm,
+      dbs,
+      index
+    );
+ 
+    yield put(actions.downloadfilterDataOK({
+      data: response
+    }));
+  } catch (error) {
+    for (let index = 0; index < 10; index++) {
+      yield put(actions.downloadfilterData({
+        FilterForm: action.payload.FilterForm,
+        dbs: action.payload.dbs,
+        index: index
+      })); 
+    }
+    yield put(actions.downloadfilterDataKO());
+    yield put(modalActions.showError({
+      title: 'Hubo un error',
+      message: 'No se pudo filtrar la informacion',
+    }));
+  }
+}
+
+
+
 function* filterSaga() {
   yield takeLatest(
     types.GET_DEP_MUNI,
@@ -149,6 +187,10 @@ function* filterSaga() {
   yield takeLatest(
     types.FILTER_DATA,
     getdata
+  );
+  yield takeLatest(
+    types.DOWNLOADFILTER_DATA,
+    downloadgetdata
   );
   yield takeLatest(
     types.CHANGE_FLAG,

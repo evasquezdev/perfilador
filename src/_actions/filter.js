@@ -37,6 +37,31 @@ export const getFilterKO = () => ({
   type: types.GET_FILTER_KO
 });
 
+export const downloadfilterData = ({
+  FilterForm,
+  dbs,
+  index
+}) => ({
+  type: types.DOWNLOADFILTER_DATA,
+  payload: {
+    FilterForm,
+    dbs,
+    index
+  }
+});
+
+export const downloadfilterDataOK = ({
+  data
+}) => ({
+  type: types.DOWNLOADFILTER_DATA_OK,
+  payload: {
+    data
+  }
+});
+
+export const downloadfilterDataKO = () => ({
+  type: types.DOWNLOADFILTER_DATA_KO
+})
 
 export const filterData = ({
   FilterForm,
@@ -108,3 +133,6 @@ export const filterInfoOK = ({
 export const filterInfoKO = () => ({
   type: types.GET_INFO_KO
 })
+
+
+

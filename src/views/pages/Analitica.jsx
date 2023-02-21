@@ -29,11 +29,12 @@ import * as filterActions from '../../_actions/filter';
 import * as modalActions from '../../_actions/modal';
 import * as DBActions from '../../_actions/db';
 import * as Actions from '../../_actions/campaing';
-
+import axios from "axios";
 import ModalN from '../../components/Modal';
 import * as messageActions from '../../_actions/action';
 import { FadeLoader, ClimbingBoxLoader } from "react-spinners";
 import { css } from "@emotion/react";
+import URL from './../../_apis/routes';
 
 const override = css`
   display: block;
@@ -90,7 +91,7 @@ class DatabasesForm extends React.Component {
     loading: false,
     editModal: false,
     dbsSelected: [],
-    campaingSelect:[],
+    campaingSelect: [],
     departamentSelect: null,
     sex: [
       {
@@ -598,7 +599,7 @@ class DatabasesForm extends React.Component {
         opts.push(opt.value);
       }
     }
-    this.setState({campaingSelect: opts});
+    this.setState({ campaingSelect: opts });
   };
 
   handleSelectChangeDB = (event) => {
@@ -646,6 +647,50 @@ class DatabasesForm extends React.Component {
     getDB();
     fetchCampaing()
   }
+
+  downloadfilterData = (FilterForm, token) => {
+    let data = { "filters": null }
+    let info = []
+    Object.keys(FilterForm).map(function (key, index) {
+      info[index] = {
+        'column': key,
+        'value': FilterForm[key]
+      }
+    });
+    data.filters = FilterForm
+    let DB = this.state.dbsSelected.join()
+    
+    let json = JSON.stringify({
+      "sms_or_email": 0,
+      "filters": info,
+      "db_names": DB
+    })
+    const formData = new FormData();
+    formData.append("data", json);
+    axios.post(
+      `${URL}/filters/get_report/`,
+      formData,
+      {
+        headers: {
+          Authorization: "Token " + token,
+          "Content-Type": "multipart/form-data",
+        },
+        method: "GET",
+        responseType: "blob",
+      },
+    ).then(
+      function (response) {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", `Report.xlsx`);
+        document.body.appendChild(link);
+        link.click();
+      }.bind(this)).catch(function (error) {
+        //this.toggleLoading();
+        //this.handleError(error, 'clients');
+      }.bind(this));
+  }
   render() {
     const {
       departments,
@@ -662,7 +707,9 @@ class DatabasesForm extends React.Component {
       userCompany,
       campaing,
       downloadFile,
-      loadingData
+      loadingData,
+      downloadFileFilter,
+      token
     } = this.props;
     const {
       FilterForm,
@@ -678,67 +725,67 @@ class DatabasesForm extends React.Component {
     const pageMode = this.checkPageMode();
     let inverted = pageMode.bg === "bg-ligh" ? 'inverted' : '';
     let filteredmuns = municipios.filter(m => m.name === departamentSelect)
-    
+
     return (
       <>
-       <div className={`blackdiv ${loadingData? 'spinner' : 'NoSpinner'} `} id="blackdiv" 
-      >
-        <div className="ui segment">
-          <div className={`ui active transition ${inverted} visible dimmer`}>
-            <div className="content">
-            <ClimbingBoxLoader css={overrideCubo} zIndex={2} size={25} color={"#1d8cf8 "} margin={0} />
+        <div className={`blackdiv ${loadingData ? 'spinner' : 'NoSpinner'} `} id="blackdiv"
+        >
+          <div className="ui segment">
+            <div className={`ui active transition ${inverted} visible dimmer`}>
+              <div className="content">
+                <ClimbingBoxLoader css={overrideCubo} zIndex={2} size={25} color={"#1d8cf8 "} margin={0} />
 
+              </div>
             </div>
+            <div style={{ minHeight: 400 }}><p>&nbsp;</p></div>
           </div>
-          <div style={{minHeight:400}}><p>&nbsp;</p></div>
         </div>
-      </div>
         <div className="content">
           <ModalN />
           <Modal
-        isOpen={editModal}
-        toggle={this.toggleEditModal}
-        modalClassName={this.checkPageMode()}
+            isOpen={editModal}
+            toggle={this.toggleEditModal}
+            modalClassName={this.checkPageMode()}
 
-      >
-        <ModalHeader className="justify-content-center" toggle={this.toggleImportModal}>
-          Selecciona las Campañas
-        </ModalHeader>
-        <ModalBody
-          style={{ height: '800px !important' }}
-        >
-          <Row>
-            <Col sm={12}>
-              <Label>Campañas</Label>
-       
-                  <Input 
-                    type="select" 
-                    name="selectMulti" 
-                    id="exampleSelectMulti1" 
+          >
+            <ModalHeader className="justify-content-center" toggle={this.toggleImportModal}>
+              Selecciona las Campañas
+            </ModalHeader>
+            <ModalBody
+              style={{ height: '800px !important' }}
+            >
+              <Row>
+                <Col sm={12}>
+                  <Label>Campañas</Label>
+
+                  <Input
+                    type="select"
+                    name="selectMulti"
+                    id="exampleSelectMulti1"
                     multiple
                     ref={this.createService}
                     onChange={this.handleSelectChange}
                     value={this.state.campaingSelect}
-                    style={{height: '200px', color: 'black'}}
+                    style={{ height: '200px', color: 'black' }}
                   >
-                    {campaing.map((client,idx) => 
+                    {campaing.map((client, idx) =>
                       <option key={idx} value={client.campaign_id}>
-                        {client.campaign_name} 
+                        {client.campaign_name}
                       </option>
                     )}
                   </Input>
-            </Col>
-          </Row>
-        </ModalBody>
-        <ModalFooter>
-          <Button color="secondary" onClick={() => this.toggleEditModal()}>
-            Cerrar
-          </Button>
-          <Button color="primary" onClick={() => downloadFile(this.state.campaingSelect)}>
-            Descargar
-          </Button>
-        </ModalFooter>
-      </Modal>
+                </Col>
+              </Row>
+            </ModalBody>
+            <ModalFooter>
+              <Button color="secondary" onClick={() => this.toggleEditModal()}>
+                Cerrar
+              </Button>
+              <Button color="primary" onClick={() => downloadFile(this.state.campaingSelect)}>
+                Descargar
+              </Button>
+            </ModalFooter>
+          </Modal>
           {userCompany.has_emails ?
             <Row>
               <Col xs="4">
@@ -783,12 +830,12 @@ class DatabasesForm extends React.Component {
                                       </Row>
                                       :
                                       (index.type === 'string' && index.name !== "DEPARTAMENTO_TANGO"
-                                && index.name !== "DEPARTAMENTO_ROMEO" 
-                                && index.name !== "DEPARTAMENTO" 
-                                && index.name !== 'MUNICIPIO_TANGO'
-                                && index.name !== "MUNICIPIO_ROMEO" 
-                                && index.name !== "MUNICIPIO" 
-                                && index.name !== "SEXO") ?
+                                        && index.name !== "DEPARTAMENTO_ROMEO"
+                                        && index.name !== "DEPARTAMENTO"
+                                        && index.name !== 'MUNICIPIO_TANGO'
+                                        && index.name !== "MUNICIPIO_ROMEO"
+                                        && index.name !== "MUNICIPIO"
+                                        && index.name !== "SEXO") ?
                                         <FormGroup>
                                           <Field
                                             name={`${index.name}|${index.type}`}
@@ -801,7 +848,7 @@ class DatabasesForm extends React.Component {
 
                                         :
                                         (index.name === 'DEPARTAMENTO_TANGO' || index.name === 'DEPARTAMENTO_ROMEO' ||
-                                        index.name === 'DEPARTAMENTO' ) ?
+                                          index.name === 'DEPARTAMENTO') ?
                                           <Row>
                                             <Col>
                                               <FormGroup >
@@ -815,9 +862,9 @@ class DatabasesForm extends React.Component {
                                             </Col>
                                           </Row>
                                           :
-                                          (index.name === 'MUNICIPIO_TANGO'||
-                                          index.name === "MUNICIPIO_ROMEO" ||
-                                          index.name === "MUNICIPIO") ?
+                                          (index.name === 'MUNICIPIO_TANGO' ||
+                                            index.name === "MUNICIPIO_ROMEO" ||
+                                            index.name === "MUNICIPIO") ?
                                             <Row>
                                               <Col>
                                                 <FormGroup >
@@ -830,47 +877,47 @@ class DatabasesForm extends React.Component {
                                                 </FormGroup>
                                               </Col>
                                             </Row>
-                                             :
-                                             index.name === 'SEXO' ?
-                                             <Row>
-                                             <Col>
-                                                   <FormGroup >
-                                                     <Field
-                                                      name={`${index.name}|${index.type}`}
-                                                       component={this.FormSelectSexo}
-                                                       //		validate={[this.required, this.verifyNumberProduction]}
-                                                       placeholder="SEXO"
-                                                       //   type='number'se
-                                                      
-                                                     />
-                                                   </FormGroup>
-                                                 </Col>
-                                               </Row>
                                             :
-                                            <Row>
-                                              <Col sm='6'>
-                                                <FormGroup >
-                                                  <Label>Fecha Inicio</Label>
-                                                  <Field
-                                                    name={`${index.name}|${index.type}-1`}
-                                                    component={this.FormDate}
-                                                    //validate={[this.verifyDate]}
-                                                    placeholder="Seleccione Fecha"
-                                                  />
-                                                </FormGroup>
-                                              </Col>
-                                              <Col sm='6'>
-                                                <FormGroup >
-                                                  <Label>Fecha Fin</Label>
-                                                  <Field
-                                                    name={`${index.name}|${index.type}-2`}
-                                                    component={this.FormDate}
-                                                    //validate={[this.verifyDate]}
-                                                    placeholder="Seleccione Fecha"
-                                                  />
-                                                </FormGroup>
-                                              </Col>
-                                            </Row>
+                                            index.name === 'SEXO' ?
+                                              <Row>
+                                                <Col>
+                                                  <FormGroup >
+                                                    <Field
+                                                      name={`${index.name}|${index.type}`}
+                                                      component={this.FormSelectSexo}
+                                                      //		validate={[this.required, this.verifyNumberProduction]}
+                                                      placeholder="SEXO"
+                                                    //   type='number'se
+
+                                                    />
+                                                  </FormGroup>
+                                                </Col>
+                                              </Row>
+                                              :
+                                              <Row>
+                                                <Col sm='6'>
+                                                  <FormGroup >
+                                                    <Label>Fecha Inicio</Label>
+                                                    <Field
+                                                      name={`${index.name}|${index.type}-1`}
+                                                      component={this.FormDate}
+                                                      //validate={[this.verifyDate]}
+                                                      placeholder="Seleccione Fecha"
+                                                    />
+                                                  </FormGroup>
+                                                </Col>
+                                                <Col sm='6'>
+                                                  <FormGroup >
+                                                    <Label>Fecha Fin</Label>
+                                                    <Field
+                                                      name={`${index.name}|${index.type}-2`}
+                                                      component={this.FormDate}
+                                                      //validate={[this.verifyDate]}
+                                                      placeholder="Seleccione Fecha"
+                                                    />
+                                                  </FormGroup>
+                                                </Col>
+                                              </Row>
                                     }
                                   </FormGroup>
                                 </Col>
@@ -983,15 +1030,23 @@ class DatabasesForm extends React.Component {
                         ))
                       }
                     </ListGroup>
-                    {console.log(filteredData && filteredData),
+                    {
+                      /*    <Form onSubmit={handleSubmit(downloadFileFilter.bind(this))}> */
                       download &&
-                    <Button
-                      className="mt-4 ml-5"
-                      color="info"
-                      onClick={() => this.toggleEditModal()}
-                    >
-                      Descargar Datos de Campañas
-                    </Button>
+                      <Button
+                        className="mt-4 ml-5"
+                        color="info"
+                        onClick={() =>
+                          //this.toggleEditModal()
+                          //console.log(this.state.Form)
+                          this.downloadfilterData(this.state.Form, token)
+                        }
+                      >
+                        Descargar Datos de Campañas
+                      </Button>
+                      /*     </Form> */
+                      //  
+
                     }
                   </CardBody>
                 </Card>
@@ -1042,7 +1097,8 @@ export default connect(
     dbs: selector.getDbsFilter(state),
     userCompany: selector.getUserCompany(state),
     campaing: selector.getCampaing(state),
-    loadingData: selector.getFilterloadingData(state)
+    loadingData: selector.getFilterloadingData(state),
+    token: selector.getUserToken(state),
 
 
   }),
@@ -1057,22 +1113,36 @@ export default connect(
       dispatch(filterActions.filterInfo())
     },
     filterData(FilterForm) {
+      console.log(FilterForm, 'fileter')
       dispatch(filterActions.filterData({
         FilterForm: FilterForm,
         dbs: this.state.dbsSelected,
         index: 0
       }))
-    this.setState({
-      Form: FilterForm,
-      download: true
-    })
-  },
+      this.setState({
+        Form: FilterForm,
+        download: true
+      })
+    },
+    downloadFileFilter(FilterForm) {
+      dispatch(filterActions.downloadfilterData({
+        FilterForm: FilterForm,
+        dbs: 0,
+        //this.state.dbsSelected,
+        index: 0
+      }))
+      console.log('asdasdds')
+      this.setState({
+        Form: FilterForm,
+        // download: true
+      })
+    },
     fetchCampaing() {
       dispatch(Actions.fetchCampaing())
     },
     downloadFile(campaing) {
       dispatch(Actions.getCampaingFILEAnalitic({
-        id:campaing
+        id: campaing
       }))
     },
     sendMail(FilterForm, Form, dbs) {

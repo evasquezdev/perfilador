@@ -110,3 +110,40 @@ export const getFilterData = (
     }
   }).catch((error) => reject(error));
 });
+
+
+export const getDownloadFilterData = (
+  token,
+  FilterForm,
+  dbs,
+  index
+) => new Promise((resolve, reject) => {
+  let data = {"filters": null}
+  let info = []
+  Object.keys(FilterForm).map(function(key, index) {
+    info[index] = {
+       'column': key,
+       'value': FilterForm[key]
+     }  
+  });
+  data.filters = FilterForm
+  let DB = dbs.join()
+  fetch(`${URL}/filters/get_report/`, {
+    method: 'POST',
+    headers: {
+      "Content-type": "application/json",
+      Authorization: `Token ${token}`,
+    },
+    body: JSON.stringify({
+      "sms_or_email" : index,
+      "filters": info,
+      "db_names": DB
+    })
+  }).then((resultado) => {
+    if (resultado.ok) {
+      resultado.json().then((res) => resolve(res));
+    } else {
+      reject("error");
+    }
+  }).catch((error) => reject(error));
+});
