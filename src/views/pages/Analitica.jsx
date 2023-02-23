@@ -1042,7 +1042,7 @@ class DatabasesForm extends React.Component {
                           this.downloadfilterData(this.state.Form, token)
                         }
                       >
-                        Descargar Datos de Campañas
+                        Descargar Base de Datos
                       </Button>
                       /*     </Form> */
                       //  
