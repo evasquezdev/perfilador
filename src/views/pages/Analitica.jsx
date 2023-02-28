@@ -1117,7 +1117,7 @@ export default connect(
       dispatch(filterActions.filterData({
         FilterForm: FilterForm,
         dbs: this.state.dbsSelected,
-        index: 0
+        index: '0'
       }))
       this.setState({
         Form: FilterForm,
@@ -1129,7 +1129,7 @@ export default connect(
         FilterForm: FilterForm,
         dbs: 0,
         //this.state.dbsSelected,
-        index: 0
+        index: '0'
       }))
       console.log('asdasdds')
       this.setState({
