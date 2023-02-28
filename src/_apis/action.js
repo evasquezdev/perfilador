@@ -38,8 +38,12 @@ export const sendMail = (
         resultado.json().then((res) => resolve(res));
       } else {
         reject("error");
+        console.log(resultado.json)
       }
-    }).catch((error) => reject(error));
+    }).catch((error) => {
+      reject(error)
+      console.log(error)
+    });
 });
 
 

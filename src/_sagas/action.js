@@ -45,7 +45,7 @@ function* sendMail(action) {
     yield put(actions.sendMailKO());
     yield put(modalActions.showError({
       title: 'Hubo un error',
-      message: 'No se pudo enviar el correo',
+      message: error,
     }));
   }
 }
