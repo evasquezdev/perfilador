@@ -30,6 +30,25 @@ function* getdeps() {
   }
 }
 
+function* getgroup() {
+  try {
+    const token = yield select(reducers.getUserToken);
+    const response = yield call(
+      api.getGroup,
+      token
+    );
+    yield put(actions.getGroupOK({
+      group: response,
+    }));
+  } catch (error) {
+    yield put(actions.getGroupKO());
+    yield put(modalActions.showError({
+      title: 'Hubo un error',
+      message: 'No se pudo obtener los Grupos',
+    }));
+  }
+}
+
 
 function* getFilterTable() {
   try {
@@ -106,6 +125,41 @@ function* getdata(action) {
   }
 }
 
+
+function* createGroup(action) {
+  try {
+    const {
+      FilterForm,
+      dbs,
+      index,
+      group
+    } = action.payload;
+    const token = yield select(reducers.getUserToken);
+    const response = yield call(
+      api.createGroup,
+      token,
+      FilterForm,
+      dbs,
+      index,
+      group
+    );
+ 
+    yield put(actions.createGroupOK({
+      data: response
+    }));
+    yield put(modalActions.showSuccess({
+      title: 'Grupos',
+      message: response.message,
+    }));
+  } catch (error) {
+    yield put(actions.createGroupKO());
+    yield put(modalActions.showError({
+      title: 'Hubo un error',
+      message: error,
+    }));
+  }
+}
+
 function* changeFlag(action) {
   try {
     const {
@@ -177,6 +231,10 @@ function* filterSaga() {
     getdeps,
   );
   yield takeLatest(
+    types.GETGROUP,
+    getgroup,
+  );
+  yield takeLatest(
     types.GET_FILTER,
     getFilterTable,
   );
@@ -187,6 +245,10 @@ function* filterSaga() {
   yield takeLatest(
     types.FILTER_DATA,
     getdata
+  );
+  yield takeLatest(
+    types.CREATEDGROUP,
+    createGroup
   );
   yield takeLatest(
     types.DOWNLOADFILTER_DATA,

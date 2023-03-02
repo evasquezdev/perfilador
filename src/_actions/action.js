@@ -2,21 +2,12 @@ import * as types from '../_types/action';
 
 export const sendMail = ({
   text,
-  Filter,
-  date,
-  time,
-  company,
-  dbs
-
+  group
 }) => ({
   type: types.SEND_EMAIL,
   payload: {
     text,
-    Filter,
-    date,
-    time,
-    company,
-    dbs
+    group
   }
 });
 
@@ -35,25 +26,13 @@ export const sendMailKO = () => ({
 
 export const sendEmail = ({
   text,
-  header,
-  file,
-  Filter,
-  date,
-  time,
-  company,
-  dbs
+  group
 
 }) => ({
   type: types.SEND_MAIL,
   payload: {
     text,
-    header,
-    file,
-    Filter,
-    date,
-    time,
-    company,
-    dbs
+    group
   }
 });
 

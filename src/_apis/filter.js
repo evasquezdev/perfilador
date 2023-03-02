@@ -17,6 +17,25 @@ export const getDepts = (
   }).catch((error) => reject(error));
 });
 
+export const getGroup = (
+  token
+) => new Promise((resolve, reject) => {
+  fetch(`${URL}/filters/get_groups/`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Token ${token}`,
+    }
+  }).then((resultado) => {
+    if (resultado.ok) {
+      resultado.json().then((res) => resolve(res));
+    } else {
+      reject("error");
+    }
+  }).catch((error) => reject(error));
+});
+
+
+
 export const getFilterTable = (
   token
 ) => new Promise((resolve, reject) => {
@@ -138,6 +157,44 @@ export const getDownloadFilterData = (
       "sms_or_email" : index,
       "filters": info,
       "db_names": DB
+    })
+  }).then((resultado) => {
+    if (resultado.ok) {
+      resultado.json().then((res) => resolve(res));
+    } else {
+      reject("error");
+    }
+  }).catch((error) => reject(error));
+});
+
+export const createGroup = (
+  token,
+  FilterForm,
+  dbs,
+  index,
+  group
+) => new Promise((resolve, reject) => {
+  let data = {"filters": null}
+  let info = []
+  Object.keys(FilterForm).map(function(key, index) {
+    info[index] = {
+       'column': key,
+       'value': FilterForm[key]
+     }  
+  });
+  data.filters = FilterForm
+  let DB = dbs.join()
+  fetch(`${URL}/filters/create_group/`, {
+    method: 'POST',
+    headers: {
+      "Content-type": "application/json",
+      Authorization: `Token ${token}`,
+    },
+    body: JSON.stringify({
+      "sms_or_email" : index,
+      "filters": info,
+      "db_names": DB,
+      "group_name": group
     })
   }).then((resultado) => {
     if (resultado.ok) {

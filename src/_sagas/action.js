@@ -15,22 +15,14 @@ function* sendMail(action) {
   try {
     const {
       text,
-      Filter,
-      date,
-      time,
-      company,
-      dbs
+      group
     } = action.payload;
     const token = yield select(reducers.getUserToken);
     const response = yield call(
       api.sendMail,
       token,
       text,
-      Filter,
-      date,
-      time,
-      company,
-      dbs
+      group
     );
     yield put(actions.sendMailOK({
       msg: response

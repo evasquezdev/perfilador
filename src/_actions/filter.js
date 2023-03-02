@@ -90,6 +90,53 @@ export const filterDataKO = () => ({
 })
 
 
+export const createGroup = ({
+  FilterForm,
+  dbs,
+  index,
+  group
+}) => ({
+  type: types.CREATEDGROUP,
+  payload: {
+    FilterForm,
+    dbs,
+    index,
+    group
+  }
+});
+
+export const createGroupOK = ({
+  data
+}) => ({
+  type: types.CREATEDGROUP_OK,
+  payload: {
+    data
+  }
+});
+
+export const createGroupKO = () => ({
+  type: types.CREATEDGROUP_KO
+})
+
+
+export const getGroup = () => ({
+  type: types.GETGROUP,
+});
+
+export const getGroupOK = ({
+  group
+}) => ({
+  type: types.GETGROUP_OK,
+  payload: {
+    group
+  }
+});
+
+export const getGroupKO = () => ({
+  type: types.GETGROUP_KO
+})
+
+
 
 export const changeFlag = ({
   value,
