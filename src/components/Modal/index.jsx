@@ -67,7 +67,8 @@ class ModalCore extends Component {
               title="Good job!"
               confirmBtnBsStyle="success"
               btnSize=""
-              showConfirm={false}
+              showConfirm={true}
+              onConfirm={() => hideModal()}
               beforeUnmount={onUmount ? () => onUmount() : undefined}
             >
               {message}
