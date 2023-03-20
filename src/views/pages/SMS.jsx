@@ -360,7 +360,7 @@ class DatabasesForm extends React.Component {
         className="react-select info"
         classNamePrefix="react-select"
         onChange={value => {
-          onChange(value.value)
+          onChange(value.value.toLowerCase())
           // this.setState({
           //  departamentSelect: value.value
           //})
@@ -446,13 +446,13 @@ class DatabasesForm extends React.Component {
         onChange={value => {
           onChange(value.value)
           this.setState({
-            departamentSelect: value.value
+            departamentSelect: value.value.toLowerCase()
           })
         }}
         value={value}
         options={options.map(companyOptions => {
           return {
-            value: companyOptions.value,
+            value: companyOptions.value.toLowerCase(),
             label: `${companyOptions.label}`
           }
         })}
@@ -688,7 +688,7 @@ class DatabasesForm extends React.Component {
       editModalGroup
     } = this.state;
     let name;
-    let filteredmuns = municipios.filter(m => m.name === departamentSelect)
+    let filteredmuns = municipios.filter(m => m.name === (departamentSelect && departamentSelect.toUpperCase()))
     const pageMode = this.checkPageMode();
     let inverted = pageMode.bg === "bg-ligh" ? 'inverted' : '';
     return (
@@ -1103,7 +1103,7 @@ class DatabasesForm extends React.Component {
                     </CardTitle>
                     <ListGroup>
                       <ListGroup className="justify-content-between" style={{ backgroundColor: '#344675' }}>
-                        <Row>{console.log(dbsSelected)}
+                        <Row>
                           <Col>
 
                             {dbs &&
