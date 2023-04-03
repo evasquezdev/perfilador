@@ -45,7 +45,6 @@ export const getModalRowData = (state) => fromModal.getModalRowData(state.modal)
 export const getInfo = (state) => filterHandler.getInfo(state.filter);
 export const getFilters = (state) => filterHandler.getFilters(state.filter);
 export const getDepartments = (state) => filterHandler.getDepartments(state.filter);
-export const getGroup = (state) => filterHandler.getGroup(state.filter);
 export const getMunicipalities = (state) => filterHandler.getMunicipalities(state.filter);
 export const getFilterData = (state) => filterHandler.getFilterData(state.filter);
 export const getFilterDataHistory = (state) => filterHandler.getFilterDataHistory(state.filter);

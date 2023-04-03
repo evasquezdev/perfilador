@@ -10,15 +10,6 @@ export const FILTER_DATA = 'FILTER_DATA';
 export const FILTER_DATA_OK = 'FILTER_DATA_OK';
 export const FILTER_DATA_KO = 'FILTER_DATA_KO';
 
-
-export const CREATEDGROUP = 'CREATEDGROUP';
-export const CREATEDGROUP_OK = 'CREATEDGROUP_OK';
-export const CREATEDGROUP_KO = 'CREATEDGROUP_KO';
-
-export const GETGROUP = 'GETGROUP';
-export const GETGROUP_OK = 'GETGROUP_OK';
-export const GETGROUP_KO = 'GETGROUP_KO';
-
 export const CHANGE_FLAG = 'CHANGE_FLAG';
 export const CHANGE_FLAG_OK = 'CHANGE_FLAG_OK';
 export const CHANGE_FLAG_KO = 'CHANGE_FLAG_KO';

@@ -9,7 +9,6 @@ const stateShape = {
   filters: [],
   info: [],
   history: [],
-  group: []
 };
 
 const filter = (state = stateShape, action) => {
@@ -41,34 +40,6 @@ const filter = (state = stateShape, action) => {
         municipalities: []
       }
     }
-
-
-    case types.GETGROUP: {
-      return {
-        ...state,
-        loading: true,
-      }
-    }
-    case types.GETGROUP_OK: {
-      const {
-        group
-      } = action.payload;
-      return {
-        ...state,
-        loading: false,
-        group
-      }
-    }
-    case types.GETGROUP_KO: {
-      return {
-        ...state,
-        loading: false,
-        group: []
-      }
-    }
-
-
-
     case types.GET_FILTER: {
       return {
         ...state,
@@ -168,7 +139,6 @@ export default filter;
 export const getInfo = (state) => state.info;
 export const getFilters = (state) => state.filters;
 export const getDepartments = (state) => state.deparments;
-export const getGroup = (state) => state.group;
 export const getMunicipalities = (state) => state.municipalities;
 export const getFilterData = (state) => state.data;
 export const getFilterDataHistory = (state) => state.history;

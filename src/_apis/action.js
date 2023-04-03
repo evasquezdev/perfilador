@@ -3,19 +3,23 @@ import URL from './routes';
 export const sendMail = (
   token,
   text,
-  group
+  Filter,
+  date,
+  time,
+  company,
+  dbs
 ) => new Promise((resolve, reject) => {
   let data = {"filters": null}
   let info = []
-  /* Object.keys(Filter).map(function(key, index) {
+  Object.keys(Filter).map(function(key, index) {
     info[index] = {
        'column': key,
        'value': Filter[key]
      }  
-  }); */
+  });
 
-  //let DB = dbs.join()
-  //data.filters = Filter
+  let DB = dbs.join()
+  data.filters = Filter
   fetch(`${URL}/filters/send_sms/`, {
     method: 'POST',
     headers: {
@@ -24,10 +28,10 @@ export const sendMail = (
     },
     body: JSON.stringify({
       "sms_text": text,
-      "group_name": group,
-      //'db_names': DB,
-      //"campaing_name": company,
-     // "programated_at": `${date && time !== ''? date +'|'+ time : null}`
+      "filters": info,
+      'db_names': DB,
+      "campaing_name": company,
+      "programated_at": `${date && time !== ''? date +'|'+ time : null}`
     })
   }).then((resultado) => {
       if (resultado.ok) {
